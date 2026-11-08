@@ -1,11 +1,10 @@
 class_name InventoryPanel
 extends CanvasLayer
-## In-game inventory and container panel (I key).
+## Two-column inventory screen.
 ##
-## List-based on purpose: the character starts with a fixed kit and loot lives
-## in chests. Weapon rows can be equipped; with a chest open, player rows can be
-## deposited and chest rows withdrawn. The server validates every transfer and
-## broadcasts both inventories, so every peer sees the same state.
+## Left column is the external source: nearby ground items, or the contents of
+## an open chest. Right column is always the local player's backpack. Clicking a
+## row transfers/picks that stack; every mutation goes through the server.
 ##
 ## The panel does not pause the match. It only tells the game to ignore the
 ## attack key while open (the local player keeps moving).
@@ -17,20 +16,20 @@ const MUTED := Color(0.62, 0.7, 0.82)
 const GOOD := Color(0.6, 0.95, 0.7)
 
 @onready var gold_label: Label = $Center/Panel/Margin/Content/Header/GoldLabel
-@onready var equipped_label: Label = $Center/Panel/Margin/Content/EquippedLabel
-@onready var list: VBoxContainer = $Center/Panel/Margin/Content/Scroll/List
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
-@onready var chest_section: VBoxContainer = $Center/Panel/Margin/Content/ChestSection
-@onready var chest_title: Label = $Center/Panel/Margin/Content/ChestSection/ChestTitle
-@onready var chest_list: VBoxContainer = $Center/Panel/Margin/Content/ChestSection/ChestScroll/ChestList
+@onready var external_title: Label = $Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalTitle
+@onready var external_list: VBoxContainer = $Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll/ExternalList
+@onready var equipped_label: Label = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/EquippedLabel
+@onready var list: VBoxContainer = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll/List
 
 var _player: PlayerCharacter = null
 var _container: LootChest = null
+var _nearby: Array = []
+var _nearby_ids: Array = []
 
 
 func _ready() -> void:
 	visible = false
-	chest_section.visible = false
 	close_button.pressed.connect(close)
 
 
@@ -39,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if visible:
 			close()
 		else:
-			open()
+			open_nearby()
 		get_viewport().set_input_as_handled()
 
 
@@ -59,14 +58,35 @@ func bind_player(hero: PlayerCharacter) -> void:
 		_refresh()
 
 
-## Opens the panel with a chest section. Safe to call while already open.
+## Game keeps this list fresh from the interactables in range.
+func set_nearby(pickups: Array) -> void:
+	var ids: Array = []
+	for pickup in pickups:
+		ids.append(pickup.get_instance_id())
+	if ids == _nearby_ids:
+		return
+	_nearby_ids = ids
+	_nearby = pickups.duplicate()
+	if visible and _container == null:
+		_refresh()
+
+
+## Opens the screen with the left column showing nearby ground items.
+func open_nearby() -> void:
+	_disconnect_container()
+	if not visible:
+		open()
+	else:
+		_refresh()
+
+
+## Opens the screen with a chest on the left and the backpack on the right.
 func open_container(chest: LootChest) -> void:
 	if _container != chest:
 		_disconnect_container()
 		_container = chest
 		if _container != null:
 			_container.inventory.changed.connect(_on_container_changed)
-	chest_section.visible = _container != null
 	if not visible:
 		open()
 	else:
@@ -82,7 +102,6 @@ func open() -> void:
 func close() -> void:
 	visible = false
 	_disconnect_container()
-	chest_section.visible = false
 	toggled.emit(false)
 
 
@@ -111,29 +130,36 @@ func _refresh() -> void:
 	for child in list.get_children():
 		list.remove_child(child)
 		child.queue_free()
-	for child in chest_list.get_children():
-		chest_list.remove_child(child)
+	for child in external_list.get_children():
+		external_list.remove_child(child)
 		child.queue_free()
 
 	if _player == null:
 		gold_label.text = ""
 		equipped_label.text = "Нет локального игрока."
-		_add_paragraph(list, "Подождите, пока арена загрузит персонажа.")
+		external_title.text = "Предметы рядом"
+		_add_paragraph(external_list, "Подождите, пока арена загрузит персонажа.")
 		return
 
 	gold_label.text = "Золото: %d" % _player.inventory.gold
 	var weapon_name := str(_player.weapon.get("name", "Без оружия"))
 	equipped_label.text = "В руках: %s  ·  %s" % [weapon_name, ItemCatalog.describe(_player.weapon_id)]
 
-	_add_items(list, _player.inventory, false)
 	if _container != null:
-		chest_title.text = "Сундук: %s" % _container.display_name
-		_add_items(chest_list, _container.inventory, true)
+		external_title.text = "Сундук: %s" % _container.display_name
+		_add_inventory(external_list, _container.inventory, true)
 		if _container.inventory.slots.is_empty():
-			_add_paragraph(chest_list, "Сундук пуст.")
+			_add_paragraph(external_list, "Сундук пуст.")
+	else:
+		external_title.text = "Предметы рядом"
+		_add_nearby(external_list)
+		if _nearby.is_empty():
+			_add_paragraph(external_list, "Рядом ничего нет.")
+
+	_add_inventory(list, _player.inventory, false)
 
 
-func _add_items(parent: Control, inventory: Inventory, from_chest: bool) -> void:
+func _add_inventory(parent: Control, inventory: Inventory, from_chest: bool) -> void:
 	var groups := {}
 	for slot in inventory.slots:
 		var category := ItemCatalog.category(slot["id"])
@@ -154,10 +180,35 @@ func _add_items(parent: Control, inventory: Inventory, from_chest: bool) -> void
 			return str(a["display_name"]) < str(b["display_name"])
 		)
 		for slot in stacks:
-			_add_row(parent, slot, category, from_chest)
+			_add_inventory_row(parent, slot, category, from_chest)
 
 
-func _add_row(parent: Control, slot: Dictionary, category: int, from_chest: bool) -> void:
+func _add_nearby(parent: Control) -> void:
+	for pickup in _nearby:
+		if not is_instance_valid(pickup) or not pickup.is_available():
+			continue
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+
+		var name_label := Label.new()
+		name_label.text = str(pickup.display_name)
+		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if int(pickup.quantity) > 1:
+			name_label.text += "  ×%d" % int(pickup.quantity)
+		row.add_child(name_label)
+
+		var take_button := Button.new()
+		take_button.text = "Подобрать"
+		take_button.custom_minimum_size = Vector2(120, 0)
+		take_button.disabled = not _player.is_alive
+		take_button.pressed.connect(_on_pickup_pressed.bind(pickup))
+		row.add_child(take_button)
+
+		parent.add_child(row)
+		_add_paragraph(parent, ItemCatalog.describe(pickup.item_id))
+
+
+func _add_inventory_row(parent: Control, slot: Dictionary, category: int, from_chest: bool) -> void:
 	var item_id: StringName = slot["id"]
 	var quantity := int(slot["quantity"])
 
@@ -202,6 +253,10 @@ func _add_row(parent: Control, slot: Dictionary, category: int, from_chest: bool
 
 	parent.add_child(row)
 	_add_paragraph(parent, ItemCatalog.describe(item_id))
+
+
+func _on_pickup_pressed(pickup: ItemPickup) -> void:
+	pickup.request()
 
 
 func _on_equip_pressed(item_id: StringName) -> void:

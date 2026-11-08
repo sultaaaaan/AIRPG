@@ -109,30 +109,43 @@ func _on_inventory_toggled(open: bool) -> void:
 
 
 func _update_interaction_prompt() -> void:
-	if inventory_panel.visible:
-		_nearest_interactable = null
-		interact_hint.text = ""
-		return
-
+	var pickups: Array = []
 	var best: Node = null
 	var best_distance := INF
 	for node in get_tree().get_nodes_in_group("interactables"):
 		if not node.has_method("is_available") or not node.is_available():
 			continue
 		var distance: float = _local_player.global_position.distance_to(node.global_position)
-		var reach := LootChest.REACH if node is LootChest else 3.0
-		if distance <= reach and distance < best_distance:
+		if node is LootChest:
+			if distance > LootChest.REACH:
+				continue
+		else:
+			if distance > 3.0:
+				continue
+			pickups.append(node)
+		if distance < best_distance:
 			best = node
 			best_distance = distance
 
+	inventory_panel.set_nearby(pickups)
 	_nearest_interactable = best
-	interact_hint.text = "" if best == null else str(best.prompt_text())
+
+	if inventory_panel.visible or best == null:
+		interact_hint.text = ""
+	elif best is LootChest:
+		interact_hint.text = str(best.prompt_text())
+	else:
+		interact_hint.text = "E — предметы рядом (%d)" % pickups.size()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
-	if inventory_panel.visible or _nearest_interactable == null:
+	if inventory_panel.visible:
+		inventory_panel.close()
+		get_viewport().set_input_as_handled()
+		return
+	if _nearest_interactable == null:
 		return
 
 	if _nearest_interactable is LootChest:
@@ -140,7 +153,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		chest.request_open()
 		inventory_panel.open_container(chest)
 	else:
-		_nearest_interactable.request()
+		# Near ground items: open the two-column screen, left side lists them.
+		inventory_panel.open_nearby()
 	get_viewport().set_input_as_handled()
 
 

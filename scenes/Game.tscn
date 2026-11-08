@@ -317,7 +317,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="InventoryPanel/Center" unique_id=1700000013]
-custom_minimum_size = Vector2(800, 640)
+custom_minimum_size = Vector2(1180, 650)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pause")
 
@@ -340,7 +340,7 @@ theme_override_constants/separation = 12
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
 theme_override_font_sizes/font_size = 28
-text = "Инвентарь"
+text = "Инвентарь и хранилище"
 
 [node name="Spacer" type="Control" parent="InventoryPanel/Center/Panel/Margin/Content/Header" unique_id=1700000018]
 layout_mode = 2
@@ -358,42 +358,64 @@ custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Закрыть"
 
-[node name="EquippedLabel" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000021]
+[node name="Columns" type="HBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000030]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="ExternalPanel" type="PanelContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns" unique_id=1700000031]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="ExternalContent" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel" unique_id=1700000032]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ExternalTitle" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent" unique_id=1700000033]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.5, 1)
+theme_override_font_sizes/font_size = 18
+text = "Предметы рядом"
+
+[node name="ExternalScroll" type="ScrollContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent" unique_id=1700000034]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ExternalList" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll" unique_id=1700000035]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="PlayerPanel" type="PanelContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns" unique_id=1700000036]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="PlayerContent" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel" unique_id=1700000037]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PlayerTitle" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent" unique_id=1700000038]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Ваш инвентарь"
+
+[node name="EquippedLabel" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent" unique_id=1700000021]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.95, 0.7, 1)
 theme_override_font_sizes/font_size = 15
 text = "В руках: —"
 autowrap_mode = 2
 
-[node name="Scroll" type="ScrollContainer" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000022]
-custom_minimum_size = Vector2(0, 250)
+[node name="PlayerScroll" type="ScrollContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent" unique_id=1700000022]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="List" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Scroll" unique_id=1700000023]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="ChestSection" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000026]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="ChestTitle" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/ChestSection" unique_id=1700000027]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.8, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "Сундук"
-
-[node name="ChestScroll" type="ScrollContainer" parent="InventoryPanel/Center/Panel/Margin/Content/ChestSection" unique_id=1700000028]
-custom_minimum_size = Vector2(0, 170)
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="ChestList" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/ChestSection/ChestScroll" unique_id=1700000029]
+[node name="List" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll" unique_id=1700000023]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
@@ -402,4 +424,4 @@ theme_override_constants/separation = 4
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.55, 0.7, 1)
 theme_override_font_sizes/font_size = 12
-text = "I — закрыть · F — атака"
+text = "I или E — закрыть · клик по предмету — взять / положить"
