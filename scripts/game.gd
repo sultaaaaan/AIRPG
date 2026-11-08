@@ -14,12 +14,14 @@ const CAMERA_FOLLOW_SPEED := 8.0
 @onready var stats_vitals: Label = $HUD/StatsPanel/Margin/Stats/Vitals
 @onready var stats_skills: Label = $HUD/StatsPanel/Margin/Stats/Skills
 @onready var combat_log: Label = $HUD/CombatLog
+@onready var interact_hint: Label = $HUD/InteractHint
 @onready var inventory_panel: InventoryPanel = $InventoryPanel
 
 var _next_slot: int = 0
 var _ready_peers: Dictionary = {}
 var _local_player: PlayerCharacter = null
 var _stats_player: PlayerCharacter = null
+var _nearest_interactable: Node = null
 
 
 func _ready() -> void:
@@ -44,9 +46,12 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(_local_player):
 		_local_player = _find_local_player()
 	if _local_player == null:
+		_nearest_interactable = null
+		interact_hint.text = ""
 		return
 	if _local_player != _stats_player:
 		_bind_stats(_local_player)
+	_update_interaction_prompt()
 
 	# Follow only horizontally so jumps do not bounce the camera.
 	var target := Vector3(
@@ -101,6 +106,42 @@ func _on_equipment_changed() -> void:
 func _on_inventory_toggled(open: bool) -> void:
 	if is_instance_valid(_local_player):
 		_local_player.inventory_open = open
+
+
+func _update_interaction_prompt() -> void:
+	if inventory_panel.visible:
+		_nearest_interactable = null
+		interact_hint.text = ""
+		return
+
+	var best: Node = null
+	var best_distance := INF
+	for node in get_tree().get_nodes_in_group("interactables"):
+		if not node.has_method("is_available") or not node.is_available():
+			continue
+		var distance: float = _local_player.global_position.distance_to(node.global_position)
+		var reach := LootChest.REACH if node is LootChest else 3.0
+		if distance <= reach and distance < best_distance:
+			best = node
+			best_distance = distance
+
+	_nearest_interactable = best
+	interact_hint.text = "" if best == null else str(best.prompt_text())
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("interact"):
+		return
+	if inventory_panel.visible or _nearest_interactable == null:
+		return
+
+	if _nearest_interactable is LootChest:
+		var chest := _nearest_interactable as LootChest
+		chest.request_open()
+		inventory_panel.open_container(chest)
+	else:
+		_nearest_interactable.request()
+	get_viewport().set_input_as_handled()
 
 
 func _on_combat_message(text: String, hit: bool) -> void:

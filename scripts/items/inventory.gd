@@ -87,6 +87,44 @@ func find_slot(item_id: StringName) -> int:
 	return -1
 
 
+func get_display_name(item_id: StringName) -> String:
+	var index := find_slot(item_id)
+	return str(slots[index]["display_name"]) if index >= 0 else String(item_id)
+
+
+## Plain-data snapshot for RPC and saves: strings and ints only.
+func to_payload() -> Dictionary:
+	var out_slots: Array = []
+	for slot in slots:
+		out_slots.append({
+			"id": String(slot["id"]),
+			"display_name": str(slot["display_name"]),
+			"quantity": int(slot["quantity"]),
+		})
+	return {"slots": out_slots, "gold": gold}
+
+
+## Replaces the contents from a to_payload() snapshot. Server payloads are
+## trusted; no capacity checks are applied here.
+func apply_payload(data: Dictionary) -> void:
+	slots.clear()
+	gold = maxi(0, int(data.get("gold", 0)))
+	var raw: Variant = data.get("slots", [])
+	if raw is Array:
+		for entry in raw:
+			if not (entry is Dictionary):
+				continue
+			var item_id := StringName(str(entry.get("id", "")))
+			if item_id == &"":
+				continue
+			slots.append({
+				"id": item_id,
+				"display_name": str(entry.get("display_name", item_id)),
+				"quantity": maxi(1, int(entry.get("quantity", 1))),
+			})
+	changed.emit()
+
+
 ## Adds without emitting; returns the leftover.
 func _add_silent(item_id: StringName, display_name: String, quantity: int) -> int:
 	if item_id == &"" or quantity <= 0:

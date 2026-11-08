@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/loot_chest.gd" id="1_chest"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_chest"]
+size = Vector3(1.2, 0.8, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="Material_chest"]
+albedo_color = Color(0.42, 0.27, 0.14, 1)
+metallic = 0.2
+roughness = 0.75
+
+[sub_resource type="BoxShape3D" id="BoxShape_chest"]
+size = Vector3(1.2, 0.8, 0.8)
+
+[node name="LootChest" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_chest")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_chest")
+material_override = SubResource("Material_chest")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape_chest")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+billboard = 1
+no_depth_test = true
+outline_size = 10
+text = "Сундук"
+font_size = 36
+outline_modulate = Color(0, 0, 0, 0.85)
+pixel_size = 0.004

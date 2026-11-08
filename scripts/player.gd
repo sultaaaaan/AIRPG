@@ -267,6 +267,49 @@ func _apply_weapon(item_id: StringName) -> void:
 	equipment_changed.emit()
 
 
+## Server -> everyone: replaces the runtime inventory after a pickup/transfer.
+@rpc("any_peer", "call_local", "reliable")
+func _inventory_sync(data: Dictionary) -> void:
+	if not _rpc_from_server():
+		return
+	inventory.apply_payload(data)
+	# A deposited/dropped weapon must not stay in the character's hands.
+	if weapon_id != &"unarmed" and not inventory.has_item(weapon_id):
+		_choose_weapon()
+		equipment_changed.emit()
+
+
+## Server-only helpers used by pickups and containers.
+func server_add_item(item_id: StringName, display_name: String, quantity: int) -> int:
+	if not _is_server_context():
+		return quantity
+	var leftover := inventory.add_item(item_id, display_name, quantity)
+	if leftover < quantity:
+		_broadcast_inventory()
+	return leftover
+
+
+func server_remove_item(item_id: StringName, quantity: int) -> int:
+	if not _is_server_context():
+		return 0
+	var removed := inventory.remove_item(item_id, quantity)
+	if removed > 0:
+		_broadcast_inventory()
+	return removed
+
+
+func _broadcast_inventory() -> void:
+	if multiplayer.has_multiplayer_peer():
+		_inventory_sync.rpc(inventory.to_payload())
+
+
+## True on the real server, and also in a standalone headless run with no peer.
+func _is_server_context() -> bool:
+	if not multiplayer.has_multiplayer_peer():
+		return true
+	return multiplayer.is_server()
+
+
 # --- combat -----------------------------------------------------------------
 
 ## Client -> server. The server resolves the attack, so reach, cooldown, AC and

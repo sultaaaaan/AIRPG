@@ -371,6 +371,12 @@ func _smoke_inventory() -> void:
 	_expect(inventory.remove_item(&"arrow", 50), 35, "inventory arrow removed")
 	_expect(inventory.has_item(&"arrow"), false, "inventory arrows fully removed")
 
+	var restored := Inventory.new()
+	restored.apply_payload(inventory.to_payload())
+	_expect(restored.get_item_count(&"greatsword"), 1, "inventory payload greatsword")
+	_expect(restored.get_item_count(&"chain_mail"), 1, "inventory payload chain mail")
+	_expect(restored.gold, inventory.gold, "inventory payload gold")
+
 
 # --- helpers ----------------------------------------------------------------
 
