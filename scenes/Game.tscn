@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://c1u0tejjkrari"]
+[gd_scene load_steps=16 format=3 uid="uid://c1u0tejjkrari"]
 
 [ext_resource type="Script" uid="uid://cqppray4js083" path="res://scripts/game.gd" id="1_game"]
 [ext_resource type="Script" path="res://scripts/pause_menu.gd" id="2_pause"]
 [ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="3_inventory"]
 [ext_resource type="PackedScene" path="res://scenes/LootChest.tscn" id="4_chest"]
 [ext_resource type="PackedScene" path="res://scenes/ItemPickup.tscn" id="5_pickup"]
+[ext_resource type="Script" path="res://scripts/ui/nearby_panel.gd" id="6_nearby"]
 
 [sub_resource type="Environment" id="Environment_main"]
 background_mode = 1
@@ -237,6 +238,28 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 15
 autowrap_mode = 2
+
+[node name="NearbyPanel" type="PanelContainer" parent="HUD" unique_id=1700000040]
+offset_left = 16.0
+offset_top = 300.0
+offset_right = 380.0
+offset_bottom = 540.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+script = ExtResource("6_nearby")
+
+[node name="Content" type="VBoxContainer" parent="HUD/NearbyPanel" unique_id=1700000041]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="HUD/NearbyPanel/Content" unique_id=1700000042]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "РЯДОМ"
+
+[node name="List" type="VBoxContainer" parent="HUD/NearbyPanel/Content" unique_id=1700000043]
+layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="PauseMenu" type="CanvasLayer" parent="." unique_id=1082513466]
 process_mode = 3

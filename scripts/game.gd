@@ -15,6 +15,7 @@ const CAMERA_FOLLOW_SPEED := 8.0
 @onready var stats_skills: Label = $HUD/StatsPanel/Margin/Stats/Skills
 @onready var combat_log: Label = $HUD/CombatLog
 @onready var interact_hint: Label = $HUD/InteractHint
+@onready var nearby_panel: NearbyPanel = $HUD/NearbyPanel
 @onready var inventory_panel: InventoryPanel = $InventoryPanel
 
 var _next_slot: int = 0
@@ -48,6 +49,7 @@ func _process(delta: float) -> void:
 	if _local_player == null:
 		_nearest_interactable = null
 		interact_hint.text = ""
+		nearby_panel.set_pickups([])
 		return
 	if _local_player != _stats_player:
 		_bind_stats(_local_player)
@@ -128,6 +130,7 @@ func _update_interaction_prompt() -> void:
 			best_distance = distance
 
 	inventory_panel.set_nearby(pickups)
+	nearby_panel.set_pickups([] if inventory_panel.visible else pickups)
 	_nearest_interactable = best
 
 	if inventory_panel.visible or best == null:
