@@ -11,6 +11,7 @@ extends RefCounted
 enum Category {
 	WEAPON,
 	ARMOR,
+	CLOTHING,
 	SHIELD,
 	AMMO,
 	PACK,
@@ -21,9 +22,26 @@ enum Category {
 	TREASURE,
 }
 
+## Equipment slots a slot grid can equip into.
+enum Slot {
+	NONE,
+	WEAPON,
+	ARMOR,
+	CLOTHING,
+	SHIELD,
+}
+
+const SLOT_NAMES_RU := {
+	Slot.WEAPON: "Оружие",
+	Slot.ARMOR: "Доспех",
+	Slot.CLOTHING: "Одежда",
+	Slot.SHIELD: "Щит",
+}
+
 const CATEGORY_NAMES_RU := {
 	Category.WEAPON: "Оружие",
 	Category.ARMOR: "Доспехи",
+	Category.CLOTHING: "Одежда",
 	Category.SHIELD: "Щиты",
 	Category.AMMO: "Боеприпасы",
 	Category.PACK: "Наборы",
@@ -34,10 +52,11 @@ const CATEGORY_NAMES_RU := {
 	Category.TREASURE: "Ценности",
 }
 
-## Display order for grouped inventory lists.
+## Display order for grouped lists.
 const CATEGORY_ORDER := [
 	Category.WEAPON,
 	Category.ARMOR,
+	Category.CLOTHING,
 	Category.SHIELD,
 	Category.AMMO,
 	Category.FOCUS,
@@ -50,6 +69,9 @@ const CATEGORY_ORDER := [
 
 const ARMOR_IDS := [
 	&"leather_armor", &"studded_leather_armor", &"chain_shirt", &"chain_mail",
+]
+const CLOTHING_IDS := [
+	&"travelers_clothes", &"fine_clothes", &"robe", &"costume",
 ]
 const SHIELD_IDS := [&"shield"]
 const AMMO_IDS := [&"arrow", &"crossbow_bolts"]
@@ -78,6 +100,8 @@ static func category(item_id: StringName) -> Category:
 		return Category.WEAPON
 	if item_id in ARMOR_IDS:
 		return Category.ARMOR
+	if item_id in CLOTHING_IDS:
+		return Category.CLOTHING
 	if item_id in SHIELD_IDS:
 		return Category.SHIELD
 	if item_id in AMMO_IDS:
@@ -93,6 +117,53 @@ static func category(item_id: StringName) -> Category:
 
 static func category_name(item_id: StringName) -> String:
 	return CATEGORY_NAMES_RU.get(category(item_id), "Снаряжение")
+
+
+## Equipment slot this item occupies, or NONE for non-equipment.
+static func equip_slot(item_id: StringName) -> Slot:
+	match category(item_id):
+		Category.WEAPON:
+			return Slot.WEAPON
+		Category.ARMOR:
+			return Slot.ARMOR
+		Category.CLOTHING:
+			return Slot.CLOTHING
+		Category.SHIELD:
+			return Slot.SHIELD
+		_:
+			return Slot.NONE
+
+
+## [base AC, max DEX bonus] where -1 means uncapped.
+const ARMOR_STATS := {
+	&"leather_armor": [11, -1],
+	&"studded_leather_armor": [12, -1],
+	&"chain_shirt": [13, 2],
+	&"chain_mail": [16, 0],
+}
+const SHIELD_BONUS := 2
+
+
+## Shared AC arithmetic for the character builder and the runtime equipment.
+## `unarmored_modifier` is 0 when the class has no Unarmored Defense.
+static func armor_class(
+	dex_modifier: int,
+	armor_id: StringName,
+	has_shield: bool,
+	unarmored_modifier: int,
+	allows_shield: bool
+) -> int:
+	if ARMOR_STATS.has(armor_id):
+		var row: Array = ARMOR_STATS[armor_id]
+		var dex_part := dex_modifier if int(row[1]) < 0 else mini(dex_modifier, int(row[1]))
+		return int(row[0]) + dex_part + (SHIELD_BONUS if has_shield else 0)
+
+	var base := 10 + dex_modifier
+	if allows_shield or not has_shield:
+		base += unarmored_modifier
+	if has_shield:
+		base += SHIELD_BONUS
+	return base
 
 
 static func stack_size(item_id: StringName) -> int:
@@ -126,8 +197,10 @@ static func describe(item_id: StringName) -> String:
 	match cat:
 		Category.ARMOR:
 			return _armor_description(item_id)
+		Category.CLOTHING:
+			return "Одежда · не влияет на КД"
 		Category.SHIELD:
-			return "+2 к КД, пока щит в снаряжении"
+			return "+2 к КД, пока щит экипирован"
 		Category.AMMO:
 			return "Боеприпасы для дальнобойного оружия"
 		Category.PACK:

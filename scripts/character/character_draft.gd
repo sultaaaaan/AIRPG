@@ -80,15 +80,7 @@ const POINT_BUY_MAX := 15
 const POINT_BUY_BUDGET := 27
 const POINT_BUY_COST := {8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9}
 
-## Armour from the starting packs. [base AC, max DEX bonus] where -1 = no cap.
-## TODO: move to ItemData once the item catalogue exists.
-const ARMOR_TABLE := {
-	&"leather_armor": [11, -1],
-	&"studded_leather_armor": [12, -1],
-	&"chain_shirt": [13, 2],
-	&"chain_mail": [16, 0],
-}
-const SHIELD_BONUS := 2
+## Armour from the starting packs is resolved through ItemCatalog.ARMOR_STATS.
 
 const SPREAD_PRIMARY := [2, 1, 0]
 const SPREAD_BALANCED := [1, 1, 1]
@@ -448,24 +440,20 @@ func spell_slots_text() -> String:
 
 
 func armor_class() -> int:
-	var dex := ability_modifier(&"dexterity")
 	var shield := equipment_mode == EquipmentMode.PACK and has_equipment(&"shield")
-	var armor := _equipped_armor_id()
-
-	if armor != &"":
-		var row: Array = ARMOR_TABLE[armor]
-		var base: int = row[0]
-		var dex_cap: int = row[1]
-		var dex_part := dex if dex_cap < 0 else mini(dex, dex_cap)
-		return base + dex_part + (SHIELD_BONUS if shield else 0)
-
-	var base := 10 + dex
-	if class_data != null and class_data.unarmored_defense_ability != &"":
-		if class_data.unarmored_defense_allows_shield or not shield:
-			base += ability_modifier(class_data.unarmored_defense_ability)
-	if shield:
-		base += SHIELD_BONUS
-	return base
+	var unarmored_modifier := 0
+	var allows_shield := true
+	if class_data != null:
+		if class_data.unarmored_defense_ability != &"":
+			unarmored_modifier = ability_modifier(class_data.unarmored_defense_ability)
+		allows_shield = class_data.unarmored_defense_allows_shield
+	return ItemCatalog.armor_class(
+		ability_modifier(&"dexterity"),
+		_equipped_armor_id(),
+		shield,
+		unarmored_modifier,
+		allows_shield
+	)
 
 
 # --- equipment --------------------------------------------------------------
@@ -501,7 +489,7 @@ func has_equipment(item_id: StringName) -> bool:
 
 func _equipped_armor_id() -> StringName:
 	for entry in starting_equipment():
-		if ARMOR_TABLE.has(entry.item_id):
+		if ItemCatalog.ARMOR_STATS.has(entry.item_id):
 			return entry.item_id
 	return &""
 
@@ -993,6 +981,9 @@ func _derived_payload() -> Dictionary:
 		})
 
 	return {
+		"class_id": String(class_data.id) if class_data != null else "",
+		"unarmored_defense_ability": String(class_data.unarmored_defense_ability) if class_data != null else "",
+		"unarmored_defense_allows_shield": class_data.unarmored_defense_allows_shield if class_data != null else true,
 		"scores": scores,
 		"saves": saves,
 		"skills": skills,

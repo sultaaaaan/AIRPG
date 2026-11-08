@@ -1,15 +1,18 @@
 class_name InventoryPanel
 extends CanvasLayer
-## Two-column inventory screen.
+## Two-column, slot-grid inventory screen.
 ##
-## Left column is the external source: nearby ground items, or the contents of
-## an open chest. Right column is always the local player's backpack. Clicking a
-## row transfers/picks that stack; every mutation goes through the server.
+## Left grid: nearby ground items or the contents of an open chest.
+## Right side: equipment slots (weapon / armour / clothing / shield) plus the
+## player's 5×8 backpack grid. Click a slot to select it; the details bar below
+## offers the valid action (equip / take / pick up / put into chest).
 ##
-## The panel does not pause the match. It only tells the game to ignore the
-## attack key while open (the local player keeps moving).
+## All mutations go through the server; the panel only renders synced state.
 
 signal toggled(open: bool)
+
+const COLUMNS: int = 5
+const SLOT_SIZE := Vector2(64, 48)
 
 const ACCENT := Color(0.72, 0.85, 1.0)
 const MUTED := Color(0.62, 0.7, 0.82)
@@ -18,19 +21,29 @@ const GOOD := Color(0.6, 0.95, 0.7)
 @onready var gold_label: Label = $Center/Panel/Margin/Content/Header/GoldLabel
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
 @onready var external_title: Label = $Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalTitle
-@onready var external_list: VBoxContainer = $Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll/ExternalList
+@onready var external_grid: GridContainer = $Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll/ExternalGrid
+@onready var equipment_row: HBoxContainer = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/EquipmentRow
 @onready var equipped_label: Label = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/EquippedLabel
-@onready var list: VBoxContainer = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll/List
+@onready var player_grid: GridContainer = $Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll/PlayerGrid
+@onready var details_label: Label = $Center/Panel/Margin/Content/Details/DetailsLabel
+@onready var primary_button: Button = $Center/Panel/Margin/Content/Details/PrimaryButton
+@onready var secondary_button: Button = $Center/Panel/Margin/Content/Details/SecondaryButton
 
 var _player: PlayerCharacter = null
 var _container: LootChest = null
 var _nearby: Array = []
 var _nearby_ids: Array = []
+var _selection: Dictionary = {}
 
 
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(close)
+	external_grid.columns = COLUMNS
+	player_grid.columns = COLUMNS
+	primary_button.pressed.connect(_on_primary_pressed)
+	secondary_button.pressed.connect(_on_secondary_pressed)
+	_clear_details()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -42,7 +55,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-## Rebinds the panel to the local player when the arena spawns it.
 func bind_player(hero: PlayerCharacter) -> void:
 	if _player != null:
 		if _player.equipment_changed.is_connected(_on_equipment_changed):
@@ -71,7 +83,6 @@ func set_nearby(pickups: Array) -> void:
 		_refresh()
 
 
-## Opens the screen with the left column showing nearby ground items.
 func open_nearby() -> void:
 	_disconnect_container()
 	if not visible:
@@ -80,7 +91,6 @@ func open_nearby() -> void:
 		_refresh()
 
 
-## Opens the screen with a chest on the left and the backpack on the right.
 func open_container(chest: LootChest) -> void:
 	if _container != chest:
 		_disconnect_container()
@@ -126,166 +136,251 @@ func _on_container_changed() -> void:
 		_refresh()
 
 
+# --- rendering --------------------------------------------------------------
+
 func _refresh() -> void:
-	for child in list.get_children():
-		list.remove_child(child)
-		child.queue_free()
-	for child in external_list.get_children():
-		external_list.remove_child(child)
-		child.queue_free()
+	_selection = {}
+	_clear_grid(external_grid)
+	_clear_grid(player_grid)
+	_clear_children(equipment_row)
 
 	if _player == null:
 		gold_label.text = ""
 		equipped_label.text = "Нет локального игрока."
 		external_title.text = "Предметы рядом"
-		_add_paragraph(external_list, "Подождите, пока арена загрузит персонажа.")
+		_add_empty_grid(external_grid)
+		_add_empty_grid(player_grid)
+		_clear_details()
 		return
 
 	gold_label.text = "Золото: %d" % _player.inventory.gold
 	var weapon_name := str(_player.weapon.get("name", "Без оружия"))
 	equipped_label.text = "В руках: %s  ·  %s" % [weapon_name, ItemCatalog.describe(_player.weapon_id)]
+	_build_equipment_row()
 
 	if _container != null:
 		external_title.text = "Сундук: %s" % _container.display_name
-		_add_inventory(external_list, _container.inventory, true)
-		if _container.inventory.slots.is_empty():
-			_add_paragraph(external_list, "Сундук пуст.")
+		_fill_inventory_grid(external_grid, _container.inventory, "chest")
 	else:
 		external_title.text = "Предметы рядом"
-		_add_nearby(external_list)
-		if _nearby.is_empty():
-			_add_paragraph(external_list, "Рядом ничего нет.")
+		_fill_nearby_grid(external_grid)
 
-	_add_inventory(list, _player.inventory, false)
-
-
-func _add_inventory(parent: Control, inventory: Inventory, from_chest: bool) -> void:
-	var groups := {}
-	for slot in inventory.slots:
-		var category := ItemCatalog.category(slot["id"])
-		if not groups.has(category):
-			groups[category] = []
-		groups[category].append(slot)
-
-	if groups.is_empty() and not from_chest:
-		_add_paragraph(parent, "Инвентарь пуст.")
-		return
-
-	for category in ItemCatalog.CATEGORY_ORDER:
-		if not groups.has(category):
-			continue
-		_add_section(parent, ItemCatalog.CATEGORY_NAMES_RU.get(category, "Снаряжение"))
-		var stacks: Array = groups[category]
-		stacks.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-			return str(a["display_name"]) < str(b["display_name"])
-		)
-		for slot in stacks:
-			_add_inventory_row(parent, slot, category, from_chest)
+	_fill_inventory_grid(player_grid, _player.inventory, "player")
+	_clear_details()
 
 
-func _add_nearby(parent: Control) -> void:
+func _build_equipment_row() -> void:
+	var slots := [
+		[ItemCatalog.Slot.WEAPON, _player.weapon_id],
+		[ItemCatalog.Slot.ARMOR, _player.armor_id],
+		[ItemCatalog.Slot.CLOTHING, _player.clothing_id],
+		[ItemCatalog.Slot.SHIELD, _player.shield_id],
+	]
+	for entry in slots:
+		var slot: int = entry[0]
+		var item_id: StringName = entry[1]
+		var label := Button.new()
+		label.disabled = true
+		label.clip_text = true
+		label.custom_minimum_size = Vector2(0, 30)
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		label.add_theme_font_size_override("font_size", 11)
+		var item_name := "—"
+		if item_id != &"" and item_id != &"unarmed":
+			item_name = _player.inventory.get_display_name(item_id)
+		elif item_id == &"unarmed":
+			item_name = "Без оружия"
+		label.text = "%s: %s" % [ItemCatalog.SLOT_NAMES_RU.get(slot, "Слот"), item_name]
+		if item_id != &"" and item_id != &"unarmed":
+			label.tooltip_text = "%s\n%s" % [item_name, ItemCatalog.describe(item_id)]
+		equipment_row.add_child(label)
+
+
+func _fill_inventory_grid(grid: GridContainer, inventory: Inventory, source: String) -> void:
+	for index in inventory.slots.size():
+		var slot: Dictionary = inventory.slots[index]
+		grid.add_child(_make_slot(
+			slot["id"], str(slot["display_name"]), int(slot["quantity"]), source
+		))
+	var empty := Inventory.MAX_SLOTS - inventory.slots.size()
+	for _index in maxi(0, empty):
+		grid.add_child(_make_empty_slot())
+
+
+func _fill_nearby_grid(grid: GridContainer) -> void:
+	var used := 0
 	for pickup in _nearby:
 		if not is_instance_valid(pickup) or not pickup.is_available():
 			continue
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 8)
-
-		var name_label := Label.new()
-		name_label.text = str(pickup.display_name)
-		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		if int(pickup.quantity) > 1:
-			name_label.text += "  ×%d" % int(pickup.quantity)
-		row.add_child(name_label)
-
-		var take_button := Button.new()
-		take_button.text = "Подобрать"
-		take_button.custom_minimum_size = Vector2(120, 0)
-		take_button.disabled = not _player.is_alive
-		take_button.pressed.connect(_on_pickup_pressed.bind(pickup))
-		row.add_child(take_button)
-
-		parent.add_child(row)
-		_add_paragraph(parent, ItemCatalog.describe(pickup.item_id))
+		grid.add_child(_make_pickup_slot(pickup))
+		used += 1
+	for _index in maxi(0, Inventory.MAX_SLOTS - used):
+		grid.add_child(_make_empty_slot())
 
 
-func _add_inventory_row(parent: Control, slot: Dictionary, category: int, from_chest: bool) -> void:
-	var item_id: StringName = slot["id"]
-	var quantity := int(slot["quantity"])
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-
-	var name_label := Label.new()
-	name_label.text = str(slot["display_name"])
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+func _make_slot(item_id: StringName, display_name: String, quantity: int, source: String) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = SLOT_SIZE
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 10)
+	var text := display_name
 	if quantity > 1:
-		name_label.text += "  ×%d" % quantity
-	row.add_child(name_label)
+		text += " ×%d" % quantity
+	if _is_equipped(item_id):
+		text = "• " + text
+	button.text = text
 
-	if from_chest:
-		var take_button := Button.new()
-		take_button.text = "Забрать"
-		take_button.custom_minimum_size = Vector2(110, 0)
-		take_button.disabled = not _player.is_alive
-		take_button.pressed.connect(_on_take_pressed.bind(item_id, quantity))
-		row.add_child(take_button)
-	else:
-		if category == ItemCatalog.Category.WEAPON:
-			var equip_button := Button.new()
-			equip_button.custom_minimum_size = Vector2(120, 0)
-			if item_id == _player.weapon_id:
-				equip_button.text = "В руках"
-				equip_button.disabled = true
-				equip_button.add_theme_color_override("font_color", GOOD)
-			else:
-				equip_button.text = "Экипировать"
-				equip_button.disabled = not _player.is_alive
-				equip_button.pressed.connect(_on_equip_pressed.bind(item_id))
-			row.add_child(equip_button)
-
-		if _container != null:
-			var put_button := Button.new()
-			put_button.text = "В сундук"
-			put_button.custom_minimum_size = Vector2(110, 0)
-			put_button.disabled = not _player.is_alive
-			put_button.pressed.connect(_on_put_pressed.bind(item_id, quantity))
-			row.add_child(put_button)
-
-	parent.add_child(row)
-	_add_paragraph(parent, ItemCatalog.describe(item_id))
+	var description := ItemCatalog.describe(item_id)
+	button.tooltip_text = "%s\n%s\nКоличество: %d" % [display_name, description, quantity]
+	if _is_equipped(item_id):
+		button.tooltip_text += "\nЭкипировано"
+		button.add_theme_color_override("font_color", GOOD)
+	button.pressed.connect(_on_slot_pressed.bind(source, item_id, display_name, quantity, null))
+	return button
 
 
-func _on_pickup_pressed(pickup: ItemPickup) -> void:
-	pickup.request()
+func _make_pickup_slot(pickup: ItemPickup) -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = SLOT_SIZE
+	button.clip_text = true
+	button.add_theme_font_size_override("font_size", 10)
+	button.text = str(pickup.display_name)
+	if int(pickup.quantity) > 1:
+		button.text += " ×%d" % int(pickup.quantity)
+	button.tooltip_text = "%s\n%s\nКоличество: %d" % [
+		pickup.display_name, ItemCatalog.describe(pickup.item_id), pickup.quantity,
+	]
+	button.pressed.connect(_on_slot_pressed.bind(
+		"pickup", pickup.item_id, pickup.display_name, pickup.quantity, pickup
+	))
+	return button
 
 
-func _on_equip_pressed(item_id: StringName) -> void:
-	if _player != null:
-		_player.request_equip(item_id)
+func _make_empty_slot() -> Button:
+	var button := Button.new()
+	button.custom_minimum_size = SLOT_SIZE
+	button.disabled = true
+	button.focus_mode = Control.FOCUS_NONE
+	button.modulate = Color(1, 1, 1, 0.4)
+	return button
 
 
-func _on_put_pressed(item_id: StringName, quantity: int) -> void:
-	if _container != null:
-		_container.request_put(item_id, quantity)
+# --- selection / actions ----------------------------------------------------
+
+func _on_slot_pressed(
+	source: String,
+	item_id: StringName,
+	display_name: String,
+	quantity: int,
+	pickup: ItemPickup
+) -> void:
+	_selection = {
+		"source": source,
+		"item_id": item_id,
+		"display_name": display_name,
+		"quantity": quantity,
+		"pickup": pickup,
+	}
+	_update_details()
 
 
-func _on_take_pressed(item_id: StringName, quantity: int) -> void:
-	if _container != null:
-		_container.request_take(item_id, quantity)
+func _update_details() -> void:
+	if _selection.is_empty() or _player == null:
+		_clear_details()
+		return
+
+	var item_id: StringName = _selection["item_id"]
+	var name := str(_selection["display_name"])
+	var quantity := int(_selection["quantity"])
+	var source := str(_selection["source"])
+	var lines := PackedStringArray()
+	lines.append("%s%s" % [name, " ×%d" % quantity if quantity > 1 else ""])
+	lines.append(ItemCatalog.describe(item_id))
+	details_label.text = "\n".join(lines)
+
+	primary_button.visible = false
+	secondary_button.visible = false
+
+	match source:
+		"player":
+			var slot := ItemCatalog.equip_slot(item_id)
+			if slot != ItemCatalog.Slot.NONE:
+				primary_button.visible = true
+				if _is_equipped(item_id):
+					primary_button.text = "Уже надето"
+					primary_button.disabled = true
+				else:
+					primary_button.text = "Экипировать"
+					primary_button.disabled = not _player.is_alive
+			if _container != null:
+				secondary_button.visible = true
+				secondary_button.text = "В сундук"
+				secondary_button.disabled = not _player.is_alive
+		"chest":
+			primary_button.visible = true
+			primary_button.text = "Забрать"
+			primary_button.disabled = not _player.is_alive
+		"pickup":
+			primary_button.visible = true
+			primary_button.text = "Подобрать"
+			primary_button.disabled = not _player.is_alive
 
 
-func _add_section(parent: Control, text: String) -> void:
-	var label := Label.new()
-	label.text = text.to_upper()
-	label.add_theme_font_size_override("font_size", 12)
-	label.add_theme_color_override("font_color", ACCENT)
-	parent.add_child(label)
+func _clear_details() -> void:
+	details_label.text = "Выберите предмет, чтобы увидеть описание и действия."
+	primary_button.visible = false
+	primary_button.disabled = false
+	secondary_button.visible = false
+	secondary_button.disabled = false
 
 
-func _add_paragraph(parent: Control, text: String) -> void:
-	var label := Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_color_override("font_color", MUTED)
-	label.add_theme_font_size_override("font_size", 13)
-	parent.add_child(label)
+func _on_primary_pressed() -> void:
+	if _selection.is_empty():
+		return
+	var source := str(_selection["source"])
+	var item_id: StringName = _selection["item_id"]
+	var quantity := int(_selection["quantity"])
+	match source:
+		"player":
+			_player.request_equip(item_id)
+		"chest":
+			if _container != null:
+				_container.request_take(item_id, quantity)
+		"pickup":
+			var pickup: ItemPickup = _selection.get("pickup")
+			if is_instance_valid(pickup):
+				pickup.request()
+
+
+func _on_secondary_pressed() -> void:
+	if _selection.is_empty() or _container == null:
+		return
+	var item_id: StringName = _selection["item_id"]
+	var quantity := int(_selection["quantity"])
+	_container.request_put(item_id, quantity)
+
+
+# --- helpers ----------------------------------------------------------------
+
+func _is_equipped(item_id: StringName) -> bool:
+	return item_id != &"" and (
+		item_id == _player.weapon_id
+		or item_id == _player.armor_id
+		or item_id == _player.clothing_id
+		or item_id == _player.shield_id
+	)
+
+
+func _clear_grid(grid: GridContainer) -> void:
+	_clear_children(grid)
+
+
+func _clear_children(parent: Node) -> void:
+	for child in parent.get_children():
+		parent.remove_child(child)
+		child.queue_free()
+
+
+func _add_empty_grid(grid: GridContainer) -> void:
+	for _index in Inventory.MAX_SLOTS:
+		grid.add_child(_make_empty_slot())

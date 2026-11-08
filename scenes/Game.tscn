@@ -340,7 +340,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="InventoryPanel/Center" unique_id=1700000013]
-custom_minimum_size = Vector2(1180, 650)
+custom_minimum_size = Vector2(1180, 680)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pause")
 
@@ -406,10 +406,12 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ExternalList" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll" unique_id=1700000035]
+[node name="ExternalGrid" type="GridContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/ExternalPanel/ExternalContent/ExternalScroll" unique_id=1700000035]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 5
 
 [node name="PlayerPanel" type="PanelContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns" unique_id=1700000036]
 layout_mode = 2
@@ -426,6 +428,10 @@ theme_override_colors/font_color = Color(0.72, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 18
 text = "Ваш инвентарь"
 
+[node name="EquipmentRow" type="HBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent" unique_id=1700000044]
+layout_mode = 2
+theme_override_constants/separation = 4
+
 [node name="EquippedLabel" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent" unique_id=1700000021]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.95, 0.7, 1)
@@ -438,13 +444,39 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="List" type="VBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll" unique_id=1700000023]
+[node name="PlayerGrid" type="GridContainer" parent="InventoryPanel/Center/Panel/Margin/Content/Columns/PlayerPanel/PlayerContent/PlayerScroll" unique_id=1700000023]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 5
+
+[node name="Details" type="HBoxContainer" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000045]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DetailsLabel" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content/Details" unique_id=1700000046]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.62, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+text = "Выберите предмет, чтобы увидеть описание и действия."
+autowrap_mode = 2
+
+[node name="PrimaryButton" type="Button" parent="InventoryPanel/Center/Panel/Margin/Content/Details" unique_id=1700000047]
+visible = false
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = ""
+
+[node name="SecondaryButton" type="Button" parent="InventoryPanel/Center/Panel/Margin/Content/Details" unique_id=1700000048]
+visible = false
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+text = ""
 
 [node name="Hint" type="Label" parent="InventoryPanel/Center/Panel/Margin/Content" unique_id=1700000024]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.55, 0.7, 1)
 theme_override_font_sizes/font_size = 12
-text = "I или E — закрыть · клик по предмету — взять / положить"
+text = "I или E — закрыть · клик по слоту — выбрать · действие — кнопкой внизу"

@@ -58,6 +58,11 @@ const RESPAWN_DELAY: float = 3.0
 
 var weapon_id: StringName = &"unarmed"
 var weapon: Dictionary = WeaponTable.get_weapon(&"unarmed")
+var armor_id: StringName = &""
+var clothing_id: StringName = &""
+var shield_id: StringName = &""
+var unarmored_defense_ability: StringName = &""
+var unarmored_defense_allows_shield: bool = true
 var is_alive: bool = true
 ## Runtime contents derived from the character's starting equipment.
 var inventory: Inventory = Inventory.new()
@@ -127,9 +132,11 @@ func _apply_character() -> void:
 	var weapons_value: Variant = derived.get("weapon_training", [])
 	if weapons_value is Array:
 		weapon_training = weapons_value
+	unarmored_defense_ability = StringName(str(derived.get("unarmored_defense_ability", "")))
+	unarmored_defense_allows_shield = bool(derived.get("unarmored_defense_allows_shield", true))
 
 	_build_inventory(derived)
-	_choose_weapon()
+	_choose_equipment()
 
 
 ## Builds the runtime inventory from the character payload. Kept read-only for
@@ -139,6 +146,36 @@ func _build_inventory(derived: Dictionary) -> void:
 	var equipment: Variant = derived.get("equipment", [])
 	var entries: Array = equipment if equipment is Array else []
 	inventory.setup(entries, int(derived.get("gold", 0)))
+
+
+## Defaults: strongest weapon, first armour, first shield, first clothing.
+func _choose_equipment() -> void:
+	_choose_weapon()
+	armor_id = _first_item_in_slot(ItemCatalog.Slot.ARMOR)
+	clothing_id = _first_item_in_slot(ItemCatalog.Slot.CLOTHING)
+	shield_id = _first_item_in_slot(ItemCatalog.Slot.SHIELD)
+	_recalculate_armor_class()
+
+
+func _first_item_in_slot(slot: int) -> StringName:
+	for entry in inventory.slots:
+		var item_id: StringName = entry["id"]
+		if ItemCatalog.equip_slot(item_id) == slot:
+			return item_id
+	return &""
+
+
+func _recalculate_armor_class() -> void:
+	var unarmored_modifier := 0
+	if unarmored_defense_ability != &"":
+		unarmored_modifier = ability_modifier_for(unarmored_defense_ability)
+	armor_class = ItemCatalog.armor_class(
+		ability_modifier_for(&"dexterity"),
+		armor_id,
+		shield_id != &"",
+		unarmored_modifier,
+		unarmored_defense_allows_shield
+	)
 
 
 ## Defaults to the strongest weapon in the backpack. The player can switch it
@@ -234,37 +271,85 @@ func request_equip(item_id: StringName) -> void:
 	if not _is_authority() or not is_alive:
 		return
 	if multiplayer.is_server():
-		request_equip_weapon(item_id)
+		request_equip_item(item_id)
 	else:
-		request_equip_weapon.rpc_id(1, item_id)
+		request_equip_item.rpc_id(1, item_id)
 
 
 @rpc("any_peer", "reliable")
-func request_equip_weapon(item_id: StringName) -> void:
+func request_equip_item(item_id: StringName) -> void:
 	if not multiplayer.is_server() or not is_alive:
 		return
 	var sender := multiplayer.get_remote_sender_id()
 	if sender != 0 and sender != get_multiplayer_authority():
 		return
-	if not WeaponTable.has_weapon(item_id) or not inventory.has_item(item_id):
+	var slot := ItemCatalog.equip_slot(item_id)
+	if slot == ItemCatalog.Slot.NONE or not inventory.has_item(item_id):
 		return
-	_apply_weapon(item_id)
-	_weapon_changed.rpc(item_id)
+	_equip_local(item_id, slot)
+	_equipment_sync.rpc(_equipment_payload())
 
 
 @rpc("any_peer", "call_local", "reliable")
-func _weapon_changed(item_id: StringName) -> void:
+func _equipment_sync(data: Dictionary) -> void:
 	if not _rpc_from_server():
 		return
-	_apply_weapon(item_id)
+	_apply_equipment_payload(data)
 
 
-func _apply_weapon(item_id: StringName) -> void:
-	if not WeaponTable.has_weapon(item_id):
-		return
-	weapon_id = item_id
-	weapon = WeaponTable.get_weapon(item_id)
+func _equip_local(item_id: StringName, slot: int) -> void:
+	match slot:
+		ItemCatalog.Slot.WEAPON:
+			weapon_id = item_id
+			weapon = WeaponTable.get_weapon(item_id)
+		ItemCatalog.Slot.ARMOR:
+			armor_id = item_id
+		ItemCatalog.Slot.CLOTHING:
+			clothing_id = item_id
+		ItemCatalog.Slot.SHIELD:
+			shield_id = item_id
+	_recalculate_armor_class()
 	equipment_changed.emit()
+
+
+func _equipment_payload() -> Dictionary:
+	return {
+		"weapon": String(weapon_id),
+		"armor": String(armor_id),
+		"clothing": String(clothing_id),
+		"shield": String(shield_id),
+	}
+
+
+func _apply_equipment_payload(data: Dictionary) -> void:
+	weapon_id = StringName(str(data.get("weapon", "unarmed")))
+	weapon = WeaponTable.get_weapon(weapon_id)
+	armor_id = StringName(str(data.get("armor", "")))
+	clothing_id = StringName(str(data.get("clothing", "")))
+	shield_id = StringName(str(data.get("shield", "")))
+	_recalculate_armor_class()
+	equipment_changed.emit()
+
+
+## After a deposit/pickup, drop equipment that is no longer in the backpack and
+## fall back to the next available item of that slot.
+func _revalidate_equipment() -> void:
+	var changed := false
+	if weapon_id != &"unarmed" and not inventory.has_item(weapon_id):
+		_choose_weapon()
+		changed = true
+	if armor_id != &"" and not inventory.has_item(armor_id):
+		armor_id = _first_item_in_slot(ItemCatalog.Slot.ARMOR)
+		changed = true
+	if clothing_id != &"" and not inventory.has_item(clothing_id):
+		clothing_id = _first_item_in_slot(ItemCatalog.Slot.CLOTHING)
+		changed = true
+	if shield_id != &"" and not inventory.has_item(shield_id):
+		shield_id = _first_item_in_slot(ItemCatalog.Slot.SHIELD)
+		changed = true
+	if changed:
+		_recalculate_armor_class()
+		equipment_changed.emit()
 
 
 ## Server -> everyone: replaces the runtime inventory after a pickup/transfer.
@@ -273,10 +358,7 @@ func _inventory_sync(data: Dictionary) -> void:
 	if not _rpc_from_server():
 		return
 	inventory.apply_payload(data)
-	# A deposited/dropped weapon must not stay in the character's hands.
-	if weapon_id != &"unarmed" and not inventory.has_item(weapon_id):
-		_choose_weapon()
-		equipment_changed.emit()
+	_revalidate_equipment()
 
 
 ## Server-only helpers used by pickups and containers.
