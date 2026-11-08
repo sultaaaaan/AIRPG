@@ -136,7 +136,7 @@ func _apply_character() -> void:
 	unarmored_defense_allows_shield = bool(derived.get("unarmored_defense_allows_shield", true))
 
 	_build_inventory(derived)
-	_choose_equipment()
+	_recalculate_armor_class()
 
 
 ## Builds the runtime inventory from the character payload. Kept read-only for
@@ -146,23 +146,6 @@ func _build_inventory(derived: Dictionary) -> void:
 	var equipment: Variant = derived.get("equipment", [])
 	var entries: Array = equipment if equipment is Array else []
 	inventory.setup(entries, int(derived.get("gold", 0)))
-
-
-## Defaults: strongest weapon, first armour, first shield, first clothing.
-func _choose_equipment() -> void:
-	_choose_weapon()
-	armor_id = _first_item_in_slot(ItemCatalog.Slot.ARMOR)
-	clothing_id = _first_item_in_slot(ItemCatalog.Slot.CLOTHING)
-	shield_id = _first_item_in_slot(ItemCatalog.Slot.SHIELD)
-	_recalculate_armor_class()
-
-
-func _first_item_in_slot(slot: int) -> StringName:
-	for entry in inventory.slots:
-		var item_id: StringName = entry["id"]
-		if ItemCatalog.equip_slot(item_id) == slot:
-			return item_id
-	return &""
 
 
 func _recalculate_armor_class() -> void:
@@ -176,22 +159,6 @@ func _recalculate_armor_class() -> void:
 		unarmored_modifier,
 		unarmored_defense_allows_shield
 	)
-
-
-## Defaults to the strongest weapon in the backpack. The player can switch it
-## from the inventory panel; the server validates and replicates the choice.
-func _choose_weapon() -> void:
-	var best_score := -1.0
-	for slot in inventory.slots:
-		var item_id: StringName = slot["id"]
-		if not WeaponTable.has_weapon(item_id):
-			continue
-		var candidate := WeaponTable.get_weapon(item_id)
-		var score := float(candidate.get("count", 1)) * (float(candidate.get("faces", 1)) + 1.0) * 0.5
-		if score > best_score:
-			best_score = score
-			weapon_id = item_id
-	weapon = WeaponTable.get_weapon(weapon_id)
 
 
 func _physics_process(delta: float) -> void:
@@ -331,21 +298,22 @@ func _apply_equipment_payload(data: Dictionary) -> void:
 	equipment_changed.emit()
 
 
-## After a deposit/pickup, drop equipment that is no longer in the backpack and
-## fall back to the next available item of that slot.
+## After a deposit/pickup, clear equipment that is no longer in the backpack.
+## No automatic replacement: equipping is manual.
 func _revalidate_equipment() -> void:
 	var changed := false
 	if weapon_id != &"unarmed" and not inventory.has_item(weapon_id):
-		_choose_weapon()
+		weapon_id = &"unarmed"
+		weapon = WeaponTable.get_weapon(weapon_id)
 		changed = true
 	if armor_id != &"" and not inventory.has_item(armor_id):
-		armor_id = _first_item_in_slot(ItemCatalog.Slot.ARMOR)
+		armor_id = &""
 		changed = true
 	if clothing_id != &"" and not inventory.has_item(clothing_id):
-		clothing_id = _first_item_in_slot(ItemCatalog.Slot.CLOTHING)
+		clothing_id = &""
 		changed = true
 	if shield_id != &"" and not inventory.has_item(shield_id):
-		shield_id = _first_item_in_slot(ItemCatalog.Slot.SHIELD)
+		shield_id = &""
 		changed = true
 	if changed:
 		_recalculate_armor_class()

@@ -1035,7 +1035,7 @@ func _sheet_bbcode() -> String:
 		])
 
 	lines.append("")
-	lines.append("Хиты: [b]%d[/b]    КД: [b]%d[/b]" % [draft.max_hit_points(), draft.armor_class()])
+	lines.append("Хиты: [b]%d[/b]    КД в снаряжении: [b]%d[/b]" % [draft.max_hit_points(), draft.armor_class()])
 	lines.append("Инициатива: %+d    Пасс. восприятие: %d" % [draft.initiative(), draft.passive_perception()])
 	lines.append("Бонус мастерства: +%d" % draft.proficiency_bonus())
 
