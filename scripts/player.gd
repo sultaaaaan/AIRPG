@@ -208,7 +208,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not _is_authority() or not is_alive:
 		return
 	if event.is_action_pressed("attack"):
-		request_attack.rpc_id(1)
+		if multiplayer.is_server():
+			# An RPC to yourself is rejected without call_local.
+			request_attack()
+		else:
+			request_attack.rpc_id(1)
 		get_viewport().set_input_as_handled()
 
 
