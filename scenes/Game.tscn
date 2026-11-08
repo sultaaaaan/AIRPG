@@ -242,21 +242,22 @@ theme_override_font_sizes/font_size = 15
 autowrap_mode = 2
 
 [node name="NearbyPanel" type="PanelContainer" parent="HUD" unique_id=1700000040]
+custom_minimum_size = Vector2(240, 0)
 offset_left = 16.0
 offset_top = 300.0
-offset_right = 380.0
-offset_bottom = 540.0
+offset_right = 256.0
+offset_bottom = 340.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
 script = ExtResource("6_nearby")
 
 [node name="Content" type="VBoxContainer" parent="HUD/NearbyPanel" unique_id=1700000041]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 3
 
 [node name="Title" type="Label" parent="HUD/NearbyPanel/Content" unique_id=1700000042]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 text = "РЯДОМ"
 
 [node name="List" type="VBoxContainer" parent="HUD/NearbyPanel/Content" unique_id=1700000043]
