@@ -41,6 +41,8 @@ func _ready() -> void:
 	close_button.pressed.connect(close)
 	external_grid.columns = COLUMNS
 	player_grid.columns = COLUMNS
+	external_grid.set_drag_forwarding(_no_drag, _can_drop_external, _drop_external)
+	player_grid.set_drag_forwarding(_no_drag, _can_drop_player_grid, _drop_player_grid)
 	primary_button.pressed.connect(_on_primary_pressed)
 	secondary_button.pressed.connect(_on_secondary_pressed)
 	_clear_details()
@@ -180,7 +182,7 @@ func _build_equipment_row() -> void:
 		var slot: int = entry[0]
 		var item_id: StringName = entry[1]
 		var label := Button.new()
-		label.disabled = true
+		label.focus_mode = Control.FOCUS_NONE
 		label.clip_text = true
 		label.custom_minimum_size = Vector2(0, 30)
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -191,8 +193,16 @@ func _build_equipment_row() -> void:
 		elif item_id == &"unarmed":
 			item_name = "Без оружия"
 		label.text = "%s: %s" % [ItemCatalog.SLOT_NAMES_RU.get(slot, "Слот"), item_name]
+		label.tooltip_text = "Перетащите подходящий предмет из рюкзака"
 		if item_id != &"" and item_id != &"unarmed":
-			label.tooltip_text = "%s\n%s" % [item_name, ItemCatalog.describe(item_id)]
+			label.tooltip_text = "%s\n%s\nПеретащите другой предмет, чтобы заменить" % [
+				item_name, ItemCatalog.describe(item_id),
+			]
+		label.set_drag_forwarding(
+			_no_drag,
+			_can_drop_equipment.bind(slot),
+			_drop_equipment.bind(slot)
+		)
 		equipment_row.add_child(label)
 
 
@@ -218,7 +228,7 @@ func _fill_nearby_grid(grid: GridContainer) -> void:
 		grid.add_child(_make_empty_slot())
 
 
-func _make_slot(item_id: StringName, display_name: String, quantity: int, source: String) -> Button:
+func _make_slot(item_id: StringName, display_name: String, quantity: int, source: String, pickup: ItemPickup = null) -> Button:
 	var button := Button.new()
 	button.custom_minimum_size = SLOT_SIZE
 	button.clip_text = true
@@ -235,7 +245,14 @@ func _make_slot(item_id: StringName, display_name: String, quantity: int, source
 	if _is_equipped(item_id):
 		button.tooltip_text += "\nЭкипировано"
 		button.add_theme_color_override("font_color", GOOD)
-	button.pressed.connect(_on_slot_pressed.bind(source, item_id, display_name, quantity, null))
+	button.pressed.connect(_on_slot_pressed.bind(source, item_id, display_name, quantity, pickup))
+	var can_drop := _can_drop_player_grid if source == "player" else _can_drop_external
+	var drop := _drop_player_grid if source == "player" else _drop_external
+	button.set_drag_forwarding(
+		_slot_drag_data.bind(button, source, item_id, display_name, quantity, pickup),
+		can_drop,
+		drop
+	)
 	return button
 
 
@@ -253,6 +270,11 @@ func _make_pickup_slot(pickup: ItemPickup) -> Button:
 	button.pressed.connect(_on_slot_pressed.bind(
 		"pickup", pickup.item_id, pickup.display_name, pickup.quantity, pickup
 	))
+	button.set_drag_forwarding(
+		_slot_drag_data.bind(button, "pickup", pickup.item_id, pickup.display_name, pickup.quantity, pickup),
+		_can_drop_external,
+		_drop_external
+	)
 	return button
 
 
@@ -261,6 +283,7 @@ func _make_empty_slot() -> Button:
 	button.custom_minimum_size = SLOT_SIZE
 	button.disabled = true
 	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.modulate = Color(1, 1, 1, 0.4)
 	return button
 
@@ -384,3 +407,98 @@ func _clear_children(parent: Node) -> void:
 func _add_empty_grid(grid: GridContainer) -> void:
 	for _index in Inventory.MAX_SLOTS:
 		grid.add_child(_make_empty_slot())
+
+
+# --- drag and drop ----------------------------------------------------------
+
+func _no_drag(_at_position: Vector2) -> Variant:
+	return null
+
+
+func _slot_drag_data(
+	_at_position: Vector2,
+	button: Button,
+	source: String,
+	item_id: StringName,
+	display_name: String,
+	quantity: int,
+	pickup: ItemPickup
+) -> Variant:
+	if _player == null or not _player.is_alive:
+		return null
+
+	var preview := Label.new()
+	preview.text = display_name
+	if quantity > 1:
+		preview.text += " ×%d" % quantity
+	preview.add_theme_color_override("font_color", Color(1, 0.95, 0.7))
+	preview.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
+	preview.add_theme_constant_override("shadow_offset_x", 2)
+	preview.add_theme_constant_override("shadow_offset_y", 2)
+	if button.get_viewport().gui_is_dragging():
+		button.set_drag_preview(preview)
+
+	return {
+		"source": source,
+		"item_id": String(item_id),
+		"display_name": display_name,
+		"quantity": quantity,
+		"pickup": pickup,
+	}
+
+
+func _can_drop_external(_at_position: Vector2, data: Variant) -> bool:
+	if not (data is Dictionary) or _container == null or _player == null:
+		return false
+	return str(data.get("source", "")) == "player" and _player.is_alive
+
+
+func _drop_external(_at_position: Vector2, data: Variant) -> void:
+	if not _can_drop_external(_at_position, data):
+		return
+	_container.request_put(
+		StringName(str(data.get("item_id", ""))),
+		int(data.get("quantity", 1))
+	)
+
+
+func _can_drop_player_grid(_at_position: Vector2, data: Variant) -> bool:
+	if not (data is Dictionary) or _player == null or not _player.is_alive:
+		return false
+	var source := str(data.get("source", ""))
+	if source == "chest":
+		return _container != null
+	if source == "pickup":
+		var pickup: ItemPickup = data.get("pickup")
+		return is_instance_valid(pickup) and pickup.is_available()
+	return false
+
+
+func _drop_player_grid(_at_position: Vector2, data: Variant) -> void:
+	if not _can_drop_player_grid(_at_position, data):
+		return
+	var source := str(data.get("source", ""))
+	if source == "chest":
+		_container.request_take(
+			StringName(str(data.get("item_id", ""))),
+			int(data.get("quantity", 1))
+		)
+	elif source == "pickup":
+		var pickup: ItemPickup = data.get("pickup")
+		if is_instance_valid(pickup):
+			pickup.request()
+
+
+func _can_drop_equipment(_at_position: Vector2, data: Variant, slot: int) -> bool:
+	if not (data is Dictionary) or _player == null or not _player.is_alive:
+		return false
+	if str(data.get("source", "")) != "player":
+		return false
+	var item_id := StringName(str(data.get("item_id", "")))
+	return ItemCatalog.equip_slot(item_id) == slot
+
+
+func _drop_equipment(_at_position: Vector2, data: Variant, slot: int) -> void:
+	if not _can_drop_equipment(_at_position, data, slot):
+		return
+	_player.request_equip(StringName(str(data.get("item_id", ""))))
