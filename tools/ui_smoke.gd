@@ -10,6 +10,7 @@ extends Node
 func _ready() -> void:
 	# Never touch the player's real save from an automated smoke test.
 	PlayerProfile.persistence_enabled = false
+	PlayerProfile.draft = null
 	var packed: PackedScene = load("res://scenes/CharacterCreation.tscn")
 	if packed == null:
 		_fail("cannot load CharacterCreation.tscn")

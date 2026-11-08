@@ -14,6 +14,7 @@ const CAMERA_FOLLOW_SPEED := 8.0
 @onready var stats_vitals: Label = $HUD/StatsPanel/Margin/Stats/Vitals
 @onready var stats_skills: Label = $HUD/StatsPanel/Margin/Stats/Skills
 @onready var combat_log: Label = $HUD/CombatLog
+@onready var inventory_panel: InventoryPanel = $InventoryPanel
 
 var _next_slot: int = 0
 var _ready_peers: Dictionary = {}
@@ -28,6 +29,7 @@ func _ready() -> void:
 	arena_camera.rotation_degrees = Vector3(-58.0, 0.0, 0.0)
 	NetworkManager.players_updated.connect(_on_players_updated)
 	NetworkManager.disconnected.connect(_on_network_disconnected)
+	inventory_panel.toggled.connect(_on_inventory_toggled)
 
 	if NetworkManager.is_online() and not NetworkManager.is_host():
 		# Client: tell the server this scene (and its spawner) exists.
@@ -74,17 +76,31 @@ func _bind_stats(hero: PlayerCharacter) -> void:
 			_stats_player.health_changed.disconnect(_on_health_changed)
 		if _stats_player.combat_message.is_connected(_on_combat_message):
 			_stats_player.combat_message.disconnect(_on_combat_message)
+		if _stats_player.equipment_changed.is_connected(_on_equipment_changed):
+			_stats_player.equipment_changed.disconnect(_on_equipment_changed)
 	_stats_player = hero
 	if not hero.health_changed.is_connected(_on_health_changed):
 		hero.health_changed.connect(_on_health_changed)
 	if not hero.combat_message.is_connected(_on_combat_message):
 		hero.combat_message.connect(_on_combat_message)
+	if not hero.equipment_changed.is_connected(_on_equipment_changed):
+		hero.equipment_changed.connect(_on_equipment_changed)
+	inventory_panel.bind_player(hero)
 	combat_log.text = ""
 	_refresh_stats()
 
 
 func _on_health_changed(_current: int, _maximum: int) -> void:
 	_refresh_vitals()
+
+
+func _on_equipment_changed() -> void:
+	_refresh_vitals()
+
+
+func _on_inventory_toggled(open: bool) -> void:
+	if is_instance_valid(_local_player):
+		_local_player.inventory_open = open
 
 
 func _on_combat_message(text: String, hit: bool) -> void:
@@ -109,12 +125,13 @@ func _refresh_stats() -> void:
 func _refresh_vitals() -> void:
 	if not is_instance_valid(_stats_player):
 		return
-	stats_vitals.text = "HP %d / %d    КД %d\nСкорость %d фт · Пасс. восприятие %d" % [
+	stats_vitals.text = "HP %d / %d    КД %d\nСкорость %d фт · Пасс. восприятие %d\nОружие: %s" % [
 		_stats_player.current_hp,
 		_stats_player.max_hp,
 		_stats_player.armor_class,
 		_stats_player.speed_ft,
 		_stats_player.passive_perception,
+		str(_stats_player.weapon.get("name", "Без оружия")),
 	]
 
 

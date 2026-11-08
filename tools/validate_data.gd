@@ -20,6 +20,7 @@ func _initialize() -> void:
 	_smoke_monk()
 	_smoke_paladin()
 	_smoke_option_proficiencies()
+	_smoke_inventory()
 	_smoke_payload()
 
 	print("-".repeat(64))
@@ -332,6 +333,43 @@ func _smoke_option_proficiencies() -> void:
 	_expect("martial" in draft.weapon_training(), true, "cleric protector martial weapons")
 	for problem in draft.validate():
 		_fail("option proficiencies draft: %s" % problem)
+
+
+## The starting kit must turn into a usable inventory: categories, quantities,
+## stacking and the "leftover" contract of add_item.
+func _smoke_inventory() -> void:
+	var draft := _draft(&"fighter", &"soldier", &"dwarf", "Сумка")
+	if draft == null:
+		return
+
+	var scores := {
+		&"strength": 15, &"dexterity": 12, &"constitution": 14,
+		&"intelligence": 8, &"wisdom": 10, &"charisma": 13,
+	}
+	draft.apply_standard_array(scores)
+	var targets: Array[StringName] = [&"strength", &"dexterity", &"constitution"]
+	draft.background_targets = targets
+	var skills: Array[StringName] = [&"athletics", &"perception"]
+	draft.skill_choices = skills
+	draft.select_option(&"fighting_style", &"dueling")
+
+	var derived: Dictionary = draft.to_payload()["derived"]
+	var inventory := Inventory.new()
+	inventory.setup(derived["equipment"], int(derived["gold"]))
+
+	_expect(inventory.has_item(&"greatsword"), true, "inventory has greatsword")
+	_expect(inventory.has_item(&"chain_mail"), true, "inventory has chain mail")
+	_expect(inventory.get_item_count(&"javelin"), 8, "inventory javelin count")
+	_expect(ItemCatalog.category(&"greatsword"), ItemCatalog.Category.WEAPON, "catalog weapon")
+	_expect(ItemCatalog.category(&"chain_mail"), ItemCatalog.Category.ARMOR, "catalog armor")
+	_expect(ItemCatalog.category(&"arrow"), ItemCatalog.Category.AMMO, "catalog ammo")
+	_expect(ItemCatalog.stack_size(&"arrow"), 999, "catalog arrow stack")
+
+	var leftover := inventory.add_item(&"arrow", "Стрела", 15)
+	_expect(leftover, 0, "inventory arrow add leftover")
+	_expect(inventory.get_item_count(&"arrow"), 35, "inventory arrow total")
+	_expect(inventory.remove_item(&"arrow", 50), 35, "inventory arrow removed")
+	_expect(inventory.has_item(&"arrow"), false, "inventory arrows fully removed")
 
 
 # --- helpers ----------------------------------------------------------------

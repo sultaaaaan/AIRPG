@@ -12,6 +12,7 @@ extends CharacterBody3D
 
 signal health_changed(current: int, maximum: int)
 signal combat_message(text: String, hit: bool)
+signal equipment_changed
 
 @export var move_speed: float = 6.0
 @export var ground_acceleration: float = 60.0
@@ -58,6 +59,10 @@ const RESPAWN_DELAY: float = 3.0
 var weapon_id: StringName = &"unarmed"
 var weapon: Dictionary = WeaponTable.get_weapon(&"unarmed")
 var is_alive: bool = true
+## Runtime contents derived from the character's starting equipment.
+var inventory: Inventory = Inventory.new()
+## Set by the inventory panel; while open, the attack key is ignored.
+var inventory_open: bool = false
 
 var _last_attack_ms: int = -ATTACK_COOLDOWN_MS
 var _rng := RandomNumberGenerator.new()
@@ -123,26 +128,32 @@ func _apply_character() -> void:
 	if weapons_value is Array:
 		weapon_training = weapons_value
 
-	_choose_weapon(derived)
+	_build_inventory(derived)
+	_choose_weapon()
 
 
-## Picks the strongest weapon found in the starting equipment. Unknown items
-## are skipped, so a caster with only a staff/dagger still gets a sensible arm.
-func _choose_weapon(derived: Dictionary) -> void:
+## Builds the runtime inventory from the character payload. Kept read-only for
+## now: every peer derives the same contents, so no extra network state is
+## needed until pickups or trading arrive.
+func _build_inventory(derived: Dictionary) -> void:
 	var equipment: Variant = derived.get("equipment", [])
+	var entries: Array = equipment if equipment is Array else []
+	inventory.setup(entries, int(derived.get("gold", 0)))
+
+
+## Defaults to the strongest weapon in the backpack. The player can switch it
+## from the inventory panel; the server validates and replicates the choice.
+func _choose_weapon() -> void:
 	var best_score := -1.0
-	if equipment is Array:
-		for entry in equipment:
-			if not (entry is Dictionary):
-				continue
-			var item_id := StringName(str(entry.get("item_id", "")))
-			if not WeaponTable.has_weapon(item_id):
-				continue
-			var candidate := WeaponTable.get_weapon(item_id)
-			var score := float(candidate.get("count", 1)) * (float(candidate.get("faces", 1)) + 1.0) * 0.5
-			if score > best_score:
-				best_score = score
-				weapon_id = item_id
+	for slot in inventory.slots:
+		var item_id: StringName = slot["id"]
+		if not WeaponTable.has_weapon(item_id):
+			continue
+		var candidate := WeaponTable.get_weapon(item_id)
+		var score := float(candidate.get("count", 1)) * (float(candidate.get("faces", 1)) + 1.0) * 0.5
+		if score > best_score:
+			best_score = score
+			weapon_id = item_id
 	weapon = WeaponTable.get_weapon(weapon_id)
 
 
@@ -205,7 +216,7 @@ func _is_authority() -> bool:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _is_authority() or not is_alive:
+	if not _is_authority() or not is_alive or inventory_open:
 		return
 	if event.is_action_pressed("attack"):
 		if multiplayer.is_server():
@@ -214,6 +225,46 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			request_attack.rpc_id(1)
 		get_viewport().set_input_as_handled()
+
+
+# --- equipment --------------------------------------------------------------
+
+## Called by the inventory UI. The server validates ownership before switching.
+func request_equip(item_id: StringName) -> void:
+	if not _is_authority() or not is_alive:
+		return
+	if multiplayer.is_server():
+		request_equip_weapon(item_id)
+	else:
+		request_equip_weapon.rpc_id(1, item_id)
+
+
+@rpc("any_peer", "reliable")
+func request_equip_weapon(item_id: StringName) -> void:
+	if not multiplayer.is_server() or not is_alive:
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	if sender != 0 and sender != get_multiplayer_authority():
+		return
+	if not WeaponTable.has_weapon(item_id) or not inventory.has_item(item_id):
+		return
+	_apply_weapon(item_id)
+	_weapon_changed.rpc(item_id)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func _weapon_changed(item_id: StringName) -> void:
+	if not _rpc_from_server():
+		return
+	_apply_weapon(item_id)
+
+
+func _apply_weapon(item_id: StringName) -> void:
+	if not WeaponTable.has_weapon(item_id):
+		return
+	weapon_id = item_id
+	weapon = WeaponTable.get_weapon(item_id)
+	equipment_changed.emit()
 
 
 # --- combat -----------------------------------------------------------------
