@@ -28,6 +28,7 @@ const GOOD := Color(0.6, 0.95, 0.7)
 @onready var details_label: Label = $Center/Panel/Margin/Content/Details/DetailsLabel
 @onready var primary_button: Button = $Center/Panel/Margin/Content/Details/PrimaryButton
 @onready var secondary_button: Button = $Center/Panel/Margin/Content/Details/SecondaryButton
+@onready var drop_button: Button = $Center/Panel/Margin/Content/Details/DropButton
 
 var _player: PlayerCharacter = null
 var _container: LootChest = null
@@ -45,6 +46,7 @@ func _ready() -> void:
 	player_grid.set_drag_forwarding(_no_drag, _can_drop_player_grid, _drop_player_grid)
 	primary_button.pressed.connect(_on_primary_pressed)
 	secondary_button.pressed.connect(_on_secondary_pressed)
+	drop_button.pressed.connect(_on_drop_pressed)
 	_clear_details()
 
 
@@ -323,6 +325,7 @@ func _update_details() -> void:
 
 	primary_button.visible = false
 	secondary_button.visible = false
+	drop_button.visible = false
 
 	match source:
 		"player":
@@ -339,6 +342,9 @@ func _update_details() -> void:
 				secondary_button.visible = true
 				secondary_button.text = "В сундук"
 				secondary_button.disabled = not _player.is_alive
+			drop_button.visible = true
+			drop_button.text = "Выбросить"
+			drop_button.disabled = not _player.is_alive
 		"chest":
 			primary_button.visible = true
 			primary_button.text = "Забрать"
@@ -355,6 +361,8 @@ func _clear_details() -> void:
 	primary_button.disabled = false
 	secondary_button.visible = false
 	secondary_button.disabled = false
+	drop_button.visible = false
+	drop_button.disabled = false
 
 
 func _on_primary_pressed() -> void:
@@ -381,6 +389,17 @@ func _on_secondary_pressed() -> void:
 	var item_id: StringName = _selection["item_id"]
 	var quantity := int(_selection["quantity"])
 	_container.request_put(item_id, quantity)
+
+
+func _on_drop_pressed() -> void:
+	if _selection.is_empty() or _player == null:
+		return
+	if str(_selection.get("source", "")) != "player":
+		return
+	_player.request_drop(
+		StringName(str(_selection.get("item_id", ""))),
+		int(_selection.get("quantity", 1))
+	)
 
 
 # --- helpers ----------------------------------------------------------------

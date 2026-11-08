@@ -3,12 +3,14 @@ extends Node3D
 ## A single fixed top-down camera follows the local player (Hades-style).
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
+const PICKUP_SCENE: PackedScene = preload("res://scenes/ItemPickup.tscn")
 ## Height 14 and 9 units behind produce a ~58 degree downward view.
 const CAMERA_OFFSET := Vector3(0.0, 14.0, 9.0)
 const CAMERA_FOLLOW_SPEED := 8.0
 
 @onready var spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var players_root: Node3D = $Players
+@onready var dropped_items: Node3D = $DroppedItems
 @onready var arena_camera: Camera3D = $ArenaCamera
 @onready var stats_title: Label = $HUD/StatsPanel/Margin/Stats/Title
 @onready var stats_vitals: Label = $HUD/StatsPanel/Margin/Stats/Vitals
@@ -19,6 +21,7 @@ const CAMERA_FOLLOW_SPEED := 8.0
 @onready var inventory_panel: InventoryPanel = $InventoryPanel
 
 var _next_slot: int = 0
+var _next_drop_id: int = 1
 var _ready_peers: Dictionary = {}
 var _local_player: PlayerCharacter = null
 var _stats_player: PlayerCharacter = null
@@ -217,6 +220,32 @@ func _spawn_player_node(data: Dictionary) -> Node:
 	if int(data.get("id", 1)) == multiplayer.get_unique_id():
 		_local_player = player as PlayerCharacter
 	return player
+
+
+## Server-only: creates a ground item from a player's drop request.
+func spawn_dropped_item(item_id: StringName, display_name: String, quantity: int, position: Vector3) -> void:
+	if quantity <= 0:
+		return
+	if NetworkManager.is_online() and not multiplayer.is_server():
+		return
+	var drop_id := _next_drop_id
+	_next_drop_id += 1
+	_spawn_dropped_item.rpc(drop_id, item_id, display_name, quantity, position)
+
+
+@rpc("authority", "call_local", "reliable")
+func _spawn_dropped_item(drop_id: int, item_id: StringName, display_name: String, quantity: int, position: Vector3) -> void:
+	_next_drop_id = maxi(_next_drop_id, drop_id + 1)
+	var node_name := "Dropped%d" % drop_id
+	if dropped_items.get_node_or_null(node_name) != null:
+		return
+	var pickup := PICKUP_SCENE.instantiate()
+	pickup.name = node_name
+	pickup.item_id = item_id
+	pickup.display_name = display_name
+	pickup.quantity = quantity
+	dropped_items.add_child(pickup)
+	pickup.global_position = position
 
 
 @rpc("any_peer", "reliable")

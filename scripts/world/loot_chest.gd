@@ -171,4 +171,10 @@ func _players_root() -> Node:
 		var node := scene.get_node_or_null("Players")
 		if node != null:
 			return node
-	return get_parent().get_node_or_null("Players")
+	var current: Node = get_parent()
+	while current != null:
+		var node := current.get_node_or_null("Players")
+		if node != null:
+			return node
+		current = current.get_parent()
+	return null

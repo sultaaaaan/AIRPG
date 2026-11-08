@@ -161,6 +161,50 @@ func _recalculate_armor_class() -> void:
 	)
 
 
+## Client -> server: drop a stack on the ground in front of the character.
+func request_drop(item_id: StringName, quantity: int) -> void:
+	if not _is_authority() or not is_alive:
+		return
+	if multiplayer.is_server():
+		_request_drop(item_id, quantity)
+	else:
+		_request_drop.rpc_id(1, item_id, quantity)
+
+
+@rpc("any_peer", "reliable")
+func _request_drop(item_id: StringName, quantity: int) -> void:
+	if not multiplayer.is_server() or not is_alive:
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	if sender != 0 and sender != get_multiplayer_authority():
+		return
+
+	var game := get_tree().current_scene
+	if game == null:
+		game = get_parent().get_parent()
+	if game == null or not game.has_method("spawn_dropped_item"):
+		return
+
+	var available := inventory.get_item_count(item_id)
+	var amount := mini(maxi(1, quantity), available)
+	if amount <= 0:
+		return
+
+	var item_name := inventory.get_display_name(item_id)
+	var removed := server_remove_item(item_id, amount)
+	if removed <= 0:
+		return
+
+	var forward := -global_transform.basis.z
+	forward.y = 0.0
+	if forward.length_squared() < 0.0001:
+		forward = Vector3.FORWARD
+	forward = forward.normalized()
+	var drop_position := global_position + forward * 1.4
+	drop_position.y = 0.05
+	game.spawn_dropped_item(item_id, item_name, removed, drop_position)
+
+
 func _physics_process(delta: float) -> void:
 	if not _is_authority():
 		return
