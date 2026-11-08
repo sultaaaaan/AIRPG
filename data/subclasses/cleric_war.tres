@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_h28t4"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_ddk17"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_ky4pb"]
+
+[sub_resource type="Resource" id="Resource_ubpwq"]
+script = ExtResource("2_ddk17")
+id = &"war_priest"
+display_name = "Воинственный жрец"
+description = "Бонусным действием вы совершаете дополнительную атаку оружием."
+level = 3
+
+[sub_resource type="Resource" id="Resource_rr2gh"]
+script = ExtResource("2_ddk17")
+id = &"guided_strike"
+display_name = "Направленный удар"
+description = "Вы жертвуете точностью божества, чтобы компенсировать промах."
+level = 3
+
+[resource]
+script = ExtResource("3_ky4pb")
+id = &"war"
+class_id = &"cleric"
+display_name = "Домен войны"
+description = "Служение битве и дисциплине оружия."
+features = Array[ExtResource("2_ddk17")]([SubResource("Resource_ubpwq"), SubResource("Resource_rr2gh")])

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_m5cqv"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_pbgn1"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_xidtt"]
+
+[sub_resource type="Resource" id="Resource_mbmth"]
+script = ExtResource("1_m5cqv")
+item_id = &"gaming_set"
+display_name = "Игровой набор"
+
+[sub_resource type="Resource" id="Resource_cjv7h"]
+script = ExtResource("1_m5cqv")
+item_id = &"fine_clothes"
+display_name = "Роскошная одежда"
+
+[sub_resource type="Resource" id="Resource_88ols"]
+script = ExtResource("1_m5cqv")
+item_id = &"perfume"
+display_name = "Парфюм"
+
+[sub_resource type="Resource" id="Resource_afl73"]
+script = ExtResource("2_pbgn1")
+id = &"skilled"
+display_name = "Умелый"
+description = "Получите владение любыми тремя навыками или инструментами на выбор."
+
+[resource]
+script = ExtResource("3_xidtt")
+id = &"noble"
+display_name = "Дворянин"
+description = "Вы выросли в достатке и знати, среди интриг и приличий."
+ability_options = Array[StringName]([&"strength", &"intelligence", &"charisma"])
+skill_proficiencies = Array[StringName]([&"history", &"persuasion"])
+tool_proficiency = &"gaming_set"
+origin_feat = SubResource("Resource_afl73")
+equipment_pack = Array[ExtResource("1_m5cqv")]([SubResource("Resource_mbmth"), SubResource("Resource_cjv7h"), SubResource("Resource_88ols")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_68365"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_evuvo"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_1i0qp"]
+
+[sub_resource type="Resource" id="Resource_nvjqh"]
+script = ExtResource("2_evuvo")
+id = &"archfey_spells"
+display_name = "Заклинания архифеи"
+description = "Вы получаете заклинания очарования и иллюзий."
+level = 3
+
+[sub_resource type="Resource" id="Resource_b2gky"]
+script = ExtResource("2_evuvo")
+id = &"fey_presence"
+display_name = "Присутствие фей"
+description = "Вы окутываете существ чарами или страхом."
+level = 3
+
+[resource]
+script = ExtResource("3_1i0qp")
+id = &"archfey"
+class_id = &"warlock"
+display_name = "Архифея"
+description = "Покровитель из Дикого леса, любящий интриги."
+features = Array[ExtResource("2_evuvo")]([SubResource("Resource_nvjqh"), SubResource("Resource_b2gky")])

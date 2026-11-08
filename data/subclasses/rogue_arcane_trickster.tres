@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_km112"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_113fh"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_1v8r4"]
+
+[sub_resource type="Resource" id="Resource_yt5x2"]
+script = ExtResource("2_113fh")
+id = &"at_spellcasting"
+display_name = "Заклинания"
+description = "Вы изучаете заклинания волшебника, опираясь на Интеллект."
+level = 3
+
+[sub_resource type="Resource" id="Resource_4mj8e"]
+script = ExtResource("2_113fh")
+id = &"mage_hand_legerdemain"
+display_name = "Ловкость рук волшебной руки"
+description = "Ваша «Волшебная рука» становится невидимой и умеет больше."
+level = 3
+
+[resource]
+script = ExtResource("3_1v8r4")
+id = &"arcane_trickster"
+class_id = &"rogue"
+display_name = "Мистический ловкач"
+description = "Плут, ворующий не только кошельки, но и заклинания."
+features = Array[ExtResource("2_113fh")]([SubResource("Resource_yt5x2"), SubResource("Resource_4mj8e")])

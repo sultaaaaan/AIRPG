@@ -1,0 +1,150 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/character_creation.gd" id="1_cc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.06, 0.08, 0.12, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.45, 0.75, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="CharacterCreation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cc")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.035, 0.045, 0.07, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/Root/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "Создание персонажа"
+
+[node name="Spacer" type="Control" parent="Margin/Root/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LevelLabel" type="Label" parent="Margin/Root/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "1 уровень"
+vertical_alignment = 1
+
+[node name="LevelUpButton" type="Button" parent="Margin/Root/Header"]
+custom_minimum_size = Vector2(130, 36)
+layout_mode = 2
+text = "УРОВЕНЬ +"
+
+[node name="NameLabel" type="Label" parent="Margin/Root/Header"]
+layout_mode = 2
+text = "Имя"
+vertical_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="Margin/Root/Header"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+placeholder_text = "Как зовут героя?"
+max_length = 40
+
+[node name="Body" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Left" type="PanelContainer" parent="Margin/Root/Body"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="LeftMargin" type="MarginContainer" parent="Margin/Root/Body/Left"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="Tabs" type="TabContainer" parent="Margin/Root/Body/Left/LeftMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SheetPanel" type="PanelContainer" parent="Margin/Root/Body"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="SheetMargin" type="MarginContainer" parent="Margin/Root/Body/SheetPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="Sheet" type="RichTextLabel" parent="Margin/Root/Body/SheetPanel/SheetMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_active = true
+selection_enabled = true
+
+[node name="Footer" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StatusLabel" type="Label" parent="Margin/Root/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.85, 0.65, 1)
+theme_override_font_sizes/font_size = 14
+text = "Выберите класс"
+autowrap_mode = 2
+vertical_alignment = 1
+
+[node name="CancelButton" type="Button" parent="Margin/Root/Footer"]
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+text = "Отмена"
+
+[node name="AcceptButton" type="Button" parent="Margin/Root/Footer"]
+custom_minimum_size = Vector2(180, 44)
+layout_mode = 2
+text = "Готово"

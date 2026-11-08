@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_466ic"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_u5nbu"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_fb6ko"]
+
+[sub_resource type="Resource" id="Resource_pfvcj"]
+script = ExtResource("2_u5nbu")
+id = &"combat_superiority"
+display_name = "Боевое превосходство"
+description = "Вы получаете кости превосходства и приёмы, усиливающие атаки и защиту."
+level = 3
+
+[sub_resource type="Resource" id="Resource_ggoqo"]
+script = ExtResource("2_u5nbu")
+id = &"student_of_war"
+display_name = "Ученик войны"
+description = "Вы изучаете историю, тактику и ремесло."
+level = 3
+
+[resource]
+script = ExtResource("3_fb6ko")
+id = &"battle_master"
+class_id = &"fighter"
+display_name = "Мастер боя"
+description = "Тактик, превращающий бой в набор отработанных приёмов."
+features = Array[ExtResource("2_u5nbu")]([SubResource("Resource_pfvcj"), SubResource("Resource_ggoqo")])

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_2u4do"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="2_mkeke"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_65ae8"]
+
+[sub_resource type="Resource" id="Resource_61125"]
+script = ExtResource("3_65ae8")
+id = &"draconic_ancestry"
+display_name = "Драконье наследие"
+description = "Выберите вид дракона: он определяет тип урона дыхания и сопротивление."
+
+[sub_resource type="Resource" id="Resource_2amol"]
+script = ExtResource("3_65ae8")
+id = &"breath_weapon"
+display_name = "Дыхание дракона"
+description = "Действием Атаки выдохните стихию в конусе 4,5 м или линии 9 м. Урон 1d10, растёт с уровнем."
+
+[sub_resource type="Resource" id="Resource_n4yco"]
+script = ExtResource("3_65ae8")
+id = &"damage_resistance"
+display_name = "Сопротивление урону"
+description = "Сопротивление типу урона, связанному с вашим драконьим наследием."
+
+[resource]
+script = ExtResource("2_mkeke")
+id = &"dragonborn"
+display_name = "Драконорождённый"
+description = "Потомок драконов, несущий в крови стихийную мощь."
+darkvision_range = 60
+languages = Array[StringName]([&"common", &"draconic"])
+traits = Array[ExtResource("3_65ae8")]([SubResource("Resource_61125"), SubResource("Resource_2amol"), SubResource("Resource_n4yco")])

@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_srpi7"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_1s86g"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_2jfn6"]
+
+[sub_resource type="Resource" id="Resource_3n6dx"]
+script = ExtResource("1_srpi7")
+item_id = &"quarterstaff"
+display_name = "Боевой посох"
+
+[sub_resource type="Resource" id="Resource_vofj2"]
+script = ExtResource("1_srpi7")
+item_id = &"herbalism_kit"
+display_name = "Набор травника"
+
+[sub_resource type="Resource" id="Resource_54gf3"]
+script = ExtResource("1_srpi7")
+item_id = &"bedroll"
+display_name = "Спальник"
+
+[sub_resource type="Resource" id="Resource_y5kka"]
+script = ExtResource("1_srpi7")
+item_id = &"book"
+display_name = "Книга (философия)"
+
+[sub_resource type="Resource" id="Resource_gxmlt"]
+script = ExtResource("1_srpi7")
+item_id = &"lamp"
+display_name = "Лампа"
+
+[sub_resource type="Resource" id="Resource_mvka8"]
+script = ExtResource("1_srpi7")
+item_id = &"oil"
+display_name = "Масло (фляга)"
+quantity = 3
+
+[sub_resource type="Resource" id="Resource_brshy"]
+script = ExtResource("1_srpi7")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_vyges"]
+script = ExtResource("2_1s86g")
+id = &"healer"
+display_name = "Лекарь"
+description = "Действием Магии с набором целителя восстановите 1d6 + бонус мастерства хитов. Можете лечить раны и стабилизировать союзников."
+
+[resource]
+script = ExtResource("3_2jfn6")
+id = &"hermit"
+display_name = "Отшельник"
+description = "Вы искали истину в уединении и долгих размышлениях."
+ability_options = Array[StringName]([&"constitution", &"wisdom", &"charisma"])
+skill_proficiencies = Array[StringName]([&"medicine", &"religion"])
+tool_proficiency = &"herbalism_kit"
+origin_feat = SubResource("Resource_vyges")
+equipment_pack = Array[ExtResource("1_srpi7")]([SubResource("Resource_3n6dx"), SubResource("Resource_vofj2"), SubResource("Resource_54gf3"), SubResource("Resource_y5kka"), SubResource("Resource_gxmlt"), SubResource("Resource_mvka8"), SubResource("Resource_brshy")])

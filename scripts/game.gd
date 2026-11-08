@@ -1,0 +1,193 @@
+extends Node3D
+## 3D arena. The server owns spawning; MultiplayerSpawner replicates players.
+## A single fixed top-down camera follows the local player (Hades-style).
+
+const PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
+## Height 14 and 9 units behind produce a ~58 degree downward view.
+const CAMERA_OFFSET := Vector3(0.0, 14.0, 9.0)
+const CAMERA_FOLLOW_SPEED := 8.0
+
+@onready var spawner: MultiplayerSpawner = $MultiplayerSpawner
+@onready var players_root: Node3D = $Players
+@onready var arena_camera: Camera3D = $ArenaCamera
+@onready var stats_title: Label = $HUD/StatsPanel/Margin/Stats/Title
+@onready var stats_vitals: Label = $HUD/StatsPanel/Margin/Stats/Vitals
+@onready var stats_skills: Label = $HUD/StatsPanel/Margin/Stats/Skills
+@onready var combat_log: Label = $HUD/CombatLog
+
+var _next_slot: int = 0
+var _ready_peers: Dictionary = {}
+var _local_player: PlayerCharacter = null
+var _stats_player: PlayerCharacter = null
+
+
+func _ready() -> void:
+	get_tree().paused = false
+	spawner.spawn_function = _spawn_player_node
+	# Fixed Hades-style angle: ~58 degrees down, no yaw.
+	arena_camera.rotation_degrees = Vector3(-58.0, 0.0, 0.0)
+	NetworkManager.players_updated.connect(_on_players_updated)
+	NetworkManager.disconnected.connect(_on_network_disconnected)
+
+	if NetworkManager.is_online() and not NetworkManager.is_host():
+		# Client: tell the server this scene (and its spawner) exists.
+		notify_game_ready.rpc_id(1)
+	else:
+		# Server, or a standalone headless run with no ENet peer.
+		_ready_peers[1] = true
+		_try_spawn_all()
+
+
+func _process(delta: float) -> void:
+	if not is_instance_valid(_local_player):
+		_local_player = _find_local_player()
+	if _local_player == null:
+		return
+	if _local_player != _stats_player:
+		_bind_stats(_local_player)
+
+	# Follow only horizontally so jumps do not bounce the camera.
+	var target := Vector3(
+		_local_player.global_position.x + CAMERA_OFFSET.x,
+		CAMERA_OFFSET.y,
+		_local_player.global_position.z + CAMERA_OFFSET.z
+	)
+	arena_camera.global_position = arena_camera.global_position.lerp(
+		target, minf(1.0, CAMERA_FOLLOW_SPEED * delta)
+	)
+
+
+func _find_local_player() -> PlayerCharacter:
+	for child in players_root.get_children():
+		if child is PlayerCharacter and child.is_multiplayer_authority():
+			return child
+	return null
+
+
+# --- stats HUD ---------------------------------------------------------------
+
+func _bind_stats(hero: PlayerCharacter) -> void:
+	if _stats_player == hero:
+		return
+	if is_instance_valid(_stats_player):
+		if _stats_player.health_changed.is_connected(_on_health_changed):
+			_stats_player.health_changed.disconnect(_on_health_changed)
+		if _stats_player.combat_message.is_connected(_on_combat_message):
+			_stats_player.combat_message.disconnect(_on_combat_message)
+	_stats_player = hero
+	if not hero.health_changed.is_connected(_on_health_changed):
+		hero.health_changed.connect(_on_health_changed)
+	if not hero.combat_message.is_connected(_on_combat_message):
+		hero.combat_message.connect(_on_combat_message)
+	combat_log.text = ""
+	_refresh_stats()
+
+
+func _on_health_changed(_current: int, _maximum: int) -> void:
+	_refresh_vitals()
+
+
+func _on_combat_message(text: String, hit: bool) -> void:
+	combat_log.text = text
+	combat_log.add_theme_color_override(
+		"font_color",
+		Color(0.6, 0.95, 0.7) if hit else Color(0.95, 0.72, 0.55)
+	)
+
+
+func _refresh_stats() -> void:
+	if not is_instance_valid(_stats_player):
+		return
+	var title := _stats_player.nickname
+	if not _stats_player.hero_class.is_empty():
+		title += " · %s, %d ур." % [_stats_player.hero_class, _stats_player.level]
+	stats_title.text = title
+	_refresh_vitals()
+	_refresh_skills()
+
+
+func _refresh_vitals() -> void:
+	if not is_instance_valid(_stats_player):
+		return
+	stats_vitals.text = "HP %d / %d    КД %d\nСкорость %d фт · Пасс. восприятие %d" % [
+		_stats_player.current_hp,
+		_stats_player.max_hp,
+		_stats_player.armor_class,
+		_stats_player.speed_ft,
+		_stats_player.passive_perception,
+	]
+
+
+func _refresh_skills() -> void:
+	if not is_instance_valid(_stats_player):
+		return
+	var trained: Array = _stats_player.skills.keys()
+	trained.sort()
+	var parts := PackedStringArray()
+	for key in trained:
+		parts.append("%s %+d" % [
+			String(CharacterText.SKILL_NAMES_RU.get(StringName(str(key)), key)),
+			int(_stats_player.skills[key]),
+		])
+	stats_skills.text = "Навыки: %s" % (", ".join(parts) if not parts.is_empty() else "—")
+
+
+func _spawn_player_node(data: Dictionary) -> Node:
+	var player := PLAYER_SCENE.instantiate()
+	player.name = str(int(data.get("id", 1)))
+	player.set_multiplayer_authority(int(data.get("id", 1)))
+	player.nickname = str(data.get("nickname", "Игрок"))
+	player.slot = int(data.get("slot", 0))
+	player.character = data.get("character", {})
+	if int(data.get("id", 1)) == multiplayer.get_unique_id():
+		_local_player = player as PlayerCharacter
+	return player
+
+
+@rpc("any_peer", "reliable")
+func notify_game_ready() -> void:
+	if not NetworkManager.is_host():
+		return
+	_ready_peers[multiplayer.get_remote_sender_id()] = true
+	_try_spawn_all()
+
+
+func _try_spawn_all() -> void:
+	for peer_id in NetworkManager.players:
+		if not _ready_peers.has(int(peer_id)):
+			return
+	_on_players_updated(NetworkManager.players)
+
+
+func _spawn_peer(peer_id: int) -> void:
+	if players_root.get_node_or_null(str(peer_id)) != null:
+		return
+	spawner.spawn({
+		"id": peer_id,
+		"nickname": str(NetworkManager.players.get(peer_id, "Игрок")),
+		"slot": _next_slot,
+		"character": NetworkManager.characters.get(peer_id, {}),
+	})
+	_next_slot += 1
+
+
+func _on_players_updated(players: Dictionary) -> void:
+	if NetworkManager.is_online() and not NetworkManager.is_host():
+		return
+
+	# Despawn peers that left (MultiplayerSpawner mirrors this on clients).
+	for child in players_root.get_children():
+		if not players.has(int(str(child.name))):
+			child.queue_free()
+
+	for peer_id in players:
+		if players_root.get_node_or_null(str(int(peer_id))) == null:
+			_spawn_peer(int(peer_id))
+
+
+func _on_network_disconnected() -> void:
+	if NetworkManager.last_message.is_empty():
+		NetworkManager.last_message = "Соединение с сервером потеряно."
+	NetworkManager.last_message_is_error = true
+	get_tree().paused = false
+	get_tree().change_scene_to_file(NetworkManager.MENU_SCENE)

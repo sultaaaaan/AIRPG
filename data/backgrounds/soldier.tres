@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_4otg6"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_s8r6t"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_y4dgy"]
+
+[sub_resource type="Resource" id="Resource_v3qpp"]
+script = ExtResource("1_4otg6")
+item_id = &"spear"
+display_name = "Копьё"
+
+[sub_resource type="Resource" id="Resource_nuvbl"]
+script = ExtResource("1_4otg6")
+item_id = &"shortbow"
+display_name = "Короткий лук"
+
+[sub_resource type="Resource" id="Resource_duqhx"]
+script = ExtResource("1_4otg6")
+item_id = &"arrow"
+display_name = "Стрела"
+quantity = 20
+
+[sub_resource type="Resource" id="Resource_gpvgl"]
+script = ExtResource("1_4otg6")
+item_id = &"gaming_set"
+display_name = "Игровой набор"
+
+[sub_resource type="Resource" id="Resource_0kskl"]
+script = ExtResource("1_4otg6")
+item_id = &"healers_kit"
+display_name = "Набор целителя"
+
+[sub_resource type="Resource" id="Resource_g6283"]
+script = ExtResource("1_4otg6")
+item_id = &"quiver"
+display_name = "Колчан"
+
+[sub_resource type="Resource" id="Resource_pd0xw"]
+script = ExtResource("1_4otg6")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_732x7"]
+script = ExtResource("2_s8r6t")
+id = &"savage_attacker"
+display_name = "Свирепый атакующий"
+description = "Раз в ход при попадании оружием перебросьте кости урона и используйте лучший результат."
+
+[resource]
+script = ExtResource("3_y4dgy")
+id = &"soldier"
+display_name = "Солдат"
+description = "Вы служили в армии, зная строй, приказ и цену дисциплины."
+ability_options = Array[StringName]([&"strength", &"dexterity", &"constitution"])
+skill_proficiencies = Array[StringName]([&"athletics", &"intimidation"])
+tool_proficiency = &"gaming_set"
+origin_feat = SubResource("Resource_732x7")
+equipment_pack = Array[ExtResource("1_4otg6")]([SubResource("Resource_v3qpp"), SubResource("Resource_nuvbl"), SubResource("Resource_duqhx"), SubResource("Resource_gpvgl"), SubResource("Resource_0kskl"), SubResource("Resource_g6283"), SubResource("Resource_pd0xw")])

@@ -1,0 +1,247 @@
+[gd_scene load_steps=12 format=3 uid="uid://c1u0tejjkrari"]
+
+[ext_resource type="Script" uid="uid://cqppray4js083" path="res://scripts/game.gd" id="1_game"]
+[ext_resource type="Script" path="res://scripts/pause_menu.gd" id="2_pause"]
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 1
+background_color = Color(0.32, 0.42, 0.58, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.62, 0.72, 1)
+ambient_light_energy = 0.7
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.17, 0.24, 0.2, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+material = SubResource("Material_ground")
+size = Vector3(80, 1, 80)
+
+[sub_resource type="BoxShape3D" id="BoxShape_ground"]
+size = Vector3(80, 1, 80)
+
+[sub_resource type="StandardMaterial3D" id="Material_box"]
+albedo_color = Color(0.55, 0.35, 0.2, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_box"]
+material = SubResource("Material_box")
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape_box"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 24.0
+bg_color = Color(0.06, 0.08, 0.12, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.45, 0.75, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.04, 0.06, 0.09, 0.78)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.45, 0.75, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Game" type="Node3D" unique_id=482239952]
+script = ExtResource("1_game")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=600699586]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=454208895]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 12, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=727144637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=929743269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0034637451, 0.009389877, -0.023462296)
+mesh = SubResource("BoxMesh_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=195028132]
+shape = SubResource("BoxShape_ground")
+
+[node name="Crate1" type="StaticBody3D" parent="." unique_id=398349278]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, -4)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Crate1" unique_id=1213761960]
+mesh = SubResource("BoxMesh_box")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate1" unique_id=1859515176]
+shape = SubResource("BoxShape_box")
+
+[node name="Crate2" type="StaticBody3D" parent="." unique_id=1832694981]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Crate2" unique_id=1270556884]
+mesh = SubResource("BoxMesh_box")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate2" unique_id=96138148]
+shape = SubResource("BoxShape_box")
+
+[node name="Crate3" type="StaticBody3D" parent="." unique_id=1773262742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 7)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Crate3" unique_id=1539301645]
+mesh = SubResource("BoxMesh_box")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate3" unique_id=1405329832]
+shape = SubResource("BoxShape_box")
+
+[node name="Crate4" type="StaticBody3D" parent="." unique_id=1384007614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, -8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Crate4" unique_id=673987830]
+mesh = SubResource("BoxMesh_box")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate4" unique_id=866710696]
+shape = SubResource("BoxShape_box")
+
+[node name="Players" type="Node3D" parent="." unique_id=683225094]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1349467871]
+spawn_path = NodePath("../Players")
+
+[node name="ArenaCamera" type="Camera3D" parent="." unique_id=1155241836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 7.5)
+current = true
+fov = 45.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1818269160]
+
+[node name="Hint" type="Label" parent="HUD" unique_id=180005713]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 620.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 4
+text = "WASD — движение · Space — прыжок · F — атака · Esc — меню"
+
+[node name="StatsPanel" type="PanelContainer" parent="HUD" unique_id=1700000001]
+offset_left = 16.0
+offset_top = 52.0
+offset_right = 420.0
+offset_bottom = 200.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="Margin" type="MarginContainer" parent="HUD/StatsPanel" unique_id=1700000002]
+layout_mode = 2
+
+[node name="Stats" type="VBoxContainer" parent="HUD/StatsPanel/Margin" unique_id=1700000003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="HUD/StatsPanel/Margin/Stats" unique_id=1700000004]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Игрок"
+
+[node name="Vitals" type="Label" parent="HUD/StatsPanel/Margin/Stats" unique_id=1700000005]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.95, 1)
+theme_override_font_sizes/font_size = 14
+text = "HP — / —    КД —"
+autowrap_mode = 2
+
+[node name="Skills" type="Label" parent="HUD/StatsPanel/Margin/Stats" unique_id=1700000006]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.72, 0.85, 1)
+theme_override_font_sizes/font_size = 12
+text = "Навыки: —"
+autowrap_mode = 2
+
+[node name="CombatLog" type="Label" parent="HUD" unique_id=1700000007]
+offset_left = 16.0
+offset_top = 206.0
+offset_right = 560.0
+offset_bottom = 250.0
+theme_override_colors/font_color = Color(0.9, 0.92, 0.96, 0.95)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 2
+
+[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=1082513466]
+process_mode = 3
+layer = 10
+script = ExtResource("2_pause")
+
+[node name="Overlay" type="ColorRect" parent="PauseMenu" unique_id=1134751962]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.05, 0.72)
+
+[node name="Center" type="CenterContainer" parent="PauseMenu" unique_id=2001437269]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="PauseMenu/Center" unique_id=406089101]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pause")
+
+[node name="Content" type="VBoxContainer" parent="PauseMenu/Center/Panel" unique_id=1680785661]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="PauseMenu/Center/Panel/Content" unique_id=1485957470]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "Пауза"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="PauseMenu/Center/Panel/Content" unique_id=1405558901]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.65, 0.8, 1)
+theme_override_font_sizes/font_size = 13
+text = "Esc — продолжить игру"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseMenu/Center/Panel/Content" unique_id=1452851057]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Продолжить"
+
+[node name="LobbyButton" type="Button" parent="PauseMenu/Center/Panel/Content" unique_id=1348726502]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Выйти в лобби"
+
+[node name="QuitButton" type="Button" parent="PauseMenu/Center/Panel/Content" unique_id=89694657]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Выйти из игры"

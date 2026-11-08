@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_da2k8"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_2lfdl"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_o1okr"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="4_1idy1"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="5_pl2tb"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="6_vttfb"]
+
+[sub_resource type="Resource" id="Resource_dt3c4"]
+script = ExtResource("3_o1okr")
+id = &"magician_bonus"
+display_name = "Тайные знания"
+description = "+модификатор Мудрости к проверкам Магии и Природы, один дополнительный заговор."
+
+[sub_resource type="Resource" id="Resource_hrk42"]
+script = ExtResource("2_2lfdl")
+id = &"magician"
+display_name = "Маг"
+description = "Вы знаете один дополнительный заговор друида и добавляете модификатор Мудрости к проверкам Тайных знаний (Магия) и Природы."
+features = Array[ExtResource("3_o1okr")]([SubResource("Resource_dt3c4")])
+
+[sub_resource type="Resource" id="Resource_52k3s"]
+script = ExtResource("2_2lfdl")
+id = &"warden"
+display_name = "Хранитель"
+description = "Вы получаете владение воинским оружием и средними доспехами."
+granted_armor_training = Array[StringName]([&"medium"])
+granted_weapon_training = Array[StringName]([&"martial"])
+
+[sub_resource type="Resource" id="Resource_0c33o"]
+script = ExtResource("1_da2k8")
+id = &"primal_order"
+prompt = "Выберите первобытный орден"
+options = Array[ExtResource("2_2lfdl")]([SubResource("Resource_hrk42"), SubResource("Resource_52k3s")])
+
+[sub_resource type="Resource" id="Resource_35ciw"]
+script = ExtResource("4_1idy1")
+item_id = &"leather_armor"
+display_name = "Кожаный доспех"
+
+[sub_resource type="Resource" id="Resource_g3x4n"]
+script = ExtResource("4_1idy1")
+item_id = &"shield"
+display_name = "Щит"
+
+[sub_resource type="Resource" id="Resource_tslkq"]
+script = ExtResource("4_1idy1")
+item_id = &"sickle"
+display_name = "Серп"
+
+[sub_resource type="Resource" id="Resource_afn7e"]
+script = ExtResource("4_1idy1")
+item_id = &"druidic_focus"
+display_name = "Друидический фокус"
+
+[sub_resource type="Resource" id="Resource_7lp64"]
+script = ExtResource("4_1idy1")
+item_id = &"explorers_pack"
+display_name = "Набор путешественника"
+
+[sub_resource type="Resource" id="Resource_5dshn"]
+script = ExtResource("4_1idy1")
+item_id = &"herbalism_kit"
+display_name = "Набор травника"
+
+[sub_resource type="Resource" id="Resource_23gt4"]
+script = ExtResource("3_o1okr")
+id = &"druidic"
+display_name = "Друидический язык"
+description = "Вы знаете тайный язык друидов и можете оставлять на нём скрытые послания."
+
+[sub_resource type="Resource" id="Resource_da2k8"]
+script = ExtResource("3_o1okr")
+id = &"wild_shape"
+display_name = "Дикий облик"
+description = "Бонусным действием вы превращаетесь в зверя, которого видели."
+level = 2
+
+[sub_resource type="Resource" id="Resource_2lfdl"]
+script = ExtResource("3_o1okr")
+id = &"wild_companion"
+display_name = "Дикий спутник"
+description = "Вы призываете духа-зверя, помогающего вам."
+level = 2
+
+[sub_resource type="Resource" id="Resource_o1okr"]
+script = ExtResource("3_o1okr")
+id = &"wild_resurgence"
+display_name = "Возрождение природы"
+description = "Вы можете потратить ячейку заклинания, чтобы восстановить использование Дикого облика, или наоборот."
+level = 5
+
+[sub_resource type="Resource" id="Resource_g4g52"]
+script = ExtResource("6_vttfb")
+ability = &"wisdom"
+cantrips_known = 2
+spells_prepared = 4
+level_1_slots = 2
+secret_language = &"druidic"
+
+[resource]
+script = ExtResource("5_pl2tb")
+id = &"druid"
+display_name = "Друид"
+description = "Хранитель природного равновесия, повелевающий стихиями и зверями."
+primary_abilities = Array[StringName]([&"wisdom"])
+saving_throws = Array[StringName]([&"intelligence", &"wisdom"])
+armor_training = Array[StringName]([&"light", &"medium", &"shields"])
+weapon_training = Array[StringName]([&"simple"])
+tool_proficiencies = Array[StringName]([&"herbalism_kit"])
+skill_pool = Array[StringName]([&"animal_handling", &"arcana", &"insight", &"medicine", &"nature", &"perception", &"religion", &"survival"])
+features = Array[ExtResource("3_o1okr")]([SubResource("Resource_23gt4"), SubResource("Resource_da2k8"), SubResource("Resource_2lfdl"), SubResource("Resource_o1okr")])
+choices = Array[ExtResource("1_da2k8")]([SubResource("Resource_0c33o")])
+spellcasting = SubResource("Resource_g4g52")
+equipment_pack = Array[ExtResource("4_1idy1")]([SubResource("Resource_35ciw"), SubResource("Resource_g3x4n"), SubResource("Resource_tslkq"), SubResource("Resource_afn7e"), SubResource("Resource_7lp64"), SubResource("Resource_5dshn")])
+alternative_gold = 100

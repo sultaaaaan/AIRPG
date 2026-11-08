@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_5a3oq"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_k4har"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_12u2y"]
+
+[sub_resource type="Resource" id="Resource_jggjt"]
+script = ExtResource("1_5a3oq")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_6jcdv"]
+script = ExtResource("1_5a3oq")
+item_id = &"thieves_tools"
+display_name = "Воровские инструменты"
+
+[sub_resource type="Resource" id="Resource_y2xdn"]
+script = ExtResource("1_5a3oq")
+item_id = &"crowbar"
+display_name = "Лом"
+
+[sub_resource type="Resource" id="Resource_2kdsg"]
+script = ExtResource("1_5a3oq")
+item_id = &"pouch"
+display_name = "Кошель"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_0ifjp"]
+script = ExtResource("1_5a3oq")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_e1ue7"]
+script = ExtResource("2_k4har")
+id = &"alert"
+display_name = "Бдительность"
+description = "Добавляйте бонус мастерства к инициативе. Сразу после броска инициативы вы можете обменяться результатами с согласным союзником."
+
+[resource]
+script = ExtResource("3_12u2y")
+id = &"criminal"
+display_name = "Преступник"
+description = "Вы выживали в преступном мире, зная его законы и тропы."
+ability_options = Array[StringName]([&"dexterity", &"constitution", &"intelligence"])
+skill_proficiencies = Array[StringName]([&"sleight_of_hand", &"stealth"])
+tool_proficiency = &"thieves_tools"
+origin_feat = SubResource("Resource_e1ue7")
+equipment_pack = Array[ExtResource("1_5a3oq")]([SubResource("Resource_jggjt"), SubResource("Resource_6jcdv"), SubResource("Resource_y2xdn"), SubResource("Resource_2kdsg"), SubResource("Resource_0ifjp")])

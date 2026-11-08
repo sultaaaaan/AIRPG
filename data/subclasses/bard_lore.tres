@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_5s714"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_aj8h6"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_kpajc"]
+
+[sub_resource type="Resource" id="Resource_d0tay"]
+script = ExtResource("2_aj8h6")
+id = &"bonus_proficiencies"
+display_name = "Дополнительные владения"
+description = "Вы получаете владение тремя навыками на выбор."
+level = 3
+
+[sub_resource type="Resource" id="Resource_xavm3"]
+script = ExtResource("2_aj8h6")
+id = &"cutting_words"
+display_name = "Колкое слово"
+description = "Реакцией тратите вдохновение, чтобы снизить чужой бросок."
+level = 3
+
+[resource]
+script = ExtResource("3_kpajc")
+id = &"lore"
+class_id = &"bard"
+display_name = "Коллегия знаний"
+description = "Эрудит, чьё слово ранит точнее клинка."
+features = Array[ExtResource("2_aj8h6")]([SubResource("Resource_d0tay"), SubResource("Resource_xavm3")])

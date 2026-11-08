@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_l345r"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_xxoqf"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_ilxl6"]
+
+[sub_resource type="Resource" id="Resource_5xis5"]
+script = ExtResource("1_l345r")
+item_id = &"quarterstaff"
+display_name = "Боевой посох"
+
+[sub_resource type="Resource" id="Resource_2kym2"]
+script = ExtResource("1_l345r")
+item_id = &"calligraphers_supplies"
+display_name = "Инструменты каллиграфа"
+
+[sub_resource type="Resource" id="Resource_dqlc6"]
+script = ExtResource("1_l345r")
+item_id = &"book"
+display_name = "Книга (история)"
+
+[sub_resource type="Resource" id="Resource_0e7h6"]
+script = ExtResource("1_l345r")
+item_id = &"parchment"
+display_name = "Пергамент"
+quantity = 8
+
+[sub_resource type="Resource" id="Resource_sf5hj"]
+script = ExtResource("1_l345r")
+item_id = &"robe"
+display_name = "Мантия"
+
+[sub_resource type="Resource" id="Resource_r7vq7"]
+script = ExtResource("2_xxoqf")
+id = &"magic_initiate"
+display_name = "Посвящённый в магию (волшебник)"
+description = "Вы знаете два заговора и одно заклинание 1 круга из списка этого класса. Заклинание можно читать без ячейки раз в долгий отдых."
+
+[resource]
+script = ExtResource("3_ilxl6")
+id = &"sage"
+display_name = "Мудрец"
+description = "Вы посвятили жизнь книгам, тайнам и научным изысканиям."
+ability_options = Array[StringName]([&"constitution", &"intelligence", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"arcana", &"history"])
+tool_proficiency = &"calligraphers_supplies"
+origin_feat = SubResource("Resource_r7vq7")
+equipment_pack = Array[ExtResource("1_l345r")]([SubResource("Resource_5xis5"), SubResource("Resource_2kym2"), SubResource("Resource_dqlc6"), SubResource("Resource_0e7h6"), SubResource("Resource_sf5hj")])

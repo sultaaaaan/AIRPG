@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_rli0m"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_b7si0"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_jf52q"]
+
+[sub_resource type="Resource" id="Resource_5ubl7"]
+script = ExtResource("1_rli0m")
+item_id = &"sickle"
+display_name = "Серп"
+
+[sub_resource type="Resource" id="Resource_vnga8"]
+script = ExtResource("1_rli0m")
+item_id = &"carpenters_tools"
+display_name = "Инструменты плотника"
+
+[sub_resource type="Resource" id="Resource_e1j8i"]
+script = ExtResource("1_rli0m")
+item_id = &"healers_kit"
+display_name = "Набор целителя"
+
+[sub_resource type="Resource" id="Resource_1824h"]
+script = ExtResource("1_rli0m")
+item_id = &"iron_pot"
+display_name = "Железный котёл"
+
+[sub_resource type="Resource" id="Resource_sol7h"]
+script = ExtResource("1_rli0m")
+item_id = &"shovel"
+display_name = "Лопата"
+
+[sub_resource type="Resource" id="Resource_q2bse"]
+script = ExtResource("1_rli0m")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_cb1ke"]
+script = ExtResource("2_b7si0")
+id = &"tough"
+display_name = "Крепкий"
+description = "Ваш максимум хитов увеличивается на 2 за каждый уровень."
+
+[resource]
+script = ExtResource("3_jf52q")
+id = &"farmer"
+display_name = "Фермер"
+description = "Вы работали на земле, зная цену труду и погоде."
+ability_options = Array[StringName]([&"strength", &"constitution", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"animal_handling", &"nature"])
+tool_proficiency = &"carpenters_tools"
+origin_feat = SubResource("Resource_cb1ke")
+equipment_pack = Array[ExtResource("1_rli0m")]([SubResource("Resource_5ubl7"), SubResource("Resource_vnga8"), SubResource("Resource_e1j8i"), SubResource("Resource_1824h"), SubResource("Resource_sol7h"), SubResource("Resource_q2bse")])

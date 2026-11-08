@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_hliip"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_peyvp"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_cp3jy"]
+
+[sub_resource type="Resource" id="Resource_a6eng"]
+script = ExtResource("2_peyvp")
+id = &"illusion_savant"
+display_name = "Знаток иллюзии"
+description = "Переписывание заклинаний иллюзии дешевле и быстрее."
+level = 3
+
+[sub_resource type="Resource" id="Resource_5ys4f"]
+script = ExtResource("2_peyvp")
+id = &"improved_illusions"
+display_name = "Улучшенные иллюзии"
+description = "Ваши иллюзии звучат, двигаются и требуют больше усилий для разоблачения."
+level = 3
+
+[resource]
+script = ExtResource("3_cp3jy")
+id = &"illusion"
+class_id = &"wizard"
+display_name = "Школа иллюзии"
+description = "Маг, делающий невозможное убедительным."
+features = Array[ExtResource("2_peyvp")]([SubResource("Resource_a6eng"), SubResource("Resource_5ys4f")])

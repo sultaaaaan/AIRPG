@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_l7aba"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_v1041"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_x2qcx"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_h5s5e"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_nuvcj"]
+
+[sub_resource type="Resource" id="Resource_wuekx"]
+script = ExtResource("2_v1041")
+item_id = &"leather_armor"
+display_name = "Кожаный доспех"
+
+[sub_resource type="Resource" id="Resource_q6xrr"]
+script = ExtResource("2_v1041")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_yw3ca"]
+script = ExtResource("2_v1041")
+item_id = &"musical_instrument"
+display_name = "Музыкальный инструмент"
+
+[sub_resource type="Resource" id="Resource_cojkg"]
+script = ExtResource("2_v1041")
+item_id = &"entertainers_pack"
+display_name = "Набор артиста"
+
+[sub_resource type="Resource" id="Resource_6sy7v"]
+script = ExtResource("3_x2qcx")
+id = &"bardic_inspiration"
+display_name = "Бардовское вдохновение"
+description = "Бонусным действием дайте союзнику в пределах 18 м кость d6. В течение часа он может добавить её к одному броску d20. Применений = модификатор Харизмы (минимум 1), восстанавливаются на долгий отдых."
+
+[sub_resource type="Resource" id="Resource_l7aba"]
+script = ExtResource("3_x2qcx")
+id = &"jack_of_all_trades"
+display_name = "Мастер на все руки"
+description = "Добавляйте половину бонуса мастерства к проверкам характеристик без владения."
+level = 2
+
+[sub_resource type="Resource" id="Resource_v1041"]
+script = ExtResource("3_x2qcx")
+id = &"expertise"
+display_name = "Компетентность"
+description = "Выберите два навыка с владением: удвойте бонус мастерства для них."
+level = 3
+
+[sub_resource type="Resource" id="Resource_x2qcx"]
+script = ExtResource("3_x2qcx")
+id = &"font_of_inspiration"
+display_name = "Источник вдохновения"
+description = "Вы восстанавливаете вдохновение барда на коротком отдыхе."
+level = 5
+
+[sub_resource type="Resource" id="Resource_clhnn"]
+script = ExtResource("5_nuvcj")
+ability = &"charisma"
+cantrips_known = 2
+spells_prepared = 4
+level_1_slots = 2
+
+[resource]
+script = ExtResource("4_h5s5e")
+id = &"bard"
+display_name = "Бард"
+description = "Вдохновляющий артист, чьё искусство обретает силу заклинаний."
+primary_abilities = Array[StringName]([&"charisma"])
+saving_throws = Array[StringName]([&"dexterity", &"charisma"])
+armor_training = Array[StringName]([&"light"])
+weapon_training = Array[StringName]([&"simple"])
+tool_proficiencies = Array[StringName]([&"musical_instrument"])
+skill_choice_count = 3
+skill_pool_is_any = true
+features = Array[ExtResource("3_x2qcx")]([SubResource("Resource_6sy7v"), SubResource("Resource_l7aba"), SubResource("Resource_v1041"), SubResource("Resource_x2qcx")])
+spellcasting = SubResource("Resource_clhnn")
+equipment_pack = Array[ExtResource("2_v1041")]([SubResource("Resource_wuekx"), SubResource("Resource_q6xrr"), SubResource("Resource_yw3ca"), SubResource("Resource_cojkg")])
+alternative_gold = 90

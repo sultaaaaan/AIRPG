@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_k5sv0"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_rgurw"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_isxne"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_nmr1f"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_ku8hp"]
+
+[sub_resource type="Resource" id="Resource_ykqqk"]
+script = ExtResource("2_rgurw")
+item_id = &"leather_armor"
+display_name = "Кожаный доспех"
+
+[sub_resource type="Resource" id="Resource_47u6a"]
+script = ExtResource("2_rgurw")
+item_id = &"sickle"
+display_name = "Серп"
+
+[sub_resource type="Resource" id="Resource_fm5jb"]
+script = ExtResource("2_rgurw")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_f31if"]
+script = ExtResource("2_rgurw")
+item_id = &"arcane_focus"
+display_name = "Магический фокус"
+
+[sub_resource type="Resource" id="Resource_86lxv"]
+script = ExtResource("2_rgurw")
+item_id = &"scholars_pack"
+display_name = "Набор учёного"
+
+[sub_resource type="Resource" id="Resource_dc7pg"]
+script = ExtResource("3_isxne")
+id = &"eldritch_invocations"
+display_name = "Мистические воззвания"
+description = "Вы знаете одно воззвание на 1 уровне и получаете новые с ростом уровня. Воззвания — отдельный каталог, зависящий от покровителя."
+
+[sub_resource type="Resource" id="Resource_dumyp"]
+script = ExtResource("3_isxne")
+id = &"pact_magic"
+display_name = "Магия договора"
+description = "Ваши ячейки заклинаний восстанавливаются на коротком отдыхе, а не на долгом. На 1 уровне — одна ячейка 1 круга."
+
+[sub_resource type="Resource" id="Resource_k5sv0"]
+script = ExtResource("3_isxne")
+id = &"magical_cunning"
+display_name = "Магическая хитрость"
+description = "Один раз между отдыхами вы восстанавливаете ячейки договора."
+level = 2
+
+[sub_resource type="Resource" id="Resource_rgurw"]
+script = ExtResource("3_isxne")
+id = &"eldritch_invocation"
+display_name = "Дополнительное воззвание"
+description = "Вы изучаете ещё одно воззвание."
+level = 5
+
+[sub_resource type="Resource" id="Resource_nwqdf"]
+script = ExtResource("5_ku8hp")
+ability = &"charisma"
+cantrips_known = 2
+spells_prepared = 2
+level_1_slots = 1
+recovery = 1
+
+[resource]
+script = ExtResource("4_nmr1f")
+id = &"warlock"
+display_name = "Колдун"
+description = "Искатель тайных знаний, обменявший часть себя на силу покровителя."
+primary_abilities = Array[StringName]([&"charisma"])
+saving_throws = Array[StringName]([&"wisdom", &"charisma"])
+armor_training = Array[StringName]([&"light"])
+weapon_training = Array[StringName]([&"simple"])
+skill_pool = Array[StringName]([&"arcana", &"deception", &"history", &"intimidation", &"investigation", &"nature", &"religion"])
+features = Array[ExtResource("3_isxne")]([SubResource("Resource_dc7pg"), SubResource("Resource_dumyp"), SubResource("Resource_k5sv0"), SubResource("Resource_rgurw")])
+spellcasting = SubResource("Resource_nwqdf")
+equipment_pack = Array[ExtResource("2_rgurw")]([SubResource("Resource_ykqqk"), SubResource("Resource_47u6a"), SubResource("Resource_fm5jb"), SubResource("Resource_f31if"), SubResource("Resource_86lxv")])
+alternative_gold = 100

@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_djr3j"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_hh84t"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_xj357"]
+
+[sub_resource type="Resource" id="Resource_r40gy"]
+script = ExtResource("1_djr3j")
+item_id = &"spear"
+display_name = "Копьё"
+
+[sub_resource type="Resource" id="Resource_shmun"]
+script = ExtResource("1_djr3j")
+item_id = &"light_crossbow"
+display_name = "Лёгкий арбалет"
+
+[sub_resource type="Resource" id="Resource_y0pyk"]
+script = ExtResource("1_djr3j")
+item_id = &"crossbow_bolts"
+display_name = "Арбалетные болты"
+quantity = 20
+
+[sub_resource type="Resource" id="Resource_av4rt"]
+script = ExtResource("1_djr3j")
+item_id = &"gaming_set"
+display_name = "Игровой набор"
+
+[sub_resource type="Resource" id="Resource_7u77p"]
+script = ExtResource("1_djr3j")
+item_id = &"hooded_lantern"
+display_name = "Фонарь с крышкой"
+
+[sub_resource type="Resource" id="Resource_sit3g"]
+script = ExtResource("1_djr3j")
+item_id = &"manacles"
+display_name = "Кандалы"
+
+[sub_resource type="Resource" id="Resource_s84xf"]
+script = ExtResource("1_djr3j")
+item_id = &"quiver"
+display_name = "Колчан"
+
+[sub_resource type="Resource" id="Resource_jeer0"]
+script = ExtResource("1_djr3j")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_byyu1"]
+script = ExtResource("2_hh84t")
+id = &"alert"
+display_name = "Бдительность"
+description = "Добавляйте бонус мастерства к инициативе. Сразу после броска инициативы вы можете обменяться результатами с согласным союзником."
+
+[resource]
+script = ExtResource("3_xj357")
+id = &"guard"
+display_name = "Стражник"
+description = "Вы несли караул, охраняя городские стены и знать."
+ability_options = Array[StringName]([&"strength", &"intelligence", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"athletics", &"perception"])
+tool_proficiency = &"gaming_set"
+origin_feat = SubResource("Resource_byyu1")
+equipment_pack = Array[ExtResource("1_djr3j")]([SubResource("Resource_r40gy"), SubResource("Resource_shmun"), SubResource("Resource_y0pyk"), SubResource("Resource_av4rt"), SubResource("Resource_7u77p"), SubResource("Resource_sit3g"), SubResource("Resource_s84xf"), SubResource("Resource_jeer0")])

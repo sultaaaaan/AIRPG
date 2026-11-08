@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_l4xfm"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_4dkf3"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_laxfn"]
+
+[sub_resource type="Resource" id="Resource_qdh8p"]
+script = ExtResource("2_4dkf3")
+id = &"improved_critical"
+display_name = "Улучшенный крит"
+description = "Ваши атаки оружием критуют чаще."
+level = 3
+
+[sub_resource type="Resource" id="Resource_4yng7"]
+script = ExtResource("2_4dkf3")
+id = &"remarkable_athlete"
+display_name = "Выдающийся атлет"
+description = "Вы добавляете половину бонуса мастерства к проверкам Силы, Ловкости и Телосложения без владения."
+level = 3
+
+[resource]
+script = ExtResource("3_laxfn")
+id = &"champion"
+class_id = &"fighter"
+display_name = "Чемпион"
+description = "Атлет и дуэлянт, доводящий тело до предела."
+features = Array[ExtResource("2_4dkf3")]([SubResource("Resource_qdh8p"), SubResource("Resource_4yng7")])

@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_4o03c"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_dnmw6"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_gk24f"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="4_v17ej"]
+
+[sub_resource type="Resource" id="Resource_4m7ri"]
+script = ExtResource("2_dnmw6")
+id = &"drow"
+display_name = "Дроу"
+description = "Заговор «Пляшущие огни». С 3 уровня — «Огонь фей», с 5 — «Тьма»."
+
+[sub_resource type="Resource" id="Resource_ggyce"]
+script = ExtResource("2_dnmw6")
+id = &"high_elf"
+display_name = "Высший эльф"
+description = "Заговор «Малый образ». С 3 уровня — «Обнаружение магии», с 5 — «Туманный шаг»."
+
+[sub_resource type="Resource" id="Resource_kxkfh"]
+script = ExtResource("2_dnmw6")
+id = &"wood_elf"
+display_name = "Лесной эльф"
+description = "Заговор «Друидизм». С 3 уровня — «Скороход», с 5 — «Без следа». Скорость 10,5 м."
+
+[sub_resource type="Resource" id="Resource_syf6h"]
+script = ExtResource("1_4o03c")
+id = &"elven_lineage"
+prompt = "Выберите эльфийское наследие"
+options = Array[ExtResource("2_dnmw6")]([SubResource("Resource_4m7ri"), SubResource("Resource_ggyce"), SubResource("Resource_kxkfh")])
+
+[sub_resource type="Resource" id="Resource_i40ub"]
+script = ExtResource("3_gk24f")
+id = &"fey_ancestry"
+display_name = "Фейское наследие"
+description = "Преимущество на спасброски от очарования; магия не усыпляет вас."
+
+[sub_resource type="Resource" id="Resource_f1kht"]
+script = ExtResource("3_gk24f")
+id = &"keen_senses"
+display_name = "Острые чувства"
+description = "Владение навыками Проницательность, Восприятие и Выживание."
+
+[sub_resource type="Resource" id="Resource_uyqd8"]
+script = ExtResource("3_gk24f")
+id = &"trance"
+display_name = "Транс"
+description = "Долгий отдых занимает 4 часа медитации вместо 8 часов сна."
+
+[resource]
+script = ExtResource("4_v17ej")
+id = &"elf"
+display_name = "Эльф"
+description = "Долгоживущий народ лесов и звёзд, связанный с фейри."
+darkvision_range = 60
+languages = Array[StringName]([&"common", &"elvish"])
+traits = Array[ExtResource("3_gk24f")]([SubResource("Resource_i40ub"), SubResource("Resource_f1kht"), SubResource("Resource_uyqd8")])
+choices = Array[ExtResource("1_4o03c")]([SubResource("Resource_syf6h")])

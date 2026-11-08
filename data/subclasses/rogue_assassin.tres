@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_sbd5g"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_bcn2p"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_wgmbt"]
+
+[sub_resource type="Resource" id="Resource_y1bj0"]
+script = ExtResource("2_bcn2p")
+id = &"assassinate"
+display_name = "Убийство"
+description = "Ваши удары по застигнутым врасплох врагам смертоносны, а инициатива выше."
+level = 3
+
+[sub_resource type="Resource" id="Resource_njlc4"]
+script = ExtResource("2_bcn2p")
+id = &"assassins_tools"
+display_name = "Инструменты убийцы"
+description = "Вы получаете владение набором для подделки и отравителя."
+level = 3
+
+[resource]
+script = ExtResource("3_wgmbt")
+id = &"assassin"
+class_id = &"rogue"
+display_name = "Убийца"
+description = "Тень, для которой один удар решает всё."
+features = Array[ExtResource("2_bcn2p")]([SubResource("Resource_y1bj0"), SubResource("Resource_njlc4")])

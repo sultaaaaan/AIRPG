@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_en32t"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_p6f7w"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_pw220"]
+
+[sub_resource type="Resource" id="Resource_njd3g"]
+script = ExtResource("1_en32t")
+item_id = &"calligraphers_supplies"
+display_name = "Инструменты каллиграфа"
+
+[sub_resource type="Resource" id="Resource_d6dk2"]
+script = ExtResource("1_en32t")
+item_id = &"fine_clothes"
+display_name = "Роскошная одежда"
+
+[sub_resource type="Resource" id="Resource_ubktn"]
+script = ExtResource("1_en32t")
+item_id = &"lamp"
+display_name = "Лампа"
+
+[sub_resource type="Resource" id="Resource_j6q0m"]
+script = ExtResource("1_en32t")
+item_id = &"oil"
+display_name = "Масло (фляга)"
+quantity = 3
+
+[sub_resource type="Resource" id="Resource_c4h68"]
+script = ExtResource("1_en32t")
+item_id = &"parchment"
+display_name = "Пергамент"
+quantity = 12
+
+[sub_resource type="Resource" id="Resource_fj8yx"]
+script = ExtResource("2_p6f7w")
+id = &"skilled"
+display_name = "Умелый"
+description = "Получите владение любыми тремя навыками или инструментами на выбор."
+
+[resource]
+script = ExtResource("3_pw220")
+id = &"scribe"
+display_name = "Писарь"
+description = "Вы переписывали тексты и документы, замечая то, что другие пропускали."
+ability_options = Array[StringName]([&"dexterity", &"intelligence", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"investigation", &"perception"])
+tool_proficiency = &"calligraphers_supplies"
+origin_feat = SubResource("Resource_fj8yx")
+equipment_pack = Array[ExtResource("1_en32t")]([SubResource("Resource_njd3g"), SubResource("Resource_d6dk2"), SubResource("Resource_ubktn"), SubResource("Resource_j6q0m"), SubResource("Resource_c4h68")])

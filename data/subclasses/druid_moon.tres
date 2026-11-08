@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_lblmx"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_3ktlf"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_jiwx8"]
+
+[sub_resource type="Resource" id="Resource_1m3a8"]
+script = ExtResource("2_3ktlf")
+id = &"circle_forms"
+display_name = "Облики круга"
+description = "Ваши превращения в зверей становятся сильнее и выдерживают больше урона."
+level = 3
+
+[resource]
+script = ExtResource("3_jiwx8")
+id = &"moon"
+class_id = &"druid"
+display_name = "Круг луны"
+description = "Друид, меняющий облик в свирепых зверей."
+features = Array[ExtResource("2_3ktlf")]([SubResource("Resource_1m3a8")])

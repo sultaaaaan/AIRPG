@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_uxyxg"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_ajnc8"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_5j3px"]
+
+[sub_resource type="Resource" id="Resource_x7irk"]
+script = ExtResource("2_ajnc8")
+id = &"vengeance_spells"
+display_name = "Заклинания клятвы"
+description = "Вы получаете заклинания преследования и охоты."
+level = 3
+
+[sub_resource type="Resource" id="Resource_1dnh0"]
+script = ExtResource("2_ajnc8")
+id = &"vow_of_enmity"
+display_name = "Обет вражды"
+description = "Бонусным действием вы отмечаете врага и получаете преимущество против него."
+level = 3
+
+[resource]
+script = ExtResource("3_5j3px")
+id = &"vengeance"
+class_id = &"paladin"
+display_name = "Клятва мести"
+description = "Мститель, для которого цель оправдывает средства."
+features = Array[ExtResource("2_ajnc8")]([SubResource("Resource_x7irk"), SubResource("Resource_1dnh0")])

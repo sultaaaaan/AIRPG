@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_w2837"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_anfpu"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_614nr"]
+
+[sub_resource type="Resource" id="Resource_vbnp0"]
+script = ExtResource("2_anfpu")
+id = &"fancy_footwork"
+display_name = "Изящная работа ног"
+description = "Атакованный вами враг не может нанести ответный удар."
+level = 3
+
+[sub_resource type="Resource" id="Resource_2njoy"]
+script = ExtResource("2_anfpu")
+id = &"rakish_audacity"
+display_name = "Дерзкая удаль"
+description = "Вы добавляете Харизму к инициативе и получаете скрытую атаку в дуэли."
+level = 3
+
+[resource]
+script = ExtResource("3_614nr")
+id = &"swashbuckler"
+class_id = &"rogue"
+display_name = "Сорвиголова"
+description = "Дуэлянт, живущий дерзостью и скоростью."
+features = Array[ExtResource("2_anfpu")]([SubResource("Resource_vbnp0"), SubResource("Resource_2njoy")])

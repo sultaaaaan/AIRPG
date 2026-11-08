@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_p5qpv"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_ep8bb"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_b80is"]
+
+[sub_resource type="Resource" id="Resource_itggq"]
+script = ExtResource("2_ep8bb")
+id = &"dazzling_footwork"
+display_name = "Ослепительная работа ног"
+description = "Без доспеха ваша защита растёт от Харизмы, а безоружные удары становятся сильнее."
+level = 3
+
+[sub_resource type="Resource" id="Resource_ujc80"]
+script = ExtResource("2_ep8bb")
+id = &"inspiring_movement"
+display_name = "Вдохновляющее движение"
+description = "Ваш танец даёт союзникам дополнительную подвижность."
+level = 3
+
+[resource]
+script = ExtResource("3_b80is")
+id = &"dance"
+class_id = &"bard"
+display_name = "Коллегия танца"
+description = "Бард, превращающий движение в оружие и защиту."
+features = Array[ExtResource("2_ep8bb")]([SubResource("Resource_itggq"), SubResource("Resource_ujc80")])

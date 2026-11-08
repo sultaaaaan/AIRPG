@@ -1,0 +1,156 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_5i77r"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_3cbce"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_riule"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="4_27g4u"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="5_te7x4"]
+
+[sub_resource type="Resource" id="Resource_81tom"]
+script = ExtResource("2_3cbce")
+id = &"archery"
+display_name = "Стрельба"
+description = "+2 к броскам атаки дальнобойным оружием."
+
+[sub_resource type="Resource" id="Resource_0jg40"]
+script = ExtResource("2_3cbce")
+id = &"blind_fighting"
+display_name = "Слепой бой"
+description = "Вы чувствуете невидимых существ в пределах 3 м."
+
+[sub_resource type="Resource" id="Resource_nhd6u"]
+script = ExtResource("2_3cbce")
+id = &"defense"
+display_name = "Оборона"
+description = "+1 к КД, пока вы носите доспех."
+
+[sub_resource type="Resource" id="Resource_0pk4d"]
+script = ExtResource("2_3cbce")
+id = &"dueling"
+display_name = "Фехтование"
+description = "+2 к урону одноручным оружием, если в другой руке нет оружия."
+
+[sub_resource type="Resource" id="Resource_aibcc"]
+script = ExtResource("2_3cbce")
+id = &"great_weapon_fighting"
+display_name = "Бой большим оружием"
+description = "Перебрасывайте 1 и 2 на костях урона двуручным оружием."
+
+[sub_resource type="Resource" id="Resource_ptng6"]
+script = ExtResource("2_3cbce")
+id = &"interception"
+display_name = "Перехват"
+description = "Реакцией снизьте урон, получаемый союзником в 1,5 м."
+
+[sub_resource type="Resource" id="Resource_rwtqk"]
+script = ExtResource("2_3cbce")
+id = &"protection"
+display_name = "Защита"
+description = "Реакцией со щитом наложите помеху на атаку по союзнику в 1,5 м."
+
+[sub_resource type="Resource" id="Resource_6drek"]
+script = ExtResource("2_3cbce")
+id = &"thrown_weapon_fighting"
+display_name = "Метательное оружие"
+description = "+2 к урону метательным оружием."
+
+[sub_resource type="Resource" id="Resource_fx7yq"]
+script = ExtResource("2_3cbce")
+id = &"two_weapon_fighting"
+display_name = "Бой двумя оружиями"
+description = "Добавляйте модификатор характеристики к урону второй атаки."
+
+[sub_resource type="Resource" id="Resource_gscbq"]
+script = ExtResource("2_3cbce")
+id = &"unarmed_fighting"
+display_name = "Безоружный бой"
+description = "Ваш безоружный удар наносит 1d6 + Сила."
+
+[sub_resource type="Resource" id="Resource_cvtoa"]
+script = ExtResource("1_5i77r")
+id = &"fighting_style"
+prompt = "Выберите боевой стиль"
+options = Array[ExtResource("2_3cbce")]([SubResource("Resource_81tom"), SubResource("Resource_0jg40"), SubResource("Resource_nhd6u"), SubResource("Resource_0pk4d"), SubResource("Resource_aibcc"), SubResource("Resource_ptng6"), SubResource("Resource_rwtqk"), SubResource("Resource_6drek"), SubResource("Resource_fx7yq"), SubResource("Resource_gscbq")])
+
+[sub_resource type="Resource" id="Resource_lcatb"]
+script = ExtResource("4_27g4u")
+item_id = &"chain_mail"
+display_name = "Кольчуга"
+
+[sub_resource type="Resource" id="Resource_sbueb"]
+script = ExtResource("4_27g4u")
+item_id = &"greatsword"
+display_name = "Двуручный меч"
+
+[sub_resource type="Resource" id="Resource_d61gu"]
+script = ExtResource("4_27g4u")
+item_id = &"flail"
+display_name = "Цеп"
+
+[sub_resource type="Resource" id="Resource_c6lpa"]
+script = ExtResource("4_27g4u")
+item_id = &"javelin"
+display_name = "Метательное копьё"
+quantity = 8
+
+[sub_resource type="Resource" id="Resource_t3mmc"]
+script = ExtResource("4_27g4u")
+item_id = &"dungeoneers_pack"
+display_name = "Набор исследователя подземелий"
+
+[sub_resource type="Resource" id="Resource_6ukux"]
+script = ExtResource("3_riule")
+id = &"second_wind"
+display_name = "Второе дыхание"
+description = "Бонусным действием восстановите 1d10 + уровень воина хитов. 2 применения: одно возвращается на коротком отдыхе, все — на долгом."
+
+[sub_resource type="Resource" id="Resource_vymk4"]
+script = ExtResource("3_riule")
+id = &"weapon_mastery"
+display_name = "Мастерство оружия"
+description = "Вы владеете особыми приёмами трёх видов оружия на свой выбор."
+
+[sub_resource type="Resource" id="Resource_5i77r"]
+script = ExtResource("3_riule")
+id = &"action_surge"
+display_name = "Всплеск действий"
+description = "Один раз между отдыхами вы совершаете дополнительное действие в свой ход."
+level = 2
+
+[sub_resource type="Resource" id="Resource_3cbce"]
+script = ExtResource("3_riule")
+id = &"tactical_mind"
+display_name = "Тактический ум"
+description = "Потратив Второе дыхание, вы можете улучшить проверку характеристики или бросок урона."
+level = 2
+
+[sub_resource type="Resource" id="Resource_riule"]
+script = ExtResource("3_riule")
+id = &"extra_attack"
+display_name = "Дополнительная атака"
+description = "При действии «Атака» вы атакуете дважды."
+level = 5
+
+[sub_resource type="Resource" id="Resource_27g4u"]
+script = ExtResource("3_riule")
+id = &"tactical_shift"
+display_name = "Тактический сдвиг"
+description = "Используя Второе дыхание, вы можете переместиться, не провоцируя атак."
+level = 5
+
+[resource]
+script = ExtResource("5_te7x4")
+id = &"fighter"
+display_name = "Воин"
+description = "Мастер оружия и доспеха, полагающийся на дисциплину и тренировку."
+hit_die = 10
+primary_abilities = Array[StringName]([&"strength", &"dexterity"])
+saving_throws = Array[StringName]([&"strength", &"constitution"])
+weapon_mastery_count = 3
+armor_training = Array[StringName]([&"light", &"medium", &"heavy", &"shields"])
+weapon_training = Array[StringName]([&"simple", &"martial"])
+skill_pool = Array[StringName]([&"acrobatics", &"animal_handling", &"athletics", &"history", &"insight", &"intimidation", &"persuasion", &"perception", &"survival"])
+features = Array[ExtResource("3_riule")]([SubResource("Resource_6ukux"), SubResource("Resource_vymk4"), SubResource("Resource_5i77r"), SubResource("Resource_3cbce"), SubResource("Resource_riule"), SubResource("Resource_27g4u")])
+choices = Array[ExtResource("1_5i77r")]([SubResource("Resource_cvtoa")])
+equipment_pack = Array[ExtResource("4_27g4u")]([SubResource("Resource_lcatb"), SubResource("Resource_sbueb"), SubResource("Resource_d61gu"), SubResource("Resource_c6lpa"), SubResource("Resource_t3mmc")])
+alternative_gold = 155

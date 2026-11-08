@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_ivlxb"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_cpvy2"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_w7d1u"]
+
+[sub_resource type="Resource" id="Resource_vyf30"]
+script = ExtResource("2_cpvy2")
+id = &"circle_spells"
+display_name = "Заклинания круга"
+description = "Вы получаете заклинания, связанные с выбранным ландшафтом."
+level = 3
+
+[sub_resource type="Resource" id="Resource_0brq7"]
+script = ExtResource("2_cpvy2")
+id = &"lands_aid"
+display_name = "Помощь земли"
+description = "Вы лечите союзников и защищаете их силой природы."
+level = 3
+
+[resource]
+script = ExtResource("3_w7d1u")
+id = &"land"
+class_id = &"druid"
+display_name = "Круг земли"
+description = "Хранитель конкретной местности и её тайн."
+features = Array[ExtResource("2_cpvy2")]([SubResource("Resource_vyf30"), SubResource("Resource_0brq7")])

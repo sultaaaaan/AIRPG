@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_i5cyy"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_iyrde"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_dfl8j"]
+
+[sub_resource type="Resource" id="Resource_8rrcy"]
+script = ExtResource("1_i5cyy")
+item_id = &"musical_instrument"
+display_name = "Музыкальный инструмент"
+
+[sub_resource type="Resource" id="Resource_vc7gf"]
+script = ExtResource("1_i5cyy")
+item_id = &"costume"
+display_name = "Костюм"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_gtsuj"]
+script = ExtResource("1_i5cyy")
+item_id = &"mirror"
+display_name = "Зеркало"
+
+[sub_resource type="Resource" id="Resource_rd83q"]
+script = ExtResource("1_i5cyy")
+item_id = &"perfume"
+display_name = "Парфюм"
+
+[sub_resource type="Resource" id="Resource_r316h"]
+script = ExtResource("1_i5cyy")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_v0na7"]
+script = ExtResource("2_iyrde")
+id = &"musician"
+display_name = "Музыкант"
+description = "Владение тремя музыкальными инструментами. Игрой на инструменте даёте союзникам Героическое вдохновение."
+
+[resource]
+script = ExtResource("3_dfl8j")
+id = &"entertainer"
+display_name = "Артист"
+description = "Вы живёте сценой, очаровывая публику песней и представлением."
+ability_options = Array[StringName]([&"strength", &"dexterity", &"charisma"])
+skill_proficiencies = Array[StringName]([&"acrobatics", &"performance"])
+tool_proficiency = &"musical_instrument"
+origin_feat = SubResource("Resource_v0na7")
+equipment_pack = Array[ExtResource("1_i5cyy")]([SubResource("Resource_8rrcy"), SubResource("Resource_vc7gf"), SubResource("Resource_gtsuj"), SubResource("Resource_rd83q"), SubResource("Resource_r316h")])

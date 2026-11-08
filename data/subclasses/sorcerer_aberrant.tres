@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_icxat"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_t2ley"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_b7va8"]
+
+[sub_resource type="Resource" id="Resource_volar"]
+script = ExtResource("2_t2ley")
+id = &"psionic_spells"
+display_name = "Псионические заклинания"
+description = "Вы получаете заклинания психики, которые всегда подготовлены."
+level = 3
+
+[sub_resource type="Resource" id="Resource_wmofx"]
+script = ExtResource("2_t2ley")
+id = &"telepathic_speech"
+display_name = "Телепатическая речь"
+description = "Вы говорите с существами мысленно."
+level = 3
+
+[resource]
+script = ExtResource("3_b7va8")
+id = &"aberrant"
+class_id = &"sorcerer"
+display_name = "Аберрантный разум"
+description = "Сила, пришедшая из-за пределов известного мира."
+features = Array[ExtResource("2_t2ley")]([SubResource("Resource_volar"), SubResource("Resource_wmofx")])

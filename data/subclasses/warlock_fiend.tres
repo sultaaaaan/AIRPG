@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_uxieq"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_6scvn"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_jbxk0"]
+
+[sub_resource type="Resource" id="Resource_kto8x"]
+script = ExtResource("2_6scvn")
+id = &"fiend_spells"
+display_name = "Заклинания исчадия"
+description = "Вы получаете заклинания огня и наказания."
+level = 3
+
+[sub_resource type="Resource" id="Resource_te6w5"]
+script = ExtResource("2_6scvn")
+id = &"dark_ones_blessing"
+display_name = "Благословение тёмного"
+description = "Снижая врага до 0 хитов, вы получаете временные хиты."
+level = 3
+
+[resource]
+script = ExtResource("3_jbxk0")
+id = &"fiend"
+class_id = &"warlock"
+display_name = "Исчадие"
+description = "Сделка с силой Нижних планов."
+features = Array[ExtResource("2_6scvn")]([SubResource("Resource_kto8x"), SubResource("Resource_te6w5")])

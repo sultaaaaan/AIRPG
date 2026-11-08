@@ -1,0 +1,82 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_vsxoy"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_dg5rh"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_4r6a1"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_0dwyy"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_2cpbk"]
+
+[sub_resource type="Resource" id="Resource_04jd1"]
+script = ExtResource("2_dg5rh")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_cx0nn"]
+script = ExtResource("2_dg5rh")
+item_id = &"arcane_focus"
+display_name = "Магический фокус"
+
+[sub_resource type="Resource" id="Resource_hkqia"]
+script = ExtResource("2_dg5rh")
+item_id = &"robe"
+display_name = "Мантия"
+
+[sub_resource type="Resource" id="Resource_jh4ge"]
+script = ExtResource("2_dg5rh")
+item_id = &"spellbook"
+display_name = "Книга заклинаний"
+
+[sub_resource type="Resource" id="Resource_h75a6"]
+script = ExtResource("2_dg5rh")
+item_id = &"scholars_pack"
+display_name = "Набор учёного"
+
+[sub_resource type="Resource" id="Resource_2sikl"]
+script = ExtResource("3_4r6a1")
+id = &"arcane_recovery"
+display_name = "Магическое восстановление"
+description = "Один раз в день на коротком отдыхе восстановите часть потраченных ячеек заклинаний."
+
+[sub_resource type="Resource" id="Resource_vsxoy"]
+script = ExtResource("3_4r6a1")
+id = &"ritual_adept"
+display_name = "Ритуальное мастерство"
+description = "Вы можете накладывать заклинания с ритуалом без подготовки, если они есть в книге."
+
+[sub_resource type="Resource" id="Resource_dg5rh"]
+script = ExtResource("3_4r6a1")
+id = &"scholar"
+display_name = "Эрудит"
+description = "Вы получаете экспертизу в одном навыке из списка волшебника."
+level = 2
+
+[sub_resource type="Resource" id="Resource_4r6a1"]
+script = ExtResource("3_4r6a1")
+id = &"memorize_spell"
+display_name = "Запоминание заклинания"
+description = "Вы можете подготовить заклинание из книги за 1 минуту."
+level = 5
+
+[sub_resource type="Resource" id="Resource_pu56g"]
+script = ExtResource("5_2cpbk")
+cantrips_known = 3
+spells_prepared = 4
+spellbook_spells = 6
+level_1_slots = 2
+ritual_caster = true
+
+[resource]
+script = ExtResource("4_0dwyy")
+id = &"wizard"
+display_name = "Волшебник"
+description = "Учёный магии, чья сила выкована изучением и книгой заклинаний."
+hit_die = 6
+primary_abilities = Array[StringName]([&"intelligence"])
+saving_throws = Array[StringName]([&"intelligence", &"wisdom"])
+weapon_training = Array[StringName]([&"simple"])
+skill_pool = Array[StringName]([&"arcana", &"history", &"insight", &"investigation", &"medicine", &"nature", &"religion"])
+features = Array[ExtResource("3_4r6a1")]([SubResource("Resource_2sikl"), SubResource("Resource_vsxoy"), SubResource("Resource_dg5rh"), SubResource("Resource_4r6a1")])
+spellcasting = SubResource("Resource_pu56g")
+equipment_pack = Array[ExtResource("2_dg5rh")]([SubResource("Resource_04jd1"), SubResource("Resource_cx0nn"), SubResource("Resource_hkqia"), SubResource("Resource_jh4ge"), SubResource("Resource_h75a6")])
+alternative_gold = 55

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_sepdk"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_p8d16"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_yxlo1"]
+
+[sub_resource type="Resource" id="Resource_jnonv"]
+script = ExtResource("2_p8d16")
+id = &"beguiling_magic"
+display_name = "Чарующая магия"
+description = "Вы получаете заклинания очарования и можете наложить их без ячейки."
+level = 3
+
+[sub_resource type="Resource" id="Resource_hd45e"]
+script = ExtResource("2_p8d16")
+id = &"mantle_of_inspiration"
+display_name = "Мантия вдохновения"
+description = "Бонусным действием даёте союзникам временные хиты и перемещение."
+level = 3
+
+[resource]
+script = ExtResource("3_yxlo1")
+id = &"glamour"
+class_id = &"bard"
+display_name = "Коллегия очарования"
+description = "Магия фей, пленяющая взгляды и сердца."
+features = Array[ExtResource("2_p8d16")]([SubResource("Resource_jnonv"), SubResource("Resource_hd45e")])

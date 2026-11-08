@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_kgf86"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_mcce3"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_op1uj"]
+
+[sub_resource type="Resource" id="Resource_rvwbt"]
+script = ExtResource("2_mcce3")
+id = &"combat_inspiration"
+display_name = "Боевое вдохновение"
+description = "Ваше вдохновение можно потратить на урон или защиту."
+level = 3
+
+[sub_resource type="Resource" id="Resource_aa31s"]
+script = ExtResource("2_mcce3")
+id = &"martial_training"
+display_name = "Воинская подготовка"
+description = "Вы получаете владение средними доспехами и воинским оружием."
+level = 3
+
+[resource]
+script = ExtResource("3_op1uj")
+id = &"valor"
+class_id = &"bard"
+display_name = "Коллегия доблести"
+description = "Бард на поле боя, вдохновляющий сталью и песней."
+features = Array[ExtResource("2_mcce3")]([SubResource("Resource_rvwbt"), SubResource("Resource_aa31s")])

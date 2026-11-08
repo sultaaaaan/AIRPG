@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_1ra2i"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_8n3x8"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_pddef"]
+
+[sub_resource type="Resource" id="Resource_gwb1l"]
+script = ExtResource("1_1ra2i")
+item_id = &"artisans_tools"
+display_name = "Ремесленные инструменты"
+
+[sub_resource type="Resource" id="Resource_nq2kt"]
+script = ExtResource("1_1ra2i")
+item_id = &"pouch"
+display_name = "Кошель"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_ulp6n"]
+script = ExtResource("1_1ra2i")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_ilwox"]
+script = ExtResource("2_8n3x8")
+id = &"crafter"
+display_name = "Ремесленник"
+description = "Владение тремя ремесленными инструментами. Скидка 20% на немагические предметы и ускоренное изготовление снаряжения."
+
+[resource]
+script = ExtResource("3_pddef")
+id = &"artisan"
+display_name = "Ремесленник"
+description = "Вы оттачивали мастерство в ремесленной мастерской."
+ability_options = Array[StringName]([&"strength", &"dexterity", &"intelligence"])
+skill_proficiencies = Array[StringName]([&"investigation", &"persuasion"])
+tool_proficiency = &"artisans_tools"
+origin_feat = SubResource("Resource_ilwox")
+equipment_pack = Array[ExtResource("1_1ra2i")]([SubResource("Resource_gwb1l"), SubResource("Resource_nq2kt"), SubResource("Resource_ulp6n")])

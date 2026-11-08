@@ -1,0 +1,120 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_ja1bg"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_eb5mq"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_wm3ht"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_mj0me"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_cast"]
+
+[sub_resource type="Resource" id="Resource_nmq7j"]
+script = ExtResource("2_eb5mq")
+item_id = &"chain_mail"
+display_name = "Кольчуга"
+
+[sub_resource type="Resource" id="Resource_ai4xu"]
+script = ExtResource("2_eb5mq")
+item_id = &"shield"
+display_name = "Щит"
+
+[sub_resource type="Resource" id="Resource_80abi"]
+script = ExtResource("2_eb5mq")
+item_id = &"longsword"
+display_name = "Длинный меч"
+
+[sub_resource type="Resource" id="Resource_spxwi"]
+script = ExtResource("2_eb5mq")
+item_id = &"javelin"
+display_name = "Метательное копьё"
+quantity = 6
+
+[sub_resource type="Resource" id="Resource_qjfvn"]
+script = ExtResource("2_eb5mq")
+item_id = &"holy_symbol"
+display_name = "Священный символ"
+
+[sub_resource type="Resource" id="Resource_kcdsx"]
+script = ExtResource("2_eb5mq")
+item_id = &"priests_pack"
+display_name = "Набор священника"
+
+[sub_resource type="Resource" id="Resource_djgfv"]
+script = ExtResource("3_wm3ht")
+id = &"lay_on_hands"
+display_name = "Возложение рук"
+description = "Запас лечения равен 5 × уровень паладина. Бонусным действием касанием восстановите любое количество хитов из запаса или снимите отраву/болезнь."
+
+[sub_resource type="Resource" id="Resource_na1hm"]
+script = ExtResource("3_wm3ht")
+id = &"divine_sense"
+display_name = "Божественное чувство"
+description = "Бонусным действием ощутите небожителей, исчадий и нежить в пределах 18 м. Применений = модификатор Харизмы (минимум 1)."
+
+[sub_resource type="Resource" id="Resource_f6ru0"]
+script = ExtResource("3_wm3ht")
+id = &"weapon_mastery"
+display_name = "Мастерство оружия"
+description = "Вы владеете особыми приёмами двух видов оружия на свой выбор."
+
+[sub_resource type="Resource" id="Resource_ja1bg"]
+script = ExtResource("3_wm3ht")
+id = &"fighting_style"
+display_name = "Боевой стиль"
+description = "Вы получаете черту боевого стиля."
+level = 2
+
+[sub_resource type="Resource" id="Resource_eb5mq"]
+script = ExtResource("3_wm3ht")
+id = &"paladins_smite"
+display_name = "Кара паладина"
+description = "Вы всегда готовите «Божественную кару» и можете наложить её без подготовки."
+level = 2
+
+[sub_resource type="Resource" id="Resource_wm3ht"]
+script = ExtResource("3_wm3ht")
+id = &"channel_divinity"
+display_name = "Божественный канал"
+description = "Вы получаете «Божественное чувство» и «Изгнание нежити»."
+level = 3
+
+[sub_resource type="Resource" id="Resource_mj0me"]
+script = ExtResource("3_wm3ht")
+id = &"extra_attack"
+display_name = "Дополнительная атака"
+description = "При действии «Атака» вы атакуете дважды."
+level = 5
+
+[sub_resource type="Resource" id="Resource_0jl2o"]
+script = ExtResource("3_wm3ht")
+id = &"faithful_steed"
+display_name = "Верный скакун"
+description = "Вы призываете скакуна, связанного с вашей клятвой."
+level = 5
+
+[sub_resource type="Resource" id="Resource_p6mww"]
+script = ExtResource("3_wm3ht")
+id = &"spellcasting"
+display_name = "Заклинания"
+description = "Вы можете накладывать заклинания паладина, используя Харизму."
+
+[sub_resource type="Resource" id="Resource_cast"]
+script = ExtResource("5_cast")
+ability = &"charisma"
+spells_prepared = 2
+level_1_slots = 2
+
+[resource]
+script = ExtResource("4_mj0me")
+id = &"paladin"
+display_name = "Паладин"
+description = "Клятвенный воин, соединяющий сталь и божественную силу."
+hit_die = 10
+primary_abilities = Array[StringName]([&"strength", &"charisma"])
+saving_throws = Array[StringName]([&"wisdom", &"charisma"])
+weapon_mastery_count = 2
+armor_training = Array[StringName]([&"light", &"medium", &"heavy", &"shields"])
+weapon_training = Array[StringName]([&"simple", &"martial"])
+skill_pool = Array[StringName]([&"athletics", &"insight", &"intimidation", &"medicine", &"persuasion", &"religion"])
+features = Array[ExtResource("3_wm3ht")]([SubResource("Resource_djgfv"), SubResource("Resource_na1hm"), SubResource("Resource_f6ru0"), SubResource("Resource_ja1bg"), SubResource("Resource_eb5mq"), SubResource("Resource_wm3ht"), SubResource("Resource_mj0me"), SubResource("Resource_0jl2o"), SubResource("Resource_p6mww")])
+spellcasting = SubResource("Resource_cast")
+equipment_pack = Array[ExtResource("2_eb5mq")]([SubResource("Resource_nmq7j"), SubResource("Resource_ai4xu"), SubResource("Resource_80abi"), SubResource("Resource_spxwi"), SubResource("Resource_qjfvn"), SubResource("Resource_kcdsx")])
+alternative_gold = 150

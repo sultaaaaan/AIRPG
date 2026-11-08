@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_f44r6"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_y0efr"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_1imrc"]
+
+[sub_resource type="Resource" id="Resource_ccy2n"]
+script = ExtResource("2_y0efr")
+id = &"soulknife_psionics"
+display_name = "Псионическая сила"
+description = "Вы получаете кости пси-энергии и телепатию."
+level = 3
+
+[sub_resource type="Resource" id="Resource_i6mda"]
+script = ExtResource("2_y0efr")
+id = &"psychic_blades"
+display_name = "Психические клинки"
+description = "Вы создаёте клинки из мысли и можете метать их."
+level = 3
+
+[resource]
+script = ExtResource("3_1imrc")
+id = &"soulknife"
+class_id = &"rogue"
+display_name = "Клинок души"
+description = "Плут, чьё оружие выковано из мысли."
+features = Array[ExtResource("2_y0efr")]([SubResource("Resource_ccy2n"), SubResource("Resource_i6mda")])

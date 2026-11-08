@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_5mil5"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_s41l5"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_f77l7"]
+
+[sub_resource type="Resource" id="Resource_ifq50"]
+script = ExtResource("1_5mil5")
+item_id = &"shortbow"
+display_name = "Короткий лук"
+
+[sub_resource type="Resource" id="Resource_rlpg7"]
+script = ExtResource("1_5mil5")
+item_id = &"arrow"
+display_name = "Стрела"
+quantity = 20
+
+[sub_resource type="Resource" id="Resource_1kndd"]
+script = ExtResource("1_5mil5")
+item_id = &"quiver"
+display_name = "Колчан"
+
+[sub_resource type="Resource" id="Resource_4pwys"]
+script = ExtResource("1_5mil5")
+item_id = &"cartographers_tools"
+display_name = "Инструменты картографа"
+
+[sub_resource type="Resource" id="Resource_nt5y2"]
+script = ExtResource("1_5mil5")
+item_id = &"bedroll"
+display_name = "Спальник"
+
+[sub_resource type="Resource" id="Resource_su10b"]
+script = ExtResource("1_5mil5")
+item_id = &"tent"
+display_name = "Палатка"
+
+[sub_resource type="Resource" id="Resource_kjtge"]
+script = ExtResource("1_5mil5")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_03346"]
+script = ExtResource("2_s41l5")
+id = &"magic_initiate"
+display_name = "Посвящённый в магию (друид)"
+description = "Вы знаете два заговора и одно заклинание 1 круга из списка этого класса. Заклинание можно читать без ячейки раз в долгий отдых."
+
+[resource]
+script = ExtResource("3_f77l7")
+id = &"guide"
+display_name = "Проводник"
+description = "Вы водили путников через дикие земли, читая следы и звёзды."
+ability_options = Array[StringName]([&"dexterity", &"constitution", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"stealth", &"survival"])
+tool_proficiency = &"cartographers_tools"
+origin_feat = SubResource("Resource_03346")
+equipment_pack = Array[ExtResource("1_5mil5")]([SubResource("Resource_ifq50"), SubResource("Resource_rlpg7"), SubResource("Resource_1kndd"), SubResource("Resource_4pwys"), SubResource("Resource_nt5y2"), SubResource("Resource_su10b"), SubResource("Resource_kjtge")])

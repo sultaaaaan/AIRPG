@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_2ycw2"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_tnird"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_50m27"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_lrsp7"]
+
+[sub_resource type="Resource" id="Resource_xktgg"]
+script = ExtResource("2_tnird")
+item_id = &"spear"
+display_name = "Копьё"
+
+[sub_resource type="Resource" id="Resource_x2c20"]
+script = ExtResource("2_tnird")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 5
+
+[sub_resource type="Resource" id="Resource_fdnlq"]
+script = ExtResource("2_tnird")
+item_id = &"artisan_tools"
+display_name = "Ремесленный инструмент"
+
+[sub_resource type="Resource" id="Resource_8m7p0"]
+script = ExtResource("2_tnird")
+item_id = &"explorers_pack"
+display_name = "Набор путешественника"
+
+[sub_resource type="Resource" id="Resource_u7xin"]
+script = ExtResource("3_50m27")
+id = &"martial_arts"
+display_name = "Боевые искусства"
+description = "Безоружные удары и monk-оружие наносят 1d6, используют Ловкость вместо Силы. Бонусным действием — ещё один безоружный удар."
+
+[sub_resource type="Resource" id="Resource_5f0mi"]
+script = ExtResource("3_50m27")
+id = &"unarmored_defense"
+display_name = "Защита без доспехов"
+description = "Без доспеха и щита КД = 10 + модификатор Ловкости + модификатор Мудрости."
+
+[sub_resource type="Resource" id="Resource_2ycw2"]
+script = ExtResource("3_50m27")
+id = &"monks_focus"
+display_name = "Сосредоточение монаха"
+description = "Вы получаете очки ци и можете направлять их в удары и защиту."
+level = 2
+
+[sub_resource type="Resource" id="Resource_tnird"]
+script = ExtResource("3_50m27")
+id = &"unarmored_movement"
+display_name = "Движение без доспехов"
+description = "Ваша скорость растёт, пока вы не носите доспех и не используете щит."
+level = 2
+
+[sub_resource type="Resource" id="Resource_50m27"]
+script = ExtResource("3_50m27")
+id = &"uncanny_metabolism"
+display_name = "Невероятный метаболизм"
+description = "Один раз между отдыхами вы восстанавливаете ци и хиты."
+level = 2
+
+[sub_resource type="Resource" id="Resource_lrsp7"]
+script = ExtResource("3_50m27")
+id = &"deflect_attacks"
+display_name = "Отражение атак"
+description = "Реакцией вы уменьшаете урон от атаки, а при удачном отражении можете вернуть его."
+level = 3
+
+[sub_resource type="Resource" id="Resource_4yfhe"]
+script = ExtResource("3_50m27")
+id = &"slow_fall"
+display_name = "Медленное падение"
+description = "Реакцией вы снижаете урон от падения."
+level = 4
+
+[sub_resource type="Resource" id="Resource_sovbd"]
+script = ExtResource("3_50m27")
+id = &"extra_attack"
+display_name = "Дополнительная атака"
+description = "При действии «Атака» вы атакуете дважды."
+level = 5
+
+[sub_resource type="Resource" id="Resource_iec8j"]
+script = ExtResource("3_50m27")
+id = &"stunning_strike"
+display_name = "Ошеломляющий удар"
+description = "Тратя ци, вы можете оглушить цель ударом."
+level = 5
+
+[resource]
+script = ExtResource("4_lrsp7")
+id = &"monk"
+display_name = "Монах"
+description = "Боец, превращающий тело в оружие через дисциплину и внутреннюю энергию."
+primary_abilities = Array[StringName]([&"dexterity", &"wisdom"])
+saving_throws = Array[StringName]([&"strength", &"dexterity"])
+unarmored_defense_ability = &"wisdom"
+unarmored_defense_allows_shield = false
+weapon_training = Array[StringName]([&"simple", &"martial_light"])
+tool_proficiencies = Array[StringName]([&"artisan_tools"])
+skill_pool = Array[StringName]([&"acrobatics", &"athletics", &"history", &"insight", &"religion", &"stealth"])
+features = Array[ExtResource("3_50m27")]([SubResource("Resource_u7xin"), SubResource("Resource_5f0mi"), SubResource("Resource_2ycw2"), SubResource("Resource_tnird"), SubResource("Resource_50m27"), SubResource("Resource_lrsp7"), SubResource("Resource_4yfhe"), SubResource("Resource_sovbd"), SubResource("Resource_iec8j")])
+equipment_pack = Array[ExtResource("2_tnird")]([SubResource("Resource_xktgg"), SubResource("Resource_x2c20"), SubResource("Resource_fdnlq"), SubResource("Resource_8m7p0")])
+alternative_gold = 50

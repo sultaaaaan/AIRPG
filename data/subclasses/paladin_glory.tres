@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_32pwy"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_vh12i"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_ahk47"]
+
+[sub_resource type="Resource" id="Resource_k8k5v"]
+script = ExtResource("2_vh12i")
+id = &"glory_spells"
+display_name = "Заклинания клятвы"
+description = "Вы получаете заклинания скорости и героизма."
+level = 3
+
+[sub_resource type="Resource" id="Resource_csy87"]
+script = ExtResource("2_vh12i")
+id = &"inspiring_smite"
+display_name = "Вдохновляющая кара"
+description = "Потратив кару, вы даёте союзникам временные хиты."
+level = 3
+
+[sub_resource type="Resource" id="Resource_dl31j"]
+script = ExtResource("2_vh12i")
+id = &"peerless_athlete"
+display_name = "Непревзойдённый атлет"
+description = "Вы получаете преимущество на проверки Атлетики и дальность прыжка."
+level = 3
+
+[resource]
+script = ExtResource("3_ahk47")
+id = &"glory"
+class_id = &"paladin"
+display_name = "Клятва славы"
+description = "Герой, ищущий подвигов и величия."
+features = Array[ExtResource("2_vh12i")]([SubResource("Resource_k8k5v"), SubResource("Resource_csy87"), SubResource("Resource_dl31j")])

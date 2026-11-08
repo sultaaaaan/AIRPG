@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_yrpa6"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_s80ov"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_d3vkr"]
+
+[sub_resource type="Resource" id="Resource_s7skj"]
+script = ExtResource("2_s80ov")
+id = &"clockwork_magic"
+display_name = "Магия механизма"
+description = "Вы получаете заклинания порядка и защиты."
+level = 3
+
+[sub_resource type="Resource" id="Resource_2vhpm"]
+script = ExtResource("2_s80ov")
+id = &"restore_balance"
+display_name = "Восстановить равновесие"
+description = "Реакцией вы уравниваете удачу и неудачу вокруг себя."
+level = 3
+
+[resource]
+script = ExtResource("3_d3vkr")
+id = &"clockwork"
+class_id = &"sorcerer"
+display_name = "Механическое наследие"
+description = "Магия порядка, механизмов и равновесия."
+features = Array[ExtResource("2_s80ov")]([SubResource("Resource_s7skj"), SubResource("Resource_2vhpm")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_kcga0"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_yof5q"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_76ij8"]
+
+[sub_resource type="Resource" id="Resource_kvxf5"]
+script = ExtResource("2_yof5q")
+id = &"devotion_spells"
+display_name = "Заклинания клятвы"
+description = "Вы получаете заклинания защиты и света."
+level = 3
+
+[sub_resource type="Resource" id="Resource_3qm4d"]
+script = ExtResource("2_yof5q")
+id = &"sacred_weapon"
+display_name = "Священное оружие"
+description = "Вы наполняете оружие светом, добавляя Харизму к атакам."
+level = 3
+
+[resource]
+script = ExtResource("3_76ij8")
+id = &"devotion"
+class_id = &"paladin"
+display_name = "Клятва преданности"
+description = "Рыцарь чести и идеала."
+features = Array[ExtResource("2_yof5q")]([SubResource("Resource_kvxf5"), SubResource("Resource_3qm4d")])

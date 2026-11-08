@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_ct6wh"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_hcbaw"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_olq0b"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="4_6cbvy"]
+
+[sub_resource type="Resource" id="Resource_7p5eh"]
+script = ExtResource("2_hcbaw")
+id = &"abyssal"
+display_name = "Бездны"
+description = "Заговор «Ядовитый брызг»; сопротивление яду. С 3 — «Порча», с 5 — «Удержание личности»."
+
+[sub_resource type="Resource" id="Resource_xktkg"]
+script = ExtResource("2_hcbaw")
+id = &"chthonic"
+display_name = "Хтоническое"
+description = "Заговор «Ледяное прикосновение»; сопротивление некротике. С 3 — «Ложная жизнь», с 5 — «Луч слабости»."
+
+[sub_resource type="Resource" id="Resource_5xaaa"]
+script = ExtResource("2_hcbaw")
+id = &"infernal"
+display_name = "Инфернальное"
+description = "Заговор «Огненный снаряд»; сопротивление огню. С 3 — «Адское возмездие», с 5 — «Тьма»."
+
+[sub_resource type="Resource" id="Resource_ltjmv"]
+script = ExtResource("1_ct6wh")
+id = &"fiendish_legacy"
+prompt = "Выберите инфернальное наследие"
+options = Array[ExtResource("2_hcbaw")]([SubResource("Resource_7p5eh"), SubResource("Resource_xktkg"), SubResource("Resource_5xaaa")])
+
+[sub_resource type="Resource" id="Resource_m644j"]
+script = ExtResource("3_olq0b")
+id = &"otherworldly_presence"
+display_name = "Потустороннее присутствие"
+description = "Вы знаете заговор «Чудотворство». Базовая характеристика — Харизма."
+
+[resource]
+script = ExtResource("4_6cbvy")
+id = &"tiefling"
+display_name = "Тифлинг"
+description = "Носитель инфернальной крови, наследующий силу предка."
+size_options = Array[StringName]([&"medium", &"small"])
+darkvision_range = 60
+languages = Array[StringName]([&"common", &"infernal"])
+traits = Array[ExtResource("3_olq0b")]([SubResource("Resource_m644j")])
+choices = Array[ExtResource("1_ct6wh")]([SubResource("Resource_ltjmv")])

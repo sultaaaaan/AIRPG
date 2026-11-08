@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_cxen1"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_co7ix"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_cijfc"]
+
+[sub_resource type="Resource" id="Resource_dmpib"]
+script = ExtResource("1_cxen1")
+item_id = &"navigators_tools"
+display_name = "Инструменты штурмана"
+
+[sub_resource type="Resource" id="Resource_6en0y"]
+script = ExtResource("1_cxen1")
+item_id = &"pouch"
+display_name = "Кошель"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_tu1jl"]
+script = ExtResource("1_cxen1")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_ksc3b"]
+script = ExtResource("2_co7ix")
+id = &"lucky"
+display_name = "Удачливый"
+description = "У вас есть очки удачи (равны бонусу мастерства). Потратьте одно, чтобы перебросить d20 или наложить помеху на атаку по вам."
+
+[resource]
+script = ExtResource("3_cijfc")
+id = &"merchant"
+display_name = "Торговец"
+description = "Вы умели торговаться, считать прибыль и находить подход к людям."
+ability_options = Array[StringName]([&"constitution", &"intelligence", &"charisma"])
+skill_proficiencies = Array[StringName]([&"animal_handling", &"persuasion"])
+tool_proficiency = &"navigators_tools"
+origin_feat = SubResource("Resource_ksc3b")
+equipment_pack = Array[ExtResource("1_cxen1")]([SubResource("Resource_dmpib"), SubResource("Resource_6en0y"), SubResource("Resource_tu1jl")])

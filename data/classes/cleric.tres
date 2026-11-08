@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_idkma"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_fdpiw"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_hwoij"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="4_i3dw4"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="5_ismnt"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="6_ieupu"]
+
+[sub_resource type="Resource" id="Resource_eeqf8"]
+script = ExtResource("2_fdpiw")
+id = &"protector"
+display_name = "Защитник"
+description = "Вы получаете владение воинским оружием и тяжёлыми доспехами."
+granted_armor_training = Array[StringName]([&"heavy"])
+granted_weapon_training = Array[StringName]([&"martial"])
+
+[sub_resource type="Resource" id="Resource_6lvtq"]
+script = ExtResource("3_hwoij")
+id = &"thaumaturge_bonus"
+display_name = "Богословская учёность"
+description = "+модификатор Мудрости к проверкам Религии и один дополнительный заговор."
+
+[sub_resource type="Resource" id="Resource_qkyia"]
+script = ExtResource("2_fdpiw")
+id = &"thaumaturge"
+display_name = "Чудотворец"
+description = "Вы знаете один дополнительный заговор жреца и добавляете модификатор Мудрости к проверкам Интеллекта (Религия)."
+features = Array[ExtResource("3_hwoij")]([SubResource("Resource_6lvtq")])
+
+[sub_resource type="Resource" id="Resource_gqg7p"]
+script = ExtResource("1_idkma")
+id = &"divine_order"
+prompt = "Выберите божественный орден"
+options = Array[ExtResource("2_fdpiw")]([SubResource("Resource_eeqf8"), SubResource("Resource_qkyia")])
+
+[sub_resource type="Resource" id="Resource_r4cnf"]
+script = ExtResource("4_i3dw4")
+item_id = &"chain_shirt"
+display_name = "Кольчужная рубаха"
+
+[sub_resource type="Resource" id="Resource_qtf1i"]
+script = ExtResource("4_i3dw4")
+item_id = &"shield"
+display_name = "Щит"
+
+[sub_resource type="Resource" id="Resource_2w516"]
+script = ExtResource("4_i3dw4")
+item_id = &"mace"
+display_name = "Булава"
+
+[sub_resource type="Resource" id="Resource_t7hp3"]
+script = ExtResource("4_i3dw4")
+item_id = &"holy_symbol"
+display_name = "Священный символ"
+
+[sub_resource type="Resource" id="Resource_6oo2a"]
+script = ExtResource("4_i3dw4")
+item_id = &"priests_pack"
+display_name = "Набор священника"
+
+[sub_resource type="Resource" id="Resource_idkma"]
+script = ExtResource("3_hwoij")
+id = &"channel_divinity"
+display_name = "Божественный канал"
+description = "Вы получаете способность направлять божественную силу: «Божественная искра» и «Изгнание нежити»."
+level = 2
+
+[sub_resource type="Resource" id="Resource_fdpiw"]
+script = ExtResource("3_hwoij")
+id = &"sear_undead"
+display_name = "Выжигание нежити"
+description = "Изгнанная нежить получает урон излучением, пока изгнана."
+level = 5
+
+[sub_resource type="Resource" id="Resource_023sm"]
+script = ExtResource("6_ieupu")
+ability = &"wisdom"
+cantrips_known = 3
+spells_prepared = 4
+level_1_slots = 2
+
+[resource]
+script = ExtResource("5_ismnt")
+id = &"cleric"
+display_name = "Жрец"
+description = "Проводник воли божества, лечащий союзников и карающий нечестивых."
+primary_abilities = Array[StringName]([&"wisdom"])
+saving_throws = Array[StringName]([&"wisdom", &"charisma"])
+armor_training = Array[StringName]([&"light", &"medium", &"shields"])
+weapon_training = Array[StringName]([&"simple"])
+skill_pool = Array[StringName]([&"history", &"insight", &"medicine", &"persuasion", &"religion"])
+features = Array[ExtResource("3_hwoij")]([SubResource("Resource_idkma"), SubResource("Resource_fdpiw")])
+choices = Array[ExtResource("1_idkma")]([SubResource("Resource_gqg7p")])
+spellcasting = SubResource("Resource_023sm")
+equipment_pack = Array[ExtResource("4_i3dw4")]([SubResource("Resource_r4cnf"), SubResource("Resource_qtf1i"), SubResource("Resource_2w516"), SubResource("Resource_t7hp3"), SubResource("Resource_6oo2a")])
+alternative_gold = 110

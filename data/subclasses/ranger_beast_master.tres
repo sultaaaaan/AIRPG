@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_oxtgu"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_bfany"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_6k7qd"]
+
+[sub_resource type="Resource" id="Resource_7p652"]
+script = ExtResource("2_bfany")
+id = &"primal_companion"
+display_name = "Первобытный спутник"
+description = "Вы призываете зверя-спутника, который сражается вместе с вами."
+level = 3
+
+[resource]
+script = ExtResource("3_6k7qd")
+id = &"beast_master"
+class_id = &"ranger"
+display_name = "Повелитель зверей"
+description = "Охотник, сражающийся бок о бок с зверем."
+features = Array[ExtResource("2_bfany")]([SubResource("Resource_7p652")])

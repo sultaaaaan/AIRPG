@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_5f5ad"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_3und0"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_dn5yy"]
+
+[sub_resource type="Resource" id="Resource_vr75f"]
+script = ExtResource("2_3und0")
+id = &"abjuration_savant"
+display_name = "Знаток ограждения"
+description = "Переписывание заклинаний ограждения дешевле и быстрее."
+level = 3
+
+[sub_resource type="Resource" id="Resource_yh5bd"]
+script = ExtResource("2_3und0")
+id = &"arcane_ward"
+display_name = "Магический оберег"
+description = "Ваши заклинания ограждения создают щит, поглощающий урон."
+level = 3
+
+[resource]
+script = ExtResource("3_dn5yy")
+id = &"abjuration"
+class_id = &"wizard"
+display_name = "Школа ограждения"
+description = "Маг, специализирующийся на защите и изгнании."
+features = Array[ExtResource("2_3und0")]([SubResource("Resource_vr75f"), SubResource("Resource_yh5bd")])

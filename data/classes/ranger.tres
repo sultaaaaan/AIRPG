@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_kqfj1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_uoux4"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_rgfmb"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_le6i0"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_n656v"]
+
+[sub_resource type="Resource" id="Resource_c1csv"]
+script = ExtResource("2_uoux4")
+item_id = &"studded_leather_armor"
+display_name = "Проклёпанный кожаный доспех"
+
+[sub_resource type="Resource" id="Resource_sjbug"]
+script = ExtResource("2_uoux4")
+item_id = &"scimitar"
+display_name = "Ятаган"
+
+[sub_resource type="Resource" id="Resource_ysuoh"]
+script = ExtResource("2_uoux4")
+item_id = &"shortsword"
+display_name = "Короткий меч"
+
+[sub_resource type="Resource" id="Resource_2fmwq"]
+script = ExtResource("2_uoux4")
+item_id = &"longbow"
+display_name = "Длинный лук"
+
+[sub_resource type="Resource" id="Resource_3hcux"]
+script = ExtResource("2_uoux4")
+item_id = &"arrow"
+display_name = "Стрела"
+quantity = 20
+
+[sub_resource type="Resource" id="Resource_doyp5"]
+script = ExtResource("2_uoux4")
+item_id = &"quiver"
+display_name = "Колчан"
+
+[sub_resource type="Resource" id="Resource_i4360"]
+script = ExtResource("2_uoux4")
+item_id = &"druidic_focus"
+display_name = "Друидический фокус"
+
+[sub_resource type="Resource" id="Resource_wxfjo"]
+script = ExtResource("2_uoux4")
+item_id = &"explorers_pack"
+display_name = "Набор путешественника"
+
+[sub_resource type="Resource" id="Resource_i6qni"]
+script = ExtResource("3_rgfmb")
+id = &"favored_enemy"
+display_name = "Избранный враг"
+description = "Заклинание «Метка охотника» всегда подготовлено. Вы можете читать его без ячейки число раз, равное модификатору Мудрости (минимум 1), до долгого отдыха."
+
+[sub_resource type="Resource" id="Resource_viavt"]
+script = ExtResource("3_rgfmb")
+id = &"weapon_mastery"
+display_name = "Мастерство оружия"
+description = "Вы владеете особыми приёмами двух видов оружия на свой выбор."
+
+[sub_resource type="Resource" id="Resource_kqfj1"]
+script = ExtResource("3_rgfmb")
+id = &"spellcasting"
+display_name = "Заклинания"
+description = "Вы можете накладывать заклинания следопыта, используя Мудрость."
+
+[sub_resource type="Resource" id="Resource_uoux4"]
+script = ExtResource("3_rgfmb")
+id = &"deft_explorer"
+display_name = "Ловкий исследователь"
+description = "Вы получаете экспертизу в одном навыке и знание ещё одного языка."
+level = 2
+
+[sub_resource type="Resource" id="Resource_rgfmb"]
+script = ExtResource("3_rgfmb")
+id = &"fighting_style"
+display_name = "Боевой стиль"
+description = "Вы получаете черту боевого стиля."
+level = 2
+
+[sub_resource type="Resource" id="Resource_le6i0"]
+script = ExtResource("3_rgfmb")
+id = &"primal_knowledge"
+display_name = "Первобытные знания"
+description = "Вы получаете владение ещё одним навыком из списка следопыта."
+level = 3
+
+[sub_resource type="Resource" id="Resource_n656v"]
+script = ExtResource("3_rgfmb")
+id = &"extra_attack"
+display_name = "Дополнительная атака"
+description = "При действии «Атака» вы атакуете дважды."
+level = 5
+
+[sub_resource type="Resource" id="Resource_ml2om"]
+script = ExtResource("5_n656v")
+ability = &"wisdom"
+cantrips_known = 1
+spells_prepared = 2
+level_1_slots = 2
+
+[resource]
+script = ExtResource("4_le6i0")
+id = &"ranger"
+display_name = "Следопыт"
+description = "Охотник на границе диких земель, владеющий оружием и первичной магией."
+hit_die = 10
+primary_abilities = Array[StringName]([&"dexterity", &"wisdom"])
+saving_throws = Array[StringName]([&"strength", &"dexterity"])
+weapon_mastery_count = 2
+armor_training = Array[StringName]([&"light", &"medium", &"shields"])
+weapon_training = Array[StringName]([&"simple", &"martial"])
+skill_choice_count = 3
+skill_pool = Array[StringName]([&"animal_handling", &"athletics", &"insight", &"investigation", &"nature", &"perception", &"stealth", &"survival"])
+features = Array[ExtResource("3_rgfmb")]([SubResource("Resource_i6qni"), SubResource("Resource_viavt"), SubResource("Resource_kqfj1"), SubResource("Resource_uoux4"), SubResource("Resource_rgfmb"), SubResource("Resource_le6i0"), SubResource("Resource_n656v")])
+spellcasting = SubResource("Resource_ml2om")
+equipment_pack = Array[ExtResource("2_uoux4")]([SubResource("Resource_c1csv"), SubResource("Resource_sjbug"), SubResource("Resource_ysuoh"), SubResource("Resource_2fmwq"), SubResource("Resource_3hcux"), SubResource("Resource_doyp5"), SubResource("Resource_i4360"), SubResource("Resource_wxfjo")])
+alternative_gold = 150

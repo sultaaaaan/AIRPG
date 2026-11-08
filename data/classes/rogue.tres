@@ -1,0 +1,117 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_l0n1y"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_07stm"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_cjm6j"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_ewcr0"]
+
+[sub_resource type="Resource" id="Resource_umsnw"]
+script = ExtResource("2_07stm")
+item_id = &"leather_armor"
+display_name = "Кожаный доспех"
+
+[sub_resource type="Resource" id="Resource_npi5h"]
+script = ExtResource("2_07stm")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_yqwkw"]
+script = ExtResource("2_07stm")
+item_id = &"shortsword"
+display_name = "Короткий меч"
+
+[sub_resource type="Resource" id="Resource_k3tcr"]
+script = ExtResource("2_07stm")
+item_id = &"shortbow"
+display_name = "Короткий лук"
+
+[sub_resource type="Resource" id="Resource_5ea5m"]
+script = ExtResource("2_07stm")
+item_id = &"arrow"
+display_name = "Стрела"
+quantity = 20
+
+[sub_resource type="Resource" id="Resource_deoox"]
+script = ExtResource("2_07stm")
+item_id = &"quiver"
+display_name = "Колчан"
+
+[sub_resource type="Resource" id="Resource_v7efc"]
+script = ExtResource("2_07stm")
+item_id = &"thieves_tools"
+display_name = "Воровские инструменты"
+
+[sub_resource type="Resource" id="Resource_ypi2k"]
+script = ExtResource("2_07stm")
+item_id = &"burglars_pack"
+display_name = "Набор взломщика"
+
+[sub_resource type="Resource" id="Resource_5m8ep"]
+script = ExtResource("3_cjm6j")
+id = &"sneak_attack"
+display_name = "Скрытая атака"
+description = "Раз за ход наносите дополнительно 1d6 урона, если у вас преимущество или рядом с целью есть ваш союзник."
+
+[sub_resource type="Resource" id="Resource_pehxp"]
+script = ExtResource("3_cjm6j")
+id = &"thieves_cant"
+display_name = "Воровской жаргон"
+description = "Вы знаете тайный язык преступного мира и шифр для скрытых посланий."
+
+[sub_resource type="Resource" id="Resource_g0b3c"]
+script = ExtResource("3_cjm6j")
+id = &"weapon_mastery"
+display_name = "Мастерство оружия"
+description = "Вы владеете особыми приёмами двух видов оружия на свой выбор."
+
+[sub_resource type="Resource" id="Resource_l0n1y"]
+script = ExtResource("3_cjm6j")
+id = &"expertise"
+display_name = "Компетентность"
+description = "Выберите два навыка с владением: удвойте бонус мастерства для них."
+
+[sub_resource type="Resource" id="Resource_07stm"]
+script = ExtResource("3_cjm6j")
+id = &"cunning_action"
+display_name = "Хитрое действие"
+description = "Бонусным действием вы совершаете Рывок, Отход или Засаду."
+level = 2
+
+[sub_resource type="Resource" id="Resource_cjm6j"]
+script = ExtResource("3_cjm6j")
+id = &"steady_aim"
+display_name = "Верный прицел"
+description = "Бонусным действием вы получаете преимущество на следующую атаку."
+level = 3
+
+[sub_resource type="Resource" id="Resource_ewcr0"]
+script = ExtResource("3_cjm6j")
+id = &"cunning_strike"
+display_name = "Хитрый удар"
+description = "Вы можете пожертвовать частью скрытой атаки ради эффекта."
+level = 5
+
+[sub_resource type="Resource" id="Resource_4qwqn"]
+script = ExtResource("3_cjm6j")
+id = &"uncanny_dodge"
+display_name = "Невероятное уклонение"
+description = "Реакцией вы уменьшаете вдвое урон от одной атаки."
+level = 5
+
+[resource]
+script = ExtResource("4_ewcr0")
+id = &"rogue"
+display_name = "Плут"
+description = "Мастер скрытности и точного удара, решающий проблемы хитростью."
+primary_abilities = Array[StringName]([&"dexterity"])
+saving_throws = Array[StringName]([&"dexterity", &"intelligence"])
+weapon_mastery_count = 2
+armor_training = Array[StringName]([&"light"])
+weapon_training = Array[StringName]([&"simple", &"martial_light"])
+tool_proficiencies = Array[StringName]([&"thieves_tools"])
+skill_choice_count = 4
+skill_pool = Array[StringName]([&"acrobatics", &"athletics", &"deception", &"insight", &"intimidation", &"investigation", &"perception", &"performance", &"persuasion", &"sleight_of_hand", &"stealth"])
+features = Array[ExtResource("3_cjm6j")]([SubResource("Resource_5m8ep"), SubResource("Resource_pehxp"), SubResource("Resource_g0b3c"), SubResource("Resource_l0n1y"), SubResource("Resource_07stm"), SubResource("Resource_cjm6j"), SubResource("Resource_ewcr0"), SubResource("Resource_4qwqn")])
+equipment_pack = Array[ExtResource("2_07stm")]([SubResource("Resource_umsnw"), SubResource("Resource_npi5h"), SubResource("Resource_yqwkw"), SubResource("Resource_k3tcr"), SubResource("Resource_5ea5m"), SubResource("Resource_deoox"), SubResource("Resource_v7efc"), SubResource("Resource_ypi2k")])
+alternative_gold = 100

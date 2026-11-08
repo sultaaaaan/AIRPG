@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_e83f5"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_n30ac"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_uc012"]
+
+[sub_resource type="Resource" id="Resource_341hx"]
+script = ExtResource("2_n30ac")
+id = &"ek_spellcasting"
+display_name = "Заклинания"
+description = "Вы изучаете заклинания волшебника, опираясь на Интеллект."
+level = 3
+
+[sub_resource type="Resource" id="Resource_t7shp"]
+script = ExtResource("2_n30ac")
+id = &"war_bond"
+display_name = "Боевая связь"
+description = "Вы привязываете оружие к себе и призываете его в руку."
+level = 3
+
+[resource]
+script = ExtResource("3_uc012")
+id = &"eldritch_knight"
+class_id = &"fighter"
+display_name = "Мистический рыцарь"
+description = "Воин, соединяющий сталь с магией ограждения и воплощения."
+features = Array[ExtResource("2_n30ac")]([SubResource("Resource_341hx"), SubResource("Resource_t7shp")])

@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_nspol"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="2_k1uq3"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_1l8ll"]
+
+[sub_resource type="Resource" id="Resource_qwbcu"]
+script = ExtResource("3_1l8ll")
+id = &"dwarven_resilience"
+display_name = "Дварфская стойкость"
+description = "Сопротивление урону ядом и преимущество на спасброски от отравления."
+
+[sub_resource type="Resource" id="Resource_llndm"]
+script = ExtResource("3_1l8ll")
+id = &"dwarven_toughness"
+display_name = "Дварфская выносливость"
+description = "Ваш максимум хитов увеличивается на 1 за каждый уровень."
+
+[sub_resource type="Resource" id="Resource_85ntb"]
+script = ExtResource("3_1l8ll")
+id = &"stonecunning"
+display_name = "Камнечутьё"
+description = "Бонусным действием на 10 минут получите чувство вибрации 18 м, пока стоите на камне. Применений = бонус мастерства."
+
+[resource]
+script = ExtResource("2_k1uq3")
+id = &"dwarf"
+display_name = "Дварф"
+description = "Стойкий народ камня, упорный в труде и бою."
+darkvision_range = 120
+languages = Array[StringName]([&"common", &"dwarvish"])
+traits = Array[ExtResource("3_1l8ll")]([SubResource("Resource_qwbcu"), SubResource("Resource_llndm"), SubResource("Resource_85ntb")])

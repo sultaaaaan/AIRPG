@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_hqhpu"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_3kmjt"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_ff1pu"]
+
+[sub_resource type="Resource" id="Resource_jktir"]
+script = ExtResource("2_3kmjt")
+id = &"psionic_power"
+display_name = "Псионическая сила"
+description = "Вы получаете кости пси-энергии для атак, защиты и телекинеза."
+level = 3
+
+[resource]
+script = ExtResource("3_ff1pu")
+id = &"psi_warrior"
+class_id = &"fighter"
+display_name = "Воин-псионик"
+description = "Боец, чей разум толкает клинок и щит."
+features = Array[ExtResource("2_3kmjt")]([SubResource("Resource_jktir")])

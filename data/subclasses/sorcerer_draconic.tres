@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_2ohyg"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_ambv8"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_otjno"]
+
+[sub_resource type="Resource" id="Resource_endy7"]
+script = ExtResource("2_ambv8")
+id = &"draconic_resilience"
+display_name = "Драконья стойкость"
+description = "Ваши хиты растут, а без доспеха КД = 10 + Ловкость + Харизма."
+level = 3
+
+[sub_resource type="Resource" id="Resource_v54s5"]
+script = ExtResource("2_ambv8")
+id = &"draconic_spells"
+display_name = "Драконьи заклинания"
+description = "Вы получаете заклинания, связанные со стихией предка."
+level = 3
+
+[resource]
+script = ExtResource("3_otjno")
+id = &"draconic"
+class_id = &"sorcerer"
+display_name = "Драконье наследие"
+description = "Кровь дракона, дарующая чешую и стихию."
+features = Array[ExtResource("2_ambv8")]([SubResource("Resource_endy7"), SubResource("Resource_v54s5")])

@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_41hei"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_ipucu"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_dj68o"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="4_jcsb0"]
+
+[sub_resource type="Resource" id="Resource_cbv0h"]
+script = ExtResource("2_ipucu")
+id = &"forest_gnome"
+display_name = "Лесной гном"
+description = "Заговор «Малый образ»; «Разговор с животными» всегда подготовлен."
+
+[sub_resource type="Resource" id="Resource_tkjqd"]
+script = ExtResource("2_ipucu")
+id = &"rock_gnome"
+display_name = "Скальный гном"
+description = "Заговоры «Починка» и «Малый образ»; можете создавать маленькие механизмы."
+
+[sub_resource type="Resource" id="Resource_hregk"]
+script = ExtResource("1_41hei")
+id = &"gnomish_lineage"
+prompt = "Выберите гномье наследие"
+options = Array[ExtResource("2_ipucu")]([SubResource("Resource_cbv0h"), SubResource("Resource_tkjqd")])
+
+[sub_resource type="Resource" id="Resource_ysbdp"]
+script = ExtResource("3_dj68o")
+id = &"gnomish_cunning"
+display_name = "Гномья хитрость"
+description = "Преимущество на спасброски Интеллекта, Мудрости и Харизмы от магии."
+
+[resource]
+script = ExtResource("4_jcsb0")
+id = &"gnome"
+display_name = "Гном"
+description = "Малый народ изобретателей и иллюзионистов с неуёмным любопытством."
+size_options = Array[StringName]([&"small"])
+darkvision_range = 60
+languages = Array[StringName]([&"common", &"gnomish"])
+traits = Array[ExtResource("3_dj68o")]([SubResource("Resource_ysbdp")])
+choices = Array[ExtResource("1_41hei")]([SubResource("Resource_hregk")])

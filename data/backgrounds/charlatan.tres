@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_10muy"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_x0j4o"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_ka5fd"]
+
+[sub_resource type="Resource" id="Resource_k5iou"]
+script = ExtResource("1_10muy")
+item_id = &"forgery_kit"
+display_name = "Набор для подделки"
+
+[sub_resource type="Resource" id="Resource_y3f0j"]
+script = ExtResource("1_10muy")
+item_id = &"costume"
+display_name = "Костюм"
+
+[sub_resource type="Resource" id="Resource_ov0e6"]
+script = ExtResource("1_10muy")
+item_id = &"fine_clothes"
+display_name = "Роскошная одежда"
+
+[sub_resource type="Resource" id="Resource_0ttjx"]
+script = ExtResource("2_x0j4o")
+id = &"skilled"
+display_name = "Умелый"
+description = "Получите владение любыми тремя навыками или инструментами на выбор."
+
+[resource]
+script = ExtResource("3_ka5fd")
+id = &"charlatan"
+display_name = "Шарлатан"
+description = "Вы жили обманом, выдавая себя за того, кем не являетесь."
+ability_options = Array[StringName]([&"dexterity", &"constitution", &"charisma"])
+skill_proficiencies = Array[StringName]([&"deception", &"sleight_of_hand"])
+tool_proficiency = &"forgery_kit"
+origin_feat = SubResource("Resource_0ttjx")
+equipment_pack = Array[ExtResource("1_10muy")]([SubResource("Resource_k5iou"), SubResource("Resource_y3f0j"), SubResource("Resource_ov0e6")])

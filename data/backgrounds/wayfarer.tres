@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_60a1h"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_eer7f"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_xcom7"]
+
+[sub_resource type="Resource" id="Resource_bov1e"]
+script = ExtResource("1_60a1h")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_hsa80"]
+script = ExtResource("1_60a1h")
+item_id = &"thieves_tools"
+display_name = "Воровские инструменты"
+
+[sub_resource type="Resource" id="Resource_eltsv"]
+script = ExtResource("1_60a1h")
+item_id = &"gaming_set"
+display_name = "Игровой набор"
+
+[sub_resource type="Resource" id="Resource_aowjo"]
+script = ExtResource("1_60a1h")
+item_id = &"bedroll"
+display_name = "Спальник"
+
+[sub_resource type="Resource" id="Resource_4ke2o"]
+script = ExtResource("1_60a1h")
+item_id = &"pouch"
+display_name = "Кошель"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_f0tiw"]
+script = ExtResource("1_60a1h")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_3henm"]
+script = ExtResource("2_eer7f")
+id = &"lucky"
+display_name = "Удачливый"
+description = "У вас есть очки удачи (равны бонусу мастерства). Потратьте одно, чтобы перебросить d20 или наложить помеху на атаку по вам."
+
+[resource]
+script = ExtResource("3_xcom7")
+id = &"wayfarer"
+display_name = "Странник"
+description = "Вы выросли на улице, выживая смекалкой и быстрыми ногами."
+ability_options = Array[StringName]([&"dexterity", &"wisdom", &"charisma"])
+skill_proficiencies = Array[StringName]([&"insight", &"stealth"])
+tool_proficiency = &"thieves_tools"
+origin_feat = SubResource("Resource_3henm")
+equipment_pack = Array[ExtResource("1_60a1h")]([SubResource("Resource_bov1e"), SubResource("Resource_hsa80"), SubResource("Resource_eltsv"), SubResource("Resource_aowjo"), SubResource("Resource_4ke2o"), SubResource("Resource_f0tiw")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_jyx5a"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_546kp"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_rxypa"]
+
+[sub_resource type="Resource" id="Resource_rvjal"]
+script = ExtResource("2_546kp")
+id = &"star_map"
+display_name = "Звёздная карта"
+description = "Вы получаете карту созвездий и заклинание «Направляющий снаряд»."
+level = 3
+
+[sub_resource type="Resource" id="Resource_ooyo8"]
+script = ExtResource("2_546kp")
+id = &"starry_form"
+display_name = "Звёздный облик"
+description = "Бонусным действием принимаете облик созвездия с особыми свойствами."
+level = 3
+
+[resource]
+script = ExtResource("3_rxypa")
+id = &"stars"
+class_id = &"druid"
+display_name = "Круг звёзд"
+description = "Друид, читающий судьбу по ночному небу."
+features = Array[ExtResource("2_546kp")]([SubResource("Resource_rvjal"), SubResource("Resource_ooyo8")])

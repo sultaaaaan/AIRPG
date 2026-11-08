@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_albnk"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_yx83f"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_ys3ge"]
+
+[sub_resource type="Resource" id="Resource_r0w4k"]
+script = ExtResource("2_yx83f")
+id = &"divine_fury"
+display_name = "Божественная ярость"
+description = "Первая атака в ход в ярости наносит дополнительный урон излучением или некротической энергией."
+level = 3
+
+[sub_resource type="Resource" id="Resource_kvuij"]
+script = ExtResource("2_yx83f")
+id = &"warrior_of_the_gods"
+display_name = "Воин богов"
+description = "Вашу душу трудно отправить за грань: смерть требует большего, чем обычная рана."
+level = 3
+
+[resource]
+script = ExtResource("3_ys3ge")
+id = &"zealot"
+class_id = &"barbarian"
+display_name = "Путь фанатика"
+description = "Священная ярость во имя божества."
+features = Array[ExtResource("2_yx83f")]([SubResource("Resource_r0w4k"), SubResource("Resource_kvuij")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_ogdw1"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_peaeh"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_7lmiu"]
+
+[sub_resource type="Resource" id="Resource_2qwuy"]
+script = ExtResource("2_peaeh")
+id = &"blessing_of_the_trickster"
+display_name = "Благословение обманщика"
+description = "Вы даёте союзнику преимущество на Скрытность."
+level = 3
+
+[sub_resource type="Resource" id="Resource_x41by"]
+script = ExtResource("2_peaeh")
+id = &"invoke_duplicity"
+display_name = "Вызвать двойника"
+description = "Вы создаёте иллюзорного двойника, из которого колдуете."
+level = 3
+
+[resource]
+script = ExtResource("3_7lmiu")
+id = &"trickery"
+class_id = &"cleric"
+display_name = "Домен обмана"
+description = "Служение богам хитрости, иллюзий и тайн."
+features = Array[ExtResource("2_peaeh")]([SubResource("Resource_2qwuy"), SubResource("Resource_x41by")])

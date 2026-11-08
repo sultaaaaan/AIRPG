@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_m6n34"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="2_3ca58"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_fvlem"]
+
+[sub_resource type="Resource" id="Resource_wj0ic"]
+script = ExtResource("3_fvlem")
+id = &"brave"
+display_name = "Отвага"
+description = "Преимущество на спасброски от состояния «Испуган»."
+
+[sub_resource type="Resource" id="Resource_ucfdv"]
+script = ExtResource("3_fvlem")
+id = &"halfling_nimbleness"
+display_name = "Ловкость полурослика"
+description = "Вы можете проходить через пространство существ, которые больше вас."
+
+[sub_resource type="Resource" id="Resource_e2xv6"]
+script = ExtResource("3_fvlem")
+id = &"luck"
+display_name = "Удача"
+description = "Если на d20 выпала 1, перебросьте кость и используйте новый результат."
+
+[sub_resource type="Resource" id="Resource_b5b32"]
+script = ExtResource("3_fvlem")
+id = &"naturally_stealthy"
+display_name = "Прирождённая скрытность"
+description = "Можете прятаться, даже если вас заслоняет только существо больше вас."
+
+[resource]
+script = ExtResource("2_3ca58")
+id = &"halfling"
+display_name = "Полурослик"
+description = "Маленький народ, чья главная сила — удача и отвага."
+size_options = Array[StringName]([&"small"])
+languages = Array[StringName]([&"common", &"halfling"])
+traits = Array[ExtResource("3_fvlem")]([SubResource("Resource_wj0ic"), SubResource("Resource_ucfdv"), SubResource("Resource_e2xv6"), SubResource("Resource_b5b32")])

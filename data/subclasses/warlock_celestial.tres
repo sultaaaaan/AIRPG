@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_kpnio"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_i1xjv"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_ftlqo"]
+
+[sub_resource type="Resource" id="Resource_ilwaw"]
+script = ExtResource("2_i1xjv")
+id = &"celestial_spells"
+display_name = "Заклинания небес"
+description = "Вы получаете заклинания света и исцеления."
+level = 3
+
+[sub_resource type="Resource" id="Resource_cad6d"]
+script = ExtResource("2_i1xjv")
+id = &"healing_light"
+display_name = "Исцеляющий свет"
+description = "У вас есть запас костей d6 для лечения союзников."
+level = 3
+
+[resource]
+script = ExtResource("3_ftlqo")
+id = &"celestial"
+class_id = &"warlock"
+display_name = "Небесный покровитель"
+description = "Договор со светом, исцеляющим и карающим."
+features = Array[ExtResource("2_i1xjv")]([SubResource("Resource_ilwaw"), SubResource("Resource_cad6d")])

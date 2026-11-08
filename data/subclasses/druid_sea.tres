@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_drb7a"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_cg3ll"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_tnv46"]
+
+[sub_resource type="Resource" id="Resource_svl7f"]
+script = ExtResource("2_cg3ll")
+id = &"sea_circle_spells"
+display_name = "Заклинания моря"
+description = "Вы получаете заклинания воды, ветра и холода."
+level = 3
+
+[sub_resource type="Resource" id="Resource_4yawi"]
+script = ExtResource("2_cg3ll")
+id = &"wrath_of_the_sea"
+display_name = "Гнев моря"
+description = "Бонусным действием обрушиваете на врага волну холодной воды."
+level = 3
+
+[resource]
+script = ExtResource("3_tnv46")
+id = &"sea"
+class_id = &"druid"
+display_name = "Круг моря"
+description = "Голос приливов, штормов и глубин."
+features = Array[ExtResource("2_cg3ll")]([SubResource("Resource_svl7f"), SubResource("Resource_4yawi")])

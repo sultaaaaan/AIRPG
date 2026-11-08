@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_l0fcm"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_1hguy"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_3gtim"]
+
+[sub_resource type="Resource" id="Resource_g0e8f"]
+script = ExtResource("2_1hguy")
+id = &"goo_spells"
+display_name = "Заклинания Древнего"
+description = "Вы получаете заклинания психики и телепатии."
+level = 3
+
+[sub_resource type="Resource" id="Resource_ximbw"]
+script = ExtResource("2_1hguy")
+id = &"awakened_mind"
+display_name = "Пробуждённый разум"
+description = "Вы телепатически говорите с существами в пределах 9 м."
+level = 3
+
+[resource]
+script = ExtResource("3_3gtim")
+id = &"great_old_one"
+class_id = &"warlock"
+display_name = "Великий Древний"
+description = "Покровитель, чей разум непостижим."
+features = Array[ExtResource("2_1hguy")]([SubResource("Resource_g0e8f"), SubResource("Resource_ximbw")])

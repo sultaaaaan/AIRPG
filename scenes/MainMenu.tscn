@@ -1,0 +1,191 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1gw67wjb5gbs"]
+
+[ext_resource type="Script" uid="uid://bdrkpulplbb87" path="res://scripts/main_menu.gd" id="1_main"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 32.0
+content_margin_top = 28.0
+content_margin_right = 32.0
+content_margin_bottom = 28.0
+bg_color = Color(0.06, 0.08, 0.12, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.45, 0.75, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="MainMenu" type="Control" unique_id=1359218049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="." unique_id=823972934]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.035, 0.045, 0.07, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=156384771]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer" unique_id=348256275]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Content" type="VBoxContainer" parent="CenterContainer/Panel" unique_id=1986772330]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/Content" unique_id=1800421715]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 44
+text = "AIRPG"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CenterContainer/Panel/Content" unique_id=632986334]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.65, 0.8, 1)
+theme_override_font_sizes/font_size = 14
+text = "Сетевая игра — выберите роль в лобби"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="CenterContainer/Panel/Content" unique_id=723524819]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="CharacterRow" type="HBoxContainer" parent="CenterContainer/Panel/Content" unique_id=990112233]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CharacterSummary" type="Label" parent="CenterContainer/Panel/Content/CharacterRow" unique_id=990112234]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "Персонаж не создан"
+vertical_alignment = 1
+
+[node name="CharacterButton" type="Button" parent="CenterContainer/Panel/Content/CharacterRow" unique_id=990112235]
+custom_minimum_size = Vector2(170, 36)
+layout_mode = 2
+text = "ПЕРСОНАЖ"
+
+[node name="NicknameRow" type="HBoxContainer" parent="CenterContainer/Panel/Content" unique_id=789239497]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/Content/NicknameRow" unique_id=1570360382]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "Никнейм"
+vertical_alignment = 1
+
+[node name="NicknameEdit" type="LineEdit" parent="CenterContainer/Panel/Content/NicknameRow" unique_id=623983422]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Введите никнейм"
+max_length = 16
+
+[node name="AddressRow" type="HBoxContainer" parent="CenterContainer/Panel/Content" unique_id=2110615366]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/Content/AddressRow" unique_id=1521234570]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "Адрес"
+vertical_alignment = 1
+
+[node name="AddressEdit" type="LineEdit" parent="CenterContainer/Panel/Content/AddressRow" unique_id=602245197]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
+placeholder_text = "IP сервера"
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/Panel/Content" unique_id=797745639]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 0.65, 1)
+theme_override_font_sizes/font_size = 14
+text = "Введите никнейм и нажмите HOST или JOIN."
+autowrap_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/Panel/Content" unique_id=1418063603]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="CenterContainer/Panel/Content/Buttons" unique_id=1686869890]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HOST"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/Panel/Content/Buttons" unique_id=1727430443]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "JOIN"
+
+[node name="StartButton" type="Button" parent="CenterContainer/Panel/Content/Buttons" unique_id=658240062]
+visible = false
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "START"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/Panel/Content/Buttons" unique_id=646925238]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "EXIT"
+
+[node name="PlayersHeader" type="HBoxContainer" parent="CenterContainer/Panel/Content" unique_id=1644121322]
+layout_mode = 2
+
+[node name="PlayersTitle" type="Label" parent="CenterContainer/Panel/Content/PlayersHeader" unique_id=565541200]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Игроки в лобби"
+
+[node name="PlayerCount" type="Label" parent="CenterContainer/Panel/Content/PlayersHeader" unique_id=1725501557]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.7, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+horizontal_alignment = 2
+
+[node name="PlayerScroll" type="ScrollContainer" parent="CenterContainer/Panel/Content" unique_id=873768809]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="PlayerList" type="VBoxContainer" parent="CenterContainer/Panel/Content/PlayerScroll" unique_id=1785209154]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Hint" type="Label" parent="CenterContainer/Panel/Content" unique_id=1881127988]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.55, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "Порт 7777. Хост открывает сервер, остальные подключаются по IP-адресу хоста."
+autowrap_mode = 2

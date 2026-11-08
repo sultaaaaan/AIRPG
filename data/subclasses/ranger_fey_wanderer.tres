@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_c8xna"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_nbwch"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_rspit"]
+
+[sub_resource type="Resource" id="Resource_hh14w"]
+script = ExtResource("2_nbwch")
+id = &"dreadful_strikes"
+display_name = "Ужасающие удары"
+description = "Ваши атаки наносят дополнительный психический урон."
+level = 3
+
+[sub_resource type="Resource" id="Resource_mjkfw"]
+script = ExtResource("2_nbwch")
+id = &"otherworldly_glamour"
+display_name = "Потустороннее очарование"
+description = "Вы добавляете Мудрость к проверкам Харизмы и получаете навык."
+level = 3
+
+[resource]
+script = ExtResource("3_rspit")
+id = &"fey_wanderer"
+class_id = &"ranger"
+display_name = "Странник фей"
+description = "Следопыт, отмеченный чарами Дикого леса."
+features = Array[ExtResource("2_nbwch")]([SubResource("Resource_hh14w"), SubResource("Resource_mjkfw")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_knbul"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_gu1re"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_rv6cg"]
+
+[sub_resource type="Resource" id="Resource_0pqsp"]
+script = ExtResource("2_gu1re")
+id = &"wild_magic_surge"
+display_name = "Всплеск дикой магии"
+description = "После ваших заклинаний 1 круга и выше может случиться случайный эффект."
+level = 3
+
+[sub_resource type="Resource" id="Resource_wly7b"]
+script = ExtResource("2_gu1re")
+id = &"tides_of_chaos"
+display_name = "Приливы хаоса"
+description = "Вы получаете преимущество на бросок, но платите за это всплеском."
+level = 3
+
+[resource]
+script = ExtResource("3_rv6cg")
+id = &"wild_magic"
+class_id = &"sorcerer"
+display_name = "Дикая магия"
+description = "Необузданная сила, которая может взорваться в любой момент."
+features = Array[ExtResource("2_gu1re")]([SubResource("Resource_0pqsp"), SubResource("Resource_wly7b")])

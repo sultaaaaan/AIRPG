@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_fkb3p"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_kgvy4"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_bldih"]
+
+[sub_resource type="Resource" id="Resource_3ldfu"]
+script = ExtResource("2_kgvy4")
+id = &"hunters_lore"
+display_name = "Знания охотника"
+description = "Вы распознаёте слабости существа и получаете заклинания охоты."
+level = 3
+
+[sub_resource type="Resource" id="Resource_yx6of"]
+script = ExtResource("2_kgvy4")
+id = &"hunters_prey"
+display_name = "Добыча охотника"
+description = "Вы выбираете приём против крупных или многочисленных врагов."
+level = 3
+
+[resource]
+script = ExtResource("3_bldih")
+id = &"hunter"
+class_id = &"ranger"
+display_name = "Охотник"
+description = "Специалист по истреблению конкретной добычи."
+features = Array[ExtResource("2_kgvy4")]([SubResource("Resource_3ldfu"), SubResource("Resource_yx6of")])

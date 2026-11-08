@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_66rig"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_xoh8i"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_6rkp8"]
+
+[sub_resource type="Resource" id="Resource_gpy3o"]
+script = ExtResource("2_xoh8i")
+id = &"open_hand_technique"
+display_name = "Техника открытой ладони"
+description = "Ваши удары сбивают с ног, отталкивают или лишают реакции."
+level = 3
+
+[resource]
+script = ExtResource("3_6rkp8")
+id = &"open_hand"
+class_id = &"monk"
+display_name = "Воин открытой ладони"
+description = "Мастер безоружного боя и контроля тела."
+features = Array[ExtResource("2_xoh8i")]([SubResource("Resource_gpy3o")])

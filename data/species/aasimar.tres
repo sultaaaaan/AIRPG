@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_q644e"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="2_s7qx4"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_jm8et"]
+
+[sub_resource type="Resource" id="Resource_ghuvr"]
+script = ExtResource("3_jm8et")
+id = &"celestial_resistance"
+display_name = "Небесное сопротивление"
+description = "Сопротивление урону некротической энергией и излучением."
+
+[sub_resource type="Resource" id="Resource_uvubh"]
+script = ExtResource("3_jm8et")
+id = &"healing_hands"
+display_name = "Исцеляющие руки"
+description = "Действием Магии коснитесь существа и восстановите ему количество d4 хитов, равное вашему бонусу мастерства."
+
+[sub_resource type="Resource" id="Resource_x00r1"]
+script = ExtResource("3_jm8et")
+id = &"light_bearer"
+display_name = "Носитель света"
+description = "Вы знаете заговор «Свет». Базовая характеристика — Харизма."
+
+[resource]
+script = ExtResource("2_s7qx4")
+id = &"aasimar"
+display_name = "Аазимар"
+description = "Смертный, в чьих жилах течёт свет небес."
+darkvision_range = 60
+languages = Array[StringName]([&"common", &"celestial"])
+traits = Array[ExtResource("3_jm8et")]([SubResource("Resource_ghuvr"), SubResource("Resource_uvubh"), SubResource("Resource_x00r1")])

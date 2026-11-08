@@ -1,0 +1,77 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_37qb2"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_nw761"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_xbyn3"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_yjmyj"]
+[ext_resource type="Script" path="res://scripts/data/spellcasting_data.gd" id="5_7mkys"]
+
+[sub_resource type="Resource" id="Resource_ht47m"]
+script = ExtResource("2_nw761")
+item_id = &"spear"
+display_name = "Копьё"
+
+[sub_resource type="Resource" id="Resource_bsn4m"]
+script = ExtResource("2_nw761")
+item_id = &"dagger"
+display_name = "Кинжал"
+quantity = 2
+
+[sub_resource type="Resource" id="Resource_emk6y"]
+script = ExtResource("2_nw761")
+item_id = &"arcane_focus"
+display_name = "Магический фокус"
+
+[sub_resource type="Resource" id="Resource_nmuwo"]
+script = ExtResource("2_nw761")
+item_id = &"dungeoneers_pack"
+display_name = "Набор исследователя подземелий"
+
+[sub_resource type="Resource" id="Resource_kj02w"]
+script = ExtResource("3_xbyn3")
+id = &"innate_sorcery"
+display_name = "Врождённое волшебство"
+description = "Бонусным действием на 1 минуту: +1 к КС спасброска от ваших заклинаний и преимущество на броски атаки заклинаниями. 2 применения на долгий отдых."
+
+[sub_resource type="Resource" id="Resource_37qb2"]
+script = ExtResource("3_xbyn3")
+id = &"font_of_magic"
+display_name = "Источник магии"
+description = "Вы получаете очки чародейства и можете превращать их в ячейки и обратно."
+level = 2
+
+[sub_resource type="Resource" id="Resource_nw761"]
+script = ExtResource("3_xbyn3")
+id = &"metamagic"
+display_name = "Метамагия"
+description = "Вы выбираете два способа изменять заклинания за очки чародейства."
+level = 2
+
+[sub_resource type="Resource" id="Resource_xbyn3"]
+script = ExtResource("3_xbyn3")
+id = &"sorcerous_restoration"
+display_name = "Восстановление чародейства"
+description = "На коротком отдыхе вы восстанавливаете часть очков чародейства."
+level = 5
+
+[sub_resource type="Resource" id="Resource_1l8lk"]
+script = ExtResource("5_7mkys")
+ability = &"charisma"
+cantrips_known = 4
+spells_prepared = 2
+level_1_slots = 2
+
+[resource]
+script = ExtResource("4_yjmyj")
+id = &"sorcerer"
+display_name = "Чародей"
+description = "Прирождённый носитель магии, чья сила течёт в крови."
+hit_die = 6
+primary_abilities = Array[StringName]([&"charisma"])
+saving_throws = Array[StringName]([&"constitution", &"charisma"])
+weapon_training = Array[StringName]([&"simple"])
+skill_pool = Array[StringName]([&"arcana", &"deception", &"insight", &"intimidation", &"persuasion", &"religion"])
+features = Array[ExtResource("3_xbyn3")]([SubResource("Resource_kj02w"), SubResource("Resource_37qb2"), SubResource("Resource_nw761"), SubResource("Resource_xbyn3")])
+spellcasting = SubResource("Resource_1l8lk")
+equipment_pack = Array[ExtResource("2_nw761")]([SubResource("Resource_ht47m"), SubResource("Resource_bsn4m"), SubResource("Resource_emk6y"), SubResource("Resource_nmuwo")])
+alternative_gold = 50

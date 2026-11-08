@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="ClassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_brc3q"]
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="2_7evuj"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_aeiyy"]
+[ext_resource type="Script" path="res://scripts/data/class_data.gd" id="4_g5g6m"]
+
+[sub_resource type="Resource" id="Resource_gkjpr"]
+script = ExtResource("2_7evuj")
+item_id = &"greataxe"
+display_name = "Секира"
+
+[sub_resource type="Resource" id="Resource_pfuqc"]
+script = ExtResource("2_7evuj")
+item_id = &"handaxe"
+display_name = "Ручной топор"
+quantity = 4
+
+[sub_resource type="Resource" id="Resource_a1b0v"]
+script = ExtResource("2_7evuj")
+item_id = &"explorers_pack"
+display_name = "Набор путешественника"
+
+[sub_resource type="Resource" id="Resource_cqd7s"]
+script = ExtResource("3_aeiyy")
+id = &"rage"
+display_name = "Ярость"
+description = "Бонусное действие, 2 применения на долгий отдых. На 1 минуту: +2 к урону силовым оружием, сопротивление дробящему, колющему и рубящему урону, преимущество на проверки и спасброски Силы. Нельзя поддерживать концентрацию и колдовать."
+
+[sub_resource type="Resource" id="Resource_aqlis"]
+script = ExtResource("3_aeiyy")
+id = &"unarmored_defense"
+display_name = "Защита без доспехов"
+description = "Пока вы не носите доспех, КД = 10 + модификатор Ловкости + модификатор Телосложения. Щит можно использовать."
+
+[sub_resource type="Resource" id="Resource_0hwuv"]
+script = ExtResource("3_aeiyy")
+id = &"weapon_mastery"
+display_name = "Мастерство оружия"
+description = "Вы владеете особыми приёмами двух видов оружия на свой выбор и можете переключать их после долгого отдыха."
+
+[sub_resource type="Resource" id="Resource_brc3q"]
+script = ExtResource("3_aeiyy")
+id = &"danger_sense"
+display_name = "Чутьё опасности"
+description = "Вы получаете преимущество на спасброски Ловкости от эффектов, которые видите."
+level = 2
+
+[sub_resource type="Resource" id="Resource_7evuj"]
+script = ExtResource("3_aeiyy")
+id = &"reckless_attack"
+display_name = "Безрассудная атака"
+description = "В свой ход вы можете атаковать с преимуществом, но враги получают преимущество против вас до вашего следующего хода."
+level = 2
+
+[sub_resource type="Resource" id="Resource_aeiyy"]
+script = ExtResource("3_aeiyy")
+id = &"primal_knowledge"
+display_name = "Первобытные знания"
+description = "Вы получаете владение ещё одним навыком из списка варвара."
+level = 3
+
+[sub_resource type="Resource" id="Resource_g5g6m"]
+script = ExtResource("3_aeiyy")
+id = &"fast_movement"
+display_name = "Быстрое перемещение"
+description = "Скорость увеличивается на 10 футов, пока вы не носите тяжёлый доспех."
+level = 5
+
+[resource]
+script = ExtResource("4_g5g6m")
+id = &"barbarian"
+display_name = "Варвар"
+description = "Неукротимый воин, черпающий силу из первобытной ярости."
+hit_die = 12
+primary_abilities = Array[StringName]([&"strength"])
+saving_throws = Array[StringName]([&"strength", &"constitution"])
+weapon_mastery_count = 2
+unarmored_defense_ability = &"constitution"
+armor_training = Array[StringName]([&"light", &"medium", &"shields"])
+weapon_training = Array[StringName]([&"simple", &"martial"])
+skill_pool = Array[StringName]([&"animal_handling", &"athletics", &"intimidation", &"nature", &"perception", &"survival"])
+features = Array[ExtResource("3_aeiyy")]([SubResource("Resource_cqd7s"), SubResource("Resource_aqlis"), SubResource("Resource_0hwuv"), SubResource("Resource_brc3q"), SubResource("Resource_7evuj"), SubResource("Resource_aeiyy"), SubResource("Resource_g5g6m")])
+equipment_pack = Array[ExtResource("2_7evuj")]([SubResource("Resource_gkjpr"), SubResource("Resource_pfuqc"), SubResource("Resource_a1b0v")])
+alternative_gold = 75

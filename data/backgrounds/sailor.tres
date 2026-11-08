@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="BackgroundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_entry.gd" id="1_ao775"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_mrelb"]
+[ext_resource type="Script" path="res://scripts/data/background_data.gd" id="3_hoiu1"]
+
+[sub_resource type="Resource" id="Resource_1gi2c"]
+script = ExtResource("1_ao775")
+item_id = &"dagger"
+display_name = "Кинжал"
+
+[sub_resource type="Resource" id="Resource_1ak28"]
+script = ExtResource("1_ao775")
+item_id = &"navigators_tools"
+display_name = "Инструменты штурмана"
+
+[sub_resource type="Resource" id="Resource_4l6a0"]
+script = ExtResource("1_ao775")
+item_id = &"rope"
+display_name = "Верёвка"
+
+[sub_resource type="Resource" id="Resource_ysvwi"]
+script = ExtResource("1_ao775")
+item_id = &"travelers_clothes"
+display_name = "Дорожная одежда"
+
+[sub_resource type="Resource" id="Resource_f4rdu"]
+script = ExtResource("2_mrelb")
+id = &"tavern_brawler"
+display_name = "Драчун из таверны"
+description = "Ваш безоружный удар наносит 1d4 + Сила, перебрасывает 1 на уроне и может толкнуть цель на 1,5 м."
+
+[resource]
+script = ExtResource("3_hoiu1")
+id = &"sailor"
+display_name = "Моряк"
+description = "Вы жили морем, зная узлы, ветра и шторма."
+ability_options = Array[StringName]([&"strength", &"dexterity", &"wisdom"])
+skill_proficiencies = Array[StringName]([&"acrobatics", &"perception"])
+tool_proficiency = &"navigators_tools"
+origin_feat = SubResource("Resource_f4rdu")
+equipment_pack = Array[ExtResource("1_ao775")]([SubResource("Resource_1gi2c"), SubResource("Resource_1ak28"), SubResource("Resource_4l6a0"), SubResource("Resource_ysvwi")])

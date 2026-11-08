@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_6y46c"]
+[ext_resource type="Script" path="res://scripts/data/choice_option_data.gd" id="2_rvlt6"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_bvo3x"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="4_kbrdd"]
+
+[sub_resource type="Resource" id="Resource_k23fh"]
+script = ExtResource("2_rvlt6")
+id = &"cloud"
+display_name = "Облачный"
+description = "Бонусным действием телепортируйтесь на 9 м. Применений = бонус мастерства."
+
+[sub_resource type="Resource" id="Resource_o53qe"]
+script = ExtResource("2_rvlt6")
+id = &"fire"
+display_name = "Огненный"
+description = "При попадании добавьте 1d10 урона огнём. Применений = бонус мастерства."
+
+[sub_resource type="Resource" id="Resource_q5m73"]
+script = ExtResource("2_rvlt6")
+id = &"frost"
+display_name = "Морозный"
+description = "При попадании добавьте 1d6 урона холодом и снизьте скорость цели на 3 м."
+
+[sub_resource type="Resource" id="Resource_s82xs"]
+script = ExtResource("2_rvlt6")
+id = &"hill"
+display_name = "Холмовой"
+description = "При попадании сбейте цель с ног (спасбросок Силы)."
+
+[sub_resource type="Resource" id="Resource_dm2to"]
+script = ExtResource("2_rvlt6")
+id = &"stone"
+display_name = "Каменный"
+description = "Реакцией снизьте получаемый урон на 1d12 + модификатор Телосложения."
+
+[sub_resource type="Resource" id="Resource_xbiqw"]
+script = ExtResource("2_rvlt6")
+id = &"storm"
+display_name = "Грозовой"
+description = "Реакцией нанесите 1d8 урона звуком атакующему вас существу."
+
+[sub_resource type="Resource" id="Resource_cxr1c"]
+script = ExtResource("1_6y46c")
+id = &"giant_ancestry"
+prompt = "Выберите наследие великана"
+options = Array[ExtResource("2_rvlt6")]([SubResource("Resource_k23fh"), SubResource("Resource_o53qe"), SubResource("Resource_q5m73"), SubResource("Resource_s82xs"), SubResource("Resource_dm2to"), SubResource("Resource_xbiqw")])
+
+[sub_resource type="Resource" id="Resource_gukqh"]
+script = ExtResource("3_bvo3x")
+id = &"powerful_build"
+display_name = "Могучий сложение"
+description = "Вы считаетесь на одну категорию больше при определении грузоподъёмности и переноса."
+
+[sub_resource type="Resource" id="Resource_wboc4"]
+script = ExtResource("3_bvo3x")
+id = &"large_form"
+display_name = "Большая форма"
+description = "С 5 уровня бонусным действием становитесь Большим на 10 минут."
+
+[resource]
+script = ExtResource("4_kbrdd")
+id = &"goliath"
+display_name = "Голиаф"
+description = "Потомок великанов, рождённый для суровых вершин."
+speed = 35
+languages = Array[StringName]([&"common", &"giant"])
+traits = Array[ExtResource("3_bvo3x")]([SubResource("Resource_gukqh"), SubResource("Resource_wboc4")])
+choices = Array[ExtResource("1_6y46c")]([SubResource("Resource_cxr1c")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_7nsro"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_n2rx6"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_h2yvx"]
+
+[sub_resource type="Resource" id="Resource_wl28t"]
+script = ExtResource("2_n2rx6")
+id = &"evocation_savant"
+display_name = "Знаток воплощения"
+description = "Переписывание заклинаний воплощения дешевле и быстрее."
+level = 3
+
+[sub_resource type="Resource" id="Resource_3nk26"]
+script = ExtResource("2_n2rx6")
+id = &"potent_cantrip"
+display_name = "Мощный заговор"
+description = "Ваши заговоры наносят половину урона даже при успешном спасброске."
+level = 3
+
+[resource]
+script = ExtResource("3_h2yvx")
+id = &"evocation"
+class_id = &"wizard"
+display_name = "Школа воплощения"
+description = "Маг, обрушивающий на врагов чистую стихию."
+features = Array[ExtResource("2_n2rx6")]([SubResource("Resource_wl28t"), SubResource("Resource_3nk26")])

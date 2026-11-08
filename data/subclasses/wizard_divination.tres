@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_6geei"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_w3lpa"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_lh2sx"]
+
+[sub_resource type="Resource" id="Resource_5xoal"]
+script = ExtResource("2_w3lpa")
+id = &"divination_savant"
+display_name = "Знаток прорицания"
+description = "Переписывание заклинаний прорицания дешевле и быстрее."
+level = 3
+
+[sub_resource type="Resource" id="Resource_0hncf"]
+script = ExtResource("2_w3lpa")
+id = &"portent"
+display_name = "Предзнаменование"
+description = "Вы заменяете чужой бросок d20 заранее выпавшим значением."
+level = 3
+
+[resource]
+script = ExtResource("3_lh2sx")
+id = &"divination"
+class_id = &"wizard"
+display_name = "Школа прорицания"
+description = "Маг, видящий обрывки будущего."
+features = Array[ExtResource("2_w3lpa")]([SubResource("Resource_5xoal"), SubResource("Resource_0hncf")])

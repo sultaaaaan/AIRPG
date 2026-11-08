@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SpeciesData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_v3rs4"]
+[ext_resource type="Script" path="res://scripts/data/species_data.gd" id="2_pvt3o"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="3_vt7bu"]
+
+[sub_resource type="Resource" id="Resource_3cpwg"]
+script = ExtResource("3_vt7bu")
+id = &"resourceful"
+display_name = "Находчивость"
+description = "После долгого отдыха получаете Героическое вдохновение."
+
+[sub_resource type="Resource" id="Resource_nedgq"]
+script = ExtResource("3_vt7bu")
+id = &"skillful"
+display_name = "Умелость"
+description = "Владение одним навыком на выбор."
+
+[sub_resource type="Resource" id="Resource_ti3if"]
+script = ExtResource("3_vt7bu")
+id = &"versatile"
+display_name = "Универсальность"
+description = "Получаете одну черту происхождения на выбор."
+
+[resource]
+script = ExtResource("2_pvt3o")
+id = &"human"
+display_name = "Человек"
+description = "Самый приспособляемый народ, чья сила — в разнообразии."
+size_options = Array[StringName]([&"medium", &"small"])
+language_choices = 1
+traits = Array[ExtResource("3_vt7bu")]([SubResource("Resource_3cpwg"), SubResource("Resource_nedgq"), SubResource("Resource_ti3if")])

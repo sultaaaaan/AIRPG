@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SubclassData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/choice_group_data.gd" id="1_pk57v"]
+[ext_resource type="Script" path="res://scripts/data/feature_data.gd" id="2_2bj15"]
+[ext_resource type="Script" path="res://scripts/data/subclass_data.gd" id="3_oldx6"]
+
+[sub_resource type="Resource" id="Resource_sol4q"]
+script = ExtResource("2_2bj15")
+id = &"dread_ambusher"
+display_name = "Ужасающий засадник"
+description = "В первый ход боя вы быстрее и наносите дополнительный урон."
+level = 3
+
+[sub_resource type="Resource" id="Resource_2u1f0"]
+script = ExtResource("2_2bj15")
+id = &"umbral_sight"
+display_name = "Сумеречное зрение"
+description = "В темноте вы невидимы для тёмного зрения и лучше видите в сумраке."
+level = 3
+
+[resource]
+script = ExtResource("3_oldx6")
+id = &"gloom_stalker"
+class_id = &"ranger"
+display_name = "Сумрачный охотник"
+description = "Охотник, рождённый во тьме и в ней невидимый."
+features = Array[ExtResource("2_2bj15")]([SubResource("Resource_sol4q"), SubResource("Resource_2u1f0")])
